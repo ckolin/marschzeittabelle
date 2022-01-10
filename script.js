@@ -34,9 +34,10 @@ const generate = (kmlString) => {
 };
 
 const parse = (kmlString) => {
-    const parseVec = (str) => {
-        const nums = str.split(",").map(s => Number(s));
-        return { x: nums[0], y: nums[1] };
+    const parseCoordinates = (str) => {
+        const wgs = str.split(",").map(s => Number(s));
+        const ch = Swisstopo.WGStoCH(wgs[1], wgs[0]);
+        return { x: ch[0], y: ch[1] };
     };
 
     const parser = new DOMParser();
@@ -56,14 +57,14 @@ const parse = (kmlString) => {
                 .querySelector("LineString coordinates")
                 .innerHTML
                 .split(" ")
-                .map(s => parseVec(s));
+                .map(s => parseCoordinates(s));
             lines.push({ points });
         }
 
         // Find markers
         if (placemark.querySelector("Point")) {
             const name = placemark.querySelector("name").innerHTML;
-            const point = parseVec(
+            const point = parseCoordinates(
                 placemark.querySelector("Point coordinates").innerHTML);
             markers.push({ name, point });
         }
