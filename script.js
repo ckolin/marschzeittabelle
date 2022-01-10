@@ -103,6 +103,9 @@ const display = (route) => {
 
     // Draw line
     ctx.beginPath();
+    ctx.lineWidth = 4;
+    ctx.lineCap = ctx.lineJoin = "round";
+    ctx.strokeStyle = "black";
     let first = true;
     for (let point of route.lines[0].points) {
         const p = project(point);
@@ -113,27 +116,25 @@ const display = (route) => {
             ctx.lineTo(p.x, p.y);
         }
     }
-
-    ctx.lineWidth = 4;
-    ctx.lineCap = ctx.lineJoin = "round";
-    ctx.strokeStyle = "red";
     ctx.stroke();
 
     // Draw dots
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "black";
     for (let marker of route.markers) {
         const p = project(marker.point);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 5, 0, 2 * Math.PI);
+        ctx.arc(p.x, p.y, 10, 0, 2 * Math.PI);
         ctx.fill();
     }
 
     // Draw labels
-    ctx.font = "bold 12px sans-serif";
+    ctx.font = "bold 14px sans-serif";
     ctx.textAlign = "center";
-    ctx.fillStyle = "black";
-    for (let marker of route.markers) {
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "white";
+    for (let i = 0; i < route.markers.length; i++) {
+        const marker = route.markers[i];
         const p = project(marker.point);
-        ctx.fillText(`${marker.name} (${marker.altitude})`, p.x, p.y - 8);
+        ctx.fillText(i + 1, p.x, p.y + 1);
     }
 };
