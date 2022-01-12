@@ -16,13 +16,13 @@ const generate = (kmlString) => {
     const route = parseKml(kmlString);
 
     // Draw route
-    reverseRoute(route);
+    //reverseRoute(route);
     reverseRoute(route);
     drawRoute(route);
 
     // Draw height profile
     Promise.all([
-        fetchProfile(route.line, false, 200),
+        fetchProfile(route.line, false, 100),
         fetchProfile(route.markers.map(m => route.line[m.index]), true, route.markers.length)])
         .then(([lineProfile, markerProfile]) => drawProfile(route, lineProfile, markerProfile));
 
@@ -33,16 +33,24 @@ const fetchProfile = (line, ensureInputPoints, resolution) => {
     const api = "https://api3.geo.admin.ch/rest/services/profile.json";
     const geometry = {
         type: "LineString",
-        coordinates: line.map(p => [p.x, p.y])
+        coordinates: line.map(p => [Math.round(p.x), Math.round(p.y)])
     };
     return fetch(`${api}?sr=21781&distinct_points=${ensureInputPoints}&nb_points=${resolution}&geom=${JSON.stringify(geometry)}`)
         .then(res => res.json())
-        .then(profile => new Promise(resolve => {
+        .then(data => new Promise(resolve => {
+            let profile = data.map(p => {
+                return {
+                    point: { x: p.easting, y: p.northing },
+                    height: p.alts.COMB
+                };
+            });
+
+            // Remove extra points not associated with a marker
             if (ensureInputPoints) {
-                // Remove extra points not associated with a marker
-                profile = profile.filter(p => line.some(l => Vec.distance({ x: p.easting, y: p.northing }, l) < epsilon));
+                profile = profile.filter(p => line.some(l => Vec.distance(p.point, l) < epsilon));
             }
-            resolve(profile.map(p => p.alts.COMB));
+
+            resolve(profile);
         }));
 };
 
@@ -126,12 +134,7 @@ const parseKml = (kmlString) => {
     markers.sort((a, b) => a.index - b.index);
 
     // Calculate prefix sum of distance
-    const distanceSum = [];
-    let sum = 0;
-    for (let i = 0; i < line.length; i++) {
-        sum += Vec.distance(line[Math.max(0, i - 1)], line[i]);
-        distanceSum[i] = sum;
-    }
+    const distanceSum = calculateDistanceSum(line);
 
     return { line, markers, distanceSum };
 };
@@ -161,10 +164,21 @@ const findConnectedLines = (lines) => {
     return null;
 };
 
+const calculateDistanceSum = (line) => {
+    const distanceSum = [];
+    let sum = 0;
+    for (let i = 0; i < line.length; i++) {
+        sum += Vec.distance(line[Math.max(0, i - 1)], line[i]);
+        distanceSum[i] = sum;
+    }
+    return distanceSum;
+};
+
 const reverseRoute = (route) => {
     route.line.reverse();
     route.markers.reverse();
     route.markers.forEach(m => m.index = route.line.length - m.index - 1);
+    route.distanceSum = calculateDistanceSum(route.line);
 };
 
 const drawRoute = (route) => {
@@ -189,12 +203,12 @@ const drawRoute = (route) => {
 
     const project = (point) => {
         // Scale and center
-        const p = Vec.add(
+        const res = Vec.add(
             Vec.scale(Vec.subtract(point, center), scale),
             { x: 0.5 * routeCanvas.width, y: 0.5 * routeCanvas.height }
         );
         // Flip y axis
-        return { x: p.x, y: routeCanvas.height - p.y };
+        return { x: res.x, y: routeCanvas.height - res.y };
     };
 
     // Draw line
@@ -231,32 +245,43 @@ const drawRoute = (route) => {
     for (let i = 0; i < route.markers.length; i++) {
         const marker = route.markers[i];
         const p = project(route.line[marker.index]);
-        ctx.fillText(i + 1, p.x, p.y + 1);
+        ctx.fillText(i + 1, p.x, p.y + 0.5);
     }
 };
 
 const drawProfile = (route, lineProfile, markerProfile) => {
     const ctx = profileCanvas.getContext("2d");
-    profileCanvas.width = 600;
+    profileCanvas.width = 800;
     profileCanvas.height = 200;
     const padding = 20;
 
     // Calculate bounds
     let minHeight = Infinity;
     let maxHeight = -Infinity;
-    for (let height of lineProfile) {
-        minHeight = Math.min(minHeight, height);
-        maxHeight = Math.max(maxHeight, height);
+    for (let p of lineProfile) {
+        minHeight = Math.min(minHeight, p.height);
+        maxHeight = Math.max(maxHeight, p.height);
     }
-    const span = maxHeight - minHeight;
-    const scale = (profileCanvas.height - 2 * padding) / span;
+    const totalDistance = route.distanceSum[route.distanceSum.length - 1];
+    const heightSpan = maxHeight - minHeight;
+    const center = { x: 0.5 * totalDistance, y: minHeight + 0.5 * heightSpan }
+    const scale = Math.min(
+        (profileCanvas.height - 2 * padding) / heightSpan,
+        (profileCanvas.width - 2 * padding) / totalDistance);
 
-    const project = (percentage, height) => {
-        return {
-            x: (profileCanvas.width - 2 * padding) * percentage + padding,
-            y: profileCanvas.height - (height - minHeight) * scale - padding
-        };
+    const project = (distance, height) => {
+        const point = { x: distance, y: height };
+        // Scale and center
+        const res = Vec.add(
+            Vec.scale(Vec.subtract(point, center), scale),
+            { x: 0.5 * profileCanvas.width, y: 0.5 * profileCanvas.height }
+        );
+        // Flip y axis
+        return { x: res.x, y: profileCanvas.height - res.y };
     };
+
+    // Calculate distance sum for generated line
+    const lineProfileDistanceSum = calculateDistanceSum(lineProfile.map(p => p.point));
 
     // Draw line profile
     ctx.beginPath();
@@ -265,23 +290,25 @@ const drawProfile = (route, lineProfile, markerProfile) => {
     ctx.strokeStyle = "black";
     let first = true;
     for (let i = 0; i < lineProfile.length; i++) {
-        const p = project(i / lineProfile.length, lineProfile[i]);
+        const p = project(
+            lineProfileDistanceSum[i],
+            lineProfile[i].height);
         if (first) {
             first = false;
             ctx.moveTo(p.x, p.y);
         } else {
             ctx.lineTo(p.x, p.y);
         }
-
     }
     ctx.stroke();
 
-    const totalDistance = route.distanceSum[route.distanceSum.length - 1];
 
     // Draw dots
     ctx.fillStyle = "black";
     for (let i = 0; i < markerProfile.length; i++) {
-        const p = project(route.distanceSum[route.markers[i].index] / totalDistance, markerProfile[i]);
+        const p = project(
+            route.distanceSum[route.markers[i].index],
+            markerProfile[i].height);
         ctx.beginPath();
         ctx.arc(p.x, p.y, 10, 0, 2 * Math.PI);
         ctx.fill();
@@ -293,7 +320,9 @@ const drawProfile = (route, lineProfile, markerProfile) => {
     ctx.textBaseline = "middle";
     ctx.fillStyle = "white";
     for (let i = 0; i < markerProfile.length; i++) {
-        const p = project(route.distanceSum[route.markers[i].index] / totalDistance, markerProfile[i]);
-        ctx.fillText(i + 1, p.x, p.y + 1);
+        const p = project(
+            route.distanceSum[route.markers[i].index],
+            markerProfile[i].height);
+        ctx.fillText(i + 1, p.x, p.y + 0.5);
     }
 };
