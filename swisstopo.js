@@ -27,6 +27,8 @@
 // Updated 9 dec 2014
 // Please validate your results with NAVREF on-line service: http://www.swisstopo.admin.ch/internet/swisstopo/en/home/apps/calc/navref.html (difference ~ 1-2m)
 
+// Modified from https://github.com/ValentinMinder/Swisstopo-WGS84-LV03/blob/f1a7e0129d93647c1c11e151b95a208a53e57ce6/scripts/js/wgs84_ch1903.js
+
 class Swisstopo {
 	static WGStoCH(lat, lng) {
 		return [
