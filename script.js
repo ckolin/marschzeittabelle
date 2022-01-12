@@ -1,6 +1,6 @@
 const dbg = (obj) => { console.log(obj); return obj; };
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const routeCanvas = document.getElementById("route-canvas");
+const profileCanvas = document.getElementById("profile-canvas");
 
 const input = document.getElementById("kml");
 input.addEventListener("change", () => {
@@ -9,28 +9,44 @@ input.addEventListener("change", () => {
     reader.readAsText(input.files[0]);
 });
 
+const epsilon = 2;
+
 const generate = (kmlString) => {
     // Parse file content
-    const route = parse(kmlString);
-
-    // Fetch height data
-    const geometry = {
-        type: "LineString",
-        coordinates: route.markers.map(m => [m.point.x, m.point.y])
-    };
-    fetch(`https://api3.geo.admin.ch/rest/services/profile.json?distinct_points=true&geom=${JSON.stringify(geometry)}`)
-        .then(res => res.json())
-        .then(profile => dbg(profile.map(p => p.alts.COMB)));
+    const route = parseKml(kmlString);
 
     // Draw route
-    display(route);
+    reverseRoute(route);
+    reverseRoute(route);
+    drawRoute(route);
 
-    // TODO: Draw height profile
+    // Draw height profile
+    Promise.all([
+        fetchProfile(route.line, false, 200),
+        fetchProfile(route.markers.map(m => route.line[m.index]), true, route.markers.length)])
+        .then(([lineProfile, markerProfile]) => drawProfile(route, lineProfile, markerProfile));
 
     // Walk line from start to end
 };
 
-const parse = (kmlString) => {
+const fetchProfile = (line, ensureInputPoints, resolution) => {
+    const api = "https://api3.geo.admin.ch/rest/services/profile.json";
+    const geometry = {
+        type: "LineString",
+        coordinates: line.map(p => [p.x, p.y])
+    };
+    return fetch(`${api}?sr=21781&distinct_points=${ensureInputPoints}&nb_points=${resolution}&geom=${JSON.stringify(geometry)}`)
+        .then(res => res.json())
+        .then(profile => new Promise(resolve => {
+            if (ensureInputPoints) {
+                // Remove extra points not associated with a marker
+                profile = profile.filter(p => line.some(l => Vec.distance({ x: p.easting, y: p.northing }, l) < epsilon));
+            }
+            resolve(profile.map(p => p.alts.COMB));
+        }));
+};
+
+const parseKml = (kmlString) => {
     // Converts coordinates from WGS84 to LV03
     const parseCoordinates = (str) => {
         const wgs = str.split(",").map(s => Number(s));
@@ -68,8 +84,6 @@ const parse = (kmlString) => {
         }
     }
 
-    const epsilon = 2;
-
     // Merge disjointed lines
     while (lines.length > 1) {
         const connected = findConnectedLines(lines, epsilon);
@@ -92,12 +106,37 @@ const parse = (kmlString) => {
 
     const line = lines[0];
 
-    // TODO: Assign markers to points on line
+    // Assign markers to points on line
+    for (let marker of markers) {
+        let closest = 0;
+        let minDistance = Infinity;
+        for (let i = 0; i < line.length; i++) {
+            const distance = Vec.distance(marker.point, line[i]);
+            if (distance < minDistance) {
+                closest = i;
+                minDistance = distance;
+            }
+        }
 
-    return { line, markers };
+        marker.index = closest;
+        delete marker.point;
+    }
+
+    // Bring markers in right order
+    markers.sort((a, b) => a.index - b.index);
+
+    // Calculate prefix sum of distance
+    const distanceSum = [];
+    let sum = 0;
+    for (let i = 0; i < line.length; i++) {
+        sum += Vec.distance(line[Math.max(0, i - 1)], line[i]);
+        distanceSum[i] = sum;
+    }
+
+    return { line, markers, distanceSum };
 };
 
-const findConnectedLines = (lines, epsilon) => {
+const findConnectedLines = (lines) => {
     const areEqual = (a, b) => Vec.distance(a, b) < epsilon;
 
     for (let i = 0; i < lines.length; i++) {
@@ -122,7 +161,17 @@ const findConnectedLines = (lines, epsilon) => {
     return null;
 };
 
-const display = (route) => {
+const reverseRoute = (route) => {
+    route.line.reverse();
+    route.markers.reverse();
+    route.markers.forEach(m => m.index = route.line.length - m.index - 1);
+};
+
+const drawRoute = (route) => {
+    const ctx = routeCanvas.getContext("2d");
+    routeCanvas.width = routeCanvas.height = 400;
+    const padding = 20;
+
     // Calculate bounds
     const topLeft = { x: Infinity, y: Infinity };
     const bottomRight = { x: -Infinity, y: -Infinity };
@@ -132,23 +181,20 @@ const display = (route) => {
         bottomRight.x = Math.max(p.x, bottomRight.x);
         bottomRight.y = Math.max(p.y, bottomRight.y);
     }
-    const size = canvas.width = canvas.height = 400;
     const bounds = Vec.subtract(bottomRight, topLeft);
     const center = Vec.add(topLeft, Vec.scale(bounds, 0.5));
-    const zoom = canvas.width / Math.max(bounds.x, bounds.y);
-    const padding = 0.1;
+    const scale = Math.min(
+        (routeCanvas.width - 2 * padding) / bounds.x,
+        (routeCanvas.height - 2 * padding) / bounds.y);
 
     const project = (point) => {
         // Scale and center
-        const offset = Vec.add(
-            Vec.scale(Vec.subtract(point, center), zoom * (1 - 2 * padding)),
-            Vec.scale({ x: 1, y: 1 }, 0.5 * size)
+        const p = Vec.add(
+            Vec.scale(Vec.subtract(point, center), scale),
+            { x: 0.5 * routeCanvas.width, y: 0.5 * routeCanvas.height }
         );
         // Flip y axis
-        return Vec.add(
-            Vec.multiply(offset, { x: 1, y: -1 }),
-            { x: 0, y: size }
-        );
+        return { x: p.x, y: routeCanvas.height - p.y };
     };
 
     // Draw line
@@ -171,20 +217,83 @@ const display = (route) => {
     // Draw dots
     ctx.fillStyle = "black";
     for (let marker of route.markers) {
-        const p = project(marker.point);
+        const p = project(route.line[marker.index]);
         ctx.beginPath();
         ctx.arc(p.x, p.y, 10, 0, 2 * Math.PI);
         ctx.fill();
     }
 
-    // Draw labels
+    // Draw numbers
     ctx.font = "bold 14px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "white";
     for (let i = 0; i < route.markers.length; i++) {
         const marker = route.markers[i];
-        const p = project(marker.point);
+        const p = project(route.line[marker.index]);
+        ctx.fillText(i + 1, p.x, p.y + 1);
+    }
+};
+
+const drawProfile = (route, lineProfile, markerProfile) => {
+    const ctx = profileCanvas.getContext("2d");
+    profileCanvas.width = 600;
+    profileCanvas.height = 200;
+    const padding = 20;
+
+    // Calculate bounds
+    let minHeight = Infinity;
+    let maxHeight = -Infinity;
+    for (let height of lineProfile) {
+        minHeight = Math.min(minHeight, height);
+        maxHeight = Math.max(maxHeight, height);
+    }
+    const span = maxHeight - minHeight;
+    const scale = (profileCanvas.height - 2 * padding) / span;
+
+    const project = (percentage, height) => {
+        return {
+            x: (profileCanvas.width - 2 * padding) * percentage + padding,
+            y: profileCanvas.height - (height - minHeight) * scale - padding
+        };
+    };
+
+    // Draw line profile
+    ctx.beginPath();
+    ctx.lineWidth = 4;
+    ctx.lineCap = ctx.lineJoin = "round";
+    ctx.strokeStyle = "black";
+    let first = true;
+    for (let i = 0; i < lineProfile.length; i++) {
+        const p = project(i / lineProfile.length, lineProfile[i]);
+        if (first) {
+            first = false;
+            ctx.moveTo(p.x, p.y);
+        } else {
+            ctx.lineTo(p.x, p.y);
+        }
+
+    }
+    ctx.stroke();
+
+    const totalDistance = route.distanceSum[route.distanceSum.length - 1];
+
+    // Draw dots
+    ctx.fillStyle = "black";
+    for (let i = 0; i < markerProfile.length; i++) {
+        const p = project(route.distanceSum[route.markers[i].index] / totalDistance, markerProfile[i]);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 10, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+
+    // Draw numbers
+    ctx.font = "bold 14px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "white";
+    for (let i = 0; i < markerProfile.length; i++) {
+        const p = project(route.distanceSum[route.markers[i].index] / totalDistance, markerProfile[i]);
         ctx.fillText(i + 1, p.x, p.y + 1);
     }
 };
