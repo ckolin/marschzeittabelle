@@ -2,7 +2,7 @@ const dbg = (obj) => { console.log(obj); return obj; };
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const input = document.getElementById("kml")
+const input = document.getElementById("kml");
 input.addEventListener("change", () => {
     const reader = new FileReader();
     reader.addEventListener("load", () => generate(reader.result));
@@ -13,27 +13,25 @@ const generate = (kmlString) => {
     // Parse file content
     const route = parse(kmlString);
 
-    // Gather elevation data
-    const coordinates = route.markers
-        .map(m => `${m.point.y},${m.point.x}`)
-        .join("|");
-    fetch(`https://api.open-elevation.com/api/v1/lookup?locations=${coordinates}`)
+    // Fetch height data
+    const geometry = {
+        type: "LineString",
+        coordinates: route.markers.map(m => [m.point.x, m.point.y])
+    };
+    fetch(`https://api3.geo.admin.ch/rest/services/profile.json?distinct_points=true&geom=${JSON.stringify(geometry)}`)
         .then(res => res.json())
-        .then(res => {
-            res.results.forEach((r, i) => route.markers[i].altitude = r.elevation);
-            // Display route for verification
-            display(route)
-        });
+        .then(profile => dbg(profile.map(p => p.alts.COMB)));
 
-    // Route has been verified
+    // Draw route
+    display(route);
 
-    // TODO: Support multiple lines (join lines together)
-    // Assign markers to points on line
+    // TODO: Draw height profile
+
     // Walk line from start to end
-    // Generate height graph
 };
 
 const parse = (kmlString) => {
+    // Converts coordinates from WGS84 to LV03
     const parseCoordinates = (str) => {
         const wgs = str.split(",").map(s => Number(s));
         const ch = Swisstopo.WGStoCH(wgs[1], wgs[0]);
