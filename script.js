@@ -56,7 +56,7 @@ const parse = (kmlString) => {
                 .innerHTML
                 .split(" ")
                 .map(s => parseCoordinates(s));
-            lines.push({ points });
+            lines.push(points);
         }
 
         // Find markers
@@ -68,14 +68,65 @@ const parse = (kmlString) => {
         }
     }
 
-    return { lines, markers };
+    const epsilon = 2;
+
+    // Merge disjointed lines
+    while (lines.length > 1) {
+        const connected = findConnectedLines(lines, epsilon);
+        if (connected == null) {
+            console.error("Lines are not connected");
+            return;
+        }
+
+        if (connected.reverseFirst) {
+            lines[connected.i].reverse();
+        }
+        if (connected.reverseSecond) {
+            lines[connected.j].reverse();
+        }
+        // Append points of second line
+        lines[connected.i].push(...lines[connected.j]);
+        // Remove second line
+        lines.splice(connected.j, 1);
+    }
+
+    const line = lines[0];
+
+    // TODO: Assign markers to points on line
+
+    return { line, markers };
+};
+
+const findConnectedLines = (lines, epsilon) => {
+    const areEqual = (a, b) => Vec.distance(a, b) < epsilon;
+
+    for (let i = 0; i < lines.length; i++) {
+        for (let j = i + 1; j < lines.length; j++) {
+            if (areEqual(lines[i][lines[i].length - 1], lines[j][0])) {
+                // Matching directions, matching order: -> ->
+                return { i, j, reverseFirst: false, reverseSecond: false };
+            } else if (areEqual(lines[i][0], lines[j][lines[j].length - 1])) {
+                // Matching directions, reversed order: <- <-
+                return { i, j, reverseFirst: true, reverseSecond: true };
+            } else if (areEqual(lines[i][0], lines[j][0])) {
+                // Opposing directions, matching order: <- ->
+                return { i, j, reverseFirst: true, reverseSecond: false };
+            } else if (areEqual(lines[i][lines[i].length - 1], lines[j][lines[j].length - 1])) {
+                // Opposing directions, reversed order: -> <-
+                return { i, j, reverseFirst: false, reverseSecond: true };
+            }
+        }
+    }
+
+    // No connected lines found 
+    return null;
 };
 
 const display = (route) => {
     // Calculate bounds
     const topLeft = { x: Infinity, y: Infinity };
     const bottomRight = { x: -Infinity, y: -Infinity };
-    for (let p of route.lines[0].points) {
+    for (let p of route.line) {
         topLeft.x = Math.min(p.x, topLeft.x);
         topLeft.y = Math.min(p.y, topLeft.y);
         bottomRight.x = Math.max(p.x, bottomRight.x);
@@ -106,7 +157,7 @@ const display = (route) => {
     ctx.lineCap = ctx.lineJoin = "round";
     ctx.strokeStyle = "black";
     let first = true;
-    for (let point of route.lines[0].points) {
+    for (let point of route.line) {
         const p = project(point);
         if (first) {
             ctx.moveTo(p.x, p.y);
