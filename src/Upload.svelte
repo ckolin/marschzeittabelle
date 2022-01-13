@@ -8,8 +8,8 @@
     $: if (files && files[0]) {
         const reader = new FileReader();
         reader.addEventListener("load", () => {
-            route = parseKml(reader.result);
-            route.loadProfiles().then(() => (route = route)); // Trigger reactivity
+            const res = parseKml(reader.result);
+            res.loadProfiles().then(() => (route = res)); // Trigger reactivity
         });
         reader.readAsText(files[0]);
     }
