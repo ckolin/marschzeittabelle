@@ -11,7 +11,7 @@
 </script>
 
 <main>
-    <canvas bind:this={canvas} width="400" height="400" />
+    <canvas bind:this={canvas} width="300" height="300" />
 </main>
 
 <style>

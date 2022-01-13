@@ -1,4 +1,5 @@
 import { Vec } from "./vec.js";
+import { fetchProfile } from "./modules/geoadmin.js";
 
 export class Route {
     constructor(line, markers) {
@@ -13,14 +14,14 @@ export class Route {
         this.line.reverse();
         this.markers.reverse();
         this.markers.forEach(m => m.index = this.line.length - m.index - 1);
-        this.distanceSum = calculateDistanceSum(route.line);
+        this.distanceSum = calculateDistanceSum(this.line);
+        this.lineProfile?.reverse();
+        this.markerProfile?.reverse();
+    }
 
-        if (this.lineProfile) {
-            this.lineProfile.reverse();
-        }
-        if (this.markerProfile) {
-            this.markerProfile.reverse();
-        }
+    async loadProfiles() {
+        this.lineProfile = await fetchProfile(route.line, false, 100);
+        this.markerProfile = await fetchProfile(route.markers.map(m => route.line[m.index]), true, route.markers.length);
     }
 }
 

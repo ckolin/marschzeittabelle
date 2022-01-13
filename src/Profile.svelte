@@ -5,7 +5,7 @@
 
     let canvas;
 
-    $: if (route && route.lineProfile && route.markerProfile && canvas) {
+    $: if (route?.lineProfile && route?.markerProfile && canvas) {
         drawProfile(route, canvas);
     }
 </script>
