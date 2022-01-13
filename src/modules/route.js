@@ -17,15 +17,19 @@ export class Route {
         this.distanceSum = calculateDistanceSum(this.line);
         this.lineProfile?.reverse();
         this.markerProfile?.reverse();
+        this.lineProfileDistanceSum = calculateDistanceSum(this.lineProfile.map(p => p.point));
     }
 
     async loadProfiles() {
         this.lineProfile = await fetchProfile(this.line, false, 100);
         this.markerProfile = await fetchProfile(this.markers.map(m => this.line[m.index]), true, this.markers.length);
+
+        // Calculate distance sum for line profile
+        this.lineProfileDistanceSum = calculateDistanceSum(this.lineProfile.map(p => p.point));
     }
 }
 
-export function calculateDistanceSum(line) {
+function calculateDistanceSum(line) {
     const distanceSum = [];
     let sum = 0;
     for (let i = 0; i < line.length; i++) {

@@ -1,4 +1,3 @@
-import { calculateDistanceSum } from "./route.js";
 import { Vec } from "./vec.js";
 
 const padding = 20;
@@ -101,9 +100,6 @@ export function drawProfile(route, canvas) {
         return { x: res.x, y: canvas.height - res.y };
     };
 
-    // Calculate distance sum for generated line
-    const lineProfileDistanceSum = calculateDistanceSum(route.lineProfile.map(p => p.point));
-
     // Draw line profile
     ctx.beginPath();
     ctx.lineWidth = 4;
@@ -112,7 +108,7 @@ export function drawProfile(route, canvas) {
     let first = true;
     for (let i = 0; i < route.lineProfile.length; i++) {
         const p = project(
-            lineProfileDistanceSum[i],
+            route.lineProfileDistanceSum[i],
             route.lineProfile[i].height);
         if (first) {
             first = false;

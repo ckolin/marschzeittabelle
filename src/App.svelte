@@ -18,9 +18,9 @@
 	<p>{name}</p>
 
 	{#if route}
+		<button on:click={reverse}>Richtung wechseln</button>
 		<Map {route} />
 		<Profile {route} />
-		<button on:click={reverse}>Richtung wechseln</button>
 	{:else}
 		<Introduction />
 		<Upload bind:route />
