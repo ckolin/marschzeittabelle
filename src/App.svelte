@@ -7,14 +7,20 @@
 	export let name;
 
 	let route;
+
+	function reverse() {
+		route.reverse();
+		route = route;
+	}
 </script>
 
 <main>
-	<h1>{name}</h1>
+	<p>{name}</p>
 
 	{#if route}
 		<Map {route} />
 		<Profile {route} />
+		<button on:click={reverse}>Richtung wechseln</button>
 	{:else}
 		<Introduction />
 		<Upload bind:route />
