@@ -15,9 +15,7 @@
     }
 </script>
 
-<main>
-    <input type="file" accept=".kml, text/xml" bind:files />
-</main>
+<input type="file" accept=".kml, text/xml" bind:files />
 
 <style>
 </style>

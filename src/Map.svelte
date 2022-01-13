@@ -10,9 +10,7 @@
     }
 </script>
 
-<main>
-    <canvas bind:this={canvas} width="300" height="300" />
-</main>
+<canvas bind:this={canvas} width="300" height="300" />
 
 <style>
 </style>
