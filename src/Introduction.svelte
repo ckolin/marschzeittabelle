@@ -1,9 +1,9 @@
 <h1>Marschzeittabellen leicht gemacht</h1>
 <p>Fertig mit unnötiger Handarbeit: Wir erstellen aus Deiner Route automatisch eine Marschzeittabelle, damit Du Dich auf die wichtigen Teile der Wanderplanung konzentrieren kannst.</p>
-<p>Wir unterstützen nur Routen, die von <a href="https://map.geo.admin.ch" target="_blank">map.geo.admin.ch</a> exportiert wurden.</p>
-<h2>So funktioniert's...</h2>
+<p>Unterstützt sind Routen, die von <a href="https://map.geo.admin.ch" target="_blank">map.geo.admin.ch</a> oder der <a href="https://www.swisstopo.admin.ch/en/maps-data-online/maps-geodata-online/swisstopo-app.html" target="_blank">swisstopo-App</a> als KML-Datei exportiert wurden.</p>
+<h2>So funktioniert's</h2>
 <h3>1. Route planen</h3>
-<p>Weg einzeichnen, Markierungen setzen - das kennst Du bereits.</p>
+<p>Weg einzeichnen, Markierungen setzen - das kennst Du schon.</p>
 <h3>2. Exportieren und importieren</h3>
 <p>In wenigen Klicks erledigt.</p>
 <h3>3. Voilà!</h3>

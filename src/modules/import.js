@@ -12,7 +12,6 @@ export function parseKml(kmlString) {
     const markers = [];
 
     const placemarks = kml
-        .querySelector("Document")
         .querySelectorAll("Placemark");
     for (let placemark of placemarks) {
         // Find lines
@@ -20,13 +19,17 @@ export function parseKml(kmlString) {
             const points = placemark
                 .querySelector("LineString coordinates")
                 .innerHTML
+                .trim()
                 .split(" ")
                 .map(s => parseCoordinates(s));
             lines.push(points);
         }
         // Find markers
         if (placemark.querySelector("Point")) {
-            const name = placemark.querySelector("name").innerHTML;
+            const name = placemark
+                .querySelector("name")
+                .innerHTML
+                .trim();
             const point = parseCoordinates(
                 placemark.querySelector("Point coordinates").innerHTML);
             markers.push({ name, point });
