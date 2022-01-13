@@ -1,5 +1,5 @@
 import { Vec } from "./vec.js";
-import { fetchProfile } from "./modules/geoadmin.js";
+import { fetchProfile } from "./geoadmin.js";
 
 export class Route {
     constructor(line, markers) {
@@ -20,8 +20,8 @@ export class Route {
     }
 
     async loadProfiles() {
-        this.lineProfile = await fetchProfile(route.line, false, 100);
-        this.markerProfile = await fetchProfile(route.markers.map(m => route.line[m.index]), true, route.markers.length);
+        this.lineProfile = await fetchProfile(this.line, false, 100);
+        this.markerProfile = await fetchProfile(this.markers.map(m => this.line[m.index]), true, this.markers.length);
     }
 }
 
