@@ -97,27 +97,25 @@ export function drawProfile(route, canvas) {
         // Flip y axis
         return { x: res.x, y: canvas.height - res.y };
     };
-
-    // Draw line
-    ctx.beginPath();
-    ctx.lineWidth = 4;
-    ctx.lineCap = ctx.lineJoin = "round";
-    ctx.strokeStyle = theme.accentColor;
-    let first = true;
-    for (let i = 0; i < route.lineProfile.length; i++) {
-        const p = project(
-            route.lineProfileDistanceSum[i],
-            route.lineProfile[i].height);
-        if (first) {
-            first = false;
-            ctx.moveTo(p.x, p.y);
-        } else {
-            ctx.lineTo(p.x, p.y);
+    
+    const followLineProfile = () => {
+        let first = true;
+        for (let i = 0; i < route.lineProfile.length; i++) {
+            const p = project(
+                route.lineProfileDistanceSum[i],
+                route.lineProfile[i].height);
+            if (first) {
+                first = false;
+                ctx.moveTo(p.x, p.y);
+            } else {
+                ctx.lineTo(p.x, p.y);
+            }
         }
-    }
-    ctx.stroke();
+    };
 
     // Draw area under line
+    ctx.beginPath();
+    followLineProfile();
     const topLeft = project(0, maxHeight);
     const bottomLeft = project(0, minHeight);
     const bottomRight = project(totalDistance, minHeight);
@@ -127,9 +125,17 @@ export function drawProfile(route, canvas) {
     gradient.addColorStop(0, theme.lighterAccentColor);
     gradient.addColorStop(1, "transparent");
     ctx.fillStyle = gradient;
-    ctx.globalAlpha = 0.2;
+    ctx.globalAlpha = 0.5;
     ctx.fill();
     ctx.globalAlpha = 1;
+
+    // Draw line
+    ctx.beginPath();
+    followLineProfile();
+    ctx.lineWidth = 4;
+    ctx.lineCap = ctx.lineJoin = "round";
+    ctx.strokeStyle = theme.accentColor;
+    ctx.stroke();
 
     // Draw dots
     ctx.fillStyle = theme.darkerAccentColor;
