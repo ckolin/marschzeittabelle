@@ -1,7 +1,9 @@
 import { Vec } from "./vec.js";
 import { theme } from "./theme.js";
 
-const padding = 20;
+const dotRadius = 10;
+const padding = dotRadius;
+const lineWidth = 4;
 
 export function drawRoute(route, canvas) {
     const ctx = canvas.getContext("2d");
@@ -34,7 +36,7 @@ export function drawRoute(route, canvas) {
 
     // Draw line
     ctx.beginPath();
-    ctx.lineWidth = 4;
+    ctx.lineWidth = lineWidth;
     ctx.lineCap = ctx.lineJoin = "round";
     ctx.strokeStyle = theme.accentColor;
     let first = true;
@@ -54,7 +56,7 @@ export function drawRoute(route, canvas) {
     for (let marker of route.markers) {
         const p = project(route.line[marker.index]);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 10, 0, 2 * Math.PI);
+        ctx.arc(p.x, p.y, dotRadius, 0, 2 * Math.PI);
         ctx.fill();
     }
 
@@ -132,7 +134,7 @@ export function drawProfile(route, canvas) {
     // Draw line
     ctx.beginPath();
     followLineProfile();
-    ctx.lineWidth = 4;
+    ctx.lineWidth = lineWidth;
     ctx.lineCap = ctx.lineJoin = "round";
     ctx.strokeStyle = theme.accentColor;
     ctx.stroke();
@@ -144,7 +146,7 @@ export function drawProfile(route, canvas) {
             route.distanceSum[route.markers[i].index],
             route.markerProfile[i].height);
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 10, 0, 2 * Math.PI);
+        ctx.arc(p.x, p.y, dotRadius, 0, 2 * Math.PI);
         ctx.fill();
     }
 
