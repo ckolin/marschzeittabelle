@@ -30,7 +30,6 @@
     }
 </script>
 
-<h2>Marschzeittabelle</h2>
 <table>
     <tr>
         <th />

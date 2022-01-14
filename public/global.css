@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
+html {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
 body {
+	margin: 0;
 	color: var(--text-color);
 	background-color: var(--background-color);
 	font-family: "Inter", sans-serif;
@@ -26,6 +32,10 @@ input, button, select, textarea {
 
 input:focus, button:focus, select:focus, textarea:focus {
 	outline: 3px solid var(--lighter-accent-color);
+}
+
+input:invalid {
+	outline: 3px solid red;
 }
 
 input:disabled, button:disabled {

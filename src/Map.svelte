@@ -10,7 +10,6 @@
     }
 </script>
 
-<h2>Karte</h2>
 <canvas bind:this={canvas} width="300" height="300" />
 
 <style>

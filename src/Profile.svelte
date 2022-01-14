@@ -10,8 +10,7 @@
     }
 </script>
 
-<h2>Höhenprofil</h2>
-<canvas bind:this={canvas} width="600" height="200" />
+<canvas bind:this={canvas} width="800" height="100" />
 
 <style>
 </style>
