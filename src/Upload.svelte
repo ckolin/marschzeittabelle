@@ -9,8 +9,7 @@
         const reader = new FileReader();
         reader.addEventListener("load", () => {
             const res = parseKml(reader.result);
-            res.loadProfiles()
-                .then(() => setTimeout(() => route = res, 1000)); // Trigger reactivity
+            res.loadProfiles().then(() => route = res); // Trigger reactivity
         });
         reader.readAsText(files[0]);
     }
