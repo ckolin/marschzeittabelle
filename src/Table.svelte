@@ -4,7 +4,7 @@
 
     let data = [];
 
-    $: if (!isNaN(speed) && speed > 0) {
+    $: if (!window.isNaN(speed) && speed > 0) {
         data = calculate(route, speed);
     }
 
@@ -94,7 +94,7 @@
     }
 
     .alt {
-        color: var(--lighter-accent-color);
+        color: var(--accent-color);
     }
 
     .number {
