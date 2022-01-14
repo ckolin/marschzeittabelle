@@ -94,13 +94,12 @@ export function drawProfile(route, canvas) {
         // Scale and center
         const res = Vec.add(
             Vec.scale(Vec.subtract(point, center), scale),
-            { x: 0.5 * canvas.width, y: 0.5 * canvas.height }
-        );
+            { x: 0.5 * canvas.width, y: 0.5 * canvas.height });
         // Flip y axis
         return { x: res.x, y: canvas.height - res.y };
     };
 
-    // Draw line profile
+    // Draw line
     ctx.beginPath();
     ctx.lineWidth = 4;
     ctx.lineCap = ctx.lineJoin = "round";
@@ -118,6 +117,20 @@ export function drawProfile(route, canvas) {
         }
     }
     ctx.stroke();
+
+    // Draw area under line
+    const topLeft = project(0, maxHeight);
+    const bottomLeft = project(0, minHeight);
+    const bottomRight = project(totalDistance, minHeight);
+    ctx.lineTo(bottomRight.x, canvas.height);
+    ctx.lineTo(bottomLeft.x, canvas.height);
+    const gradient = ctx.createLinearGradient(0, topLeft.y, 0, canvas.height);
+    gradient.addColorStop(0, primaryColor);
+    gradient.addColorStop(1, "transparent");
+    ctx.fillStyle = gradient;
+    ctx.globalAlpha = 0.2;
+    ctx.fill();
+    ctx.globalAlpha = 1;
 
     // Draw dots
     ctx.fillStyle = primaryColor;
