@@ -4,7 +4,9 @@
 
     let data = [];
 
-    $: data = calculate(route, speed);
+    $: if (!isNaN(speed) && speed > 0) {
+        data = calculate(route, speed);
+    }
 
     function calculate(route, speed) {
         const res = [];
