@@ -1,9 +1,11 @@
 <script>
+	import Info from "./Info.svelte";
 	import Map from "./Map.svelte";
 	import Profile from "./Profile.svelte";
 	import Table from "./Table.svelte";
 	import Introduction from "./Introduction.svelte";
 	import Upload from "./Upload.svelte";
+
 	import { theme } from "./modules/theme.js";
 
 	export let name;
@@ -29,6 +31,7 @@
 	{#if route}
 		<input type="number" bind:value={speed} />
 		<button on:click={reverse}>Richtung wechseln</button>
+		<Info {route} />
 		<Map {route} />
 		<Profile {route} />
 		<Table {route} {speed} />
