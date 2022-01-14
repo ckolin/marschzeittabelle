@@ -2,11 +2,11 @@
 
 html {
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 820px;
 }
 
 body {
-	margin: 0;
+	margin: 10px;
 	color: var(--text-color);
 	background-color: var(--background-color);
 	font-family: "Inter", sans-serif;
