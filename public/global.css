@@ -12,6 +12,12 @@ body {
 	font-family: "Inter", sans-serif;
 }
 
+@media print {
+	body {
+		color-adjust: exact;
+	}
+}
+
 a {
 	color: var(--accent-color);
 }
@@ -24,7 +30,6 @@ input, button, select, textarea {
 	font-family: inherit;
 	font-size: inherit;
 	background-color: var(--background-color);
-	-webkit-padding: 0.4em 0;
 	padding: 0.4em;
 	border: 2px solid var(--accent-color);
 	border-radius: 4px;
@@ -32,6 +37,7 @@ input, button, select, textarea {
 
 input:focus, button:focus, select:focus, textarea:focus {
 	outline: 3px solid var(--lighter-accent-color);
+	transition: 50ms;
 }
 
 input:invalid {
@@ -46,11 +52,22 @@ button {
 	font-weight: bold;
 	color: var(--background-color);
 	background-color: var(--accent-color);
-	outline: 0px;
 	cursor: pointer;
 }
 
 button:not(:disabled):active {
 	background-color: var(--darker-accent-color);
+	border-color: var(--darker-accent-color);
+	transition: 50ms;
+}
+
+button.secondary {
+	color: var(--accent-color);
+	background-color: var(--background-color);
+}
+
+button.secondary:not(:disabled):active {
+	color: var(--darker-accent-color);
+	background-color: var(--background-color);
 	border-color: var(--darker-accent-color);
 }
