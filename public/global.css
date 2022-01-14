@@ -1,38 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
 body {
-	color: black;
-	background-color: white;
-	font-family: sans-serif;
+	color: var(--text-color);
+	background-color: var(--background-color);
+	font-family: "Inter", sans-serif;
+}
+
+a {
+	color: var(--accent-color);
+}
+
+a:visited {
+	color: var(--darker-accent-color);
 }
 
 input, button, select, textarea {
 	font-family: inherit;
 	font-size: inherit;
+	background-color: var(--background-color);
 	-webkit-padding: 0.4em 0;
 	padding: 0.4em;
-	margin: 0 0 0.5em 0;
-	border: 1px solid #ccc;
-	border-radius: 2px;
+	border: 2px solid var(--accent-color);
+	border-radius: 4px;
 }
 
-input:disabled {
-	color: #ccc;
+input:focus, button:focus, select:focus, textarea:focus {
+	outline: 3px solid var(--lighter-accent-color);
+}
+
+input:disabled, button:disabled {
+	opacity: 0.5;
 }
 
 button {
-	color: #333;
-	background-color: #f4f4f4;
-	outline: none;
+	font-weight: bold;
+	color: var(--background-color);
+	background-color: var(--accent-color);
+	outline: 0px;
 	cursor: pointer;
 }
 
-button:disabled {
-	color: #999;
-}
-
 button:not(:disabled):active {
-	background-color: #ddd;
-}
-
-button:focus {
-	border-color: #666;
+	background-color: var(--darker-accent-color);
+	border-color: var(--darker-accent-color);
 }

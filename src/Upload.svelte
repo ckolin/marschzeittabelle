@@ -36,7 +36,7 @@
 <style>
     div {
         border-radius: 1rem;
-        border: 3px dashed black;
+        border: 3px dashed var(--lighter-accent-color);
         padding: 3rem;
         text-align: center;
     }

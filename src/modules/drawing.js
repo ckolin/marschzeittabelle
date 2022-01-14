@@ -1,8 +1,7 @@
 import { Vec } from "./vec.js";
+import { theme } from "./theme.js";
 
 const padding = 20;
-const primaryColor = "black";
-const secondaryColor = "white";
 
 export function drawRoute(route, canvas) {
     const ctx = canvas.getContext("2d");
@@ -37,7 +36,7 @@ export function drawRoute(route, canvas) {
     ctx.beginPath();
     ctx.lineWidth = 4;
     ctx.lineCap = ctx.lineJoin = "round";
-    ctx.strokeStyle = primaryColor;
+    ctx.strokeStyle = theme.accentColor;
     let first = true;
     for (let point of route.line) {
         const p = project(point);
@@ -51,7 +50,7 @@ export function drawRoute(route, canvas) {
     ctx.stroke();
 
     // Draw dots
-    ctx.fillStyle = primaryColor;
+    ctx.fillStyle = theme.darkerAccentColor;
     for (let marker of route.markers) {
         const p = project(route.line[marker.index]);
         ctx.beginPath();
@@ -63,7 +62,7 @@ export function drawRoute(route, canvas) {
     ctx.font = "bold 14px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = secondaryColor;
+    ctx.fillStyle = theme.backgroundColor;
     for (let i = 0; i < route.markers.length; i++) {
         const marker = route.markers[i];
         const p = project(route.line[marker.index]);
@@ -103,7 +102,7 @@ export function drawProfile(route, canvas) {
     ctx.beginPath();
     ctx.lineWidth = 4;
     ctx.lineCap = ctx.lineJoin = "round";
-    ctx.strokeStyle = primaryColor;
+    ctx.strokeStyle = theme.accentColor;
     let first = true;
     for (let i = 0; i < route.lineProfile.length; i++) {
         const p = project(
@@ -125,7 +124,7 @@ export function drawProfile(route, canvas) {
     ctx.lineTo(bottomRight.x, canvas.height);
     ctx.lineTo(bottomLeft.x, canvas.height);
     const gradient = ctx.createLinearGradient(0, topLeft.y, 0, canvas.height);
-    gradient.addColorStop(0, primaryColor);
+    gradient.addColorStop(0, theme.lighterAccentColor);
     gradient.addColorStop(1, "transparent");
     ctx.fillStyle = gradient;
     ctx.globalAlpha = 0.2;
@@ -133,7 +132,7 @@ export function drawProfile(route, canvas) {
     ctx.globalAlpha = 1;
 
     // Draw dots
-    ctx.fillStyle = primaryColor;
+    ctx.fillStyle = theme.darkerAccentColor;
     for (let i = 0; i < route.markerProfile.length; i++) {
         const p = project(
             route.distanceSum[route.markers[i].index],
@@ -147,7 +146,7 @@ export function drawProfile(route, canvas) {
     ctx.font = "bold 14px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = secondaryColor;
+    ctx.fillStyle = theme.backgroundColor;
     for (let i = 0; i < route.markerProfile.length; i++) {
         const p = project(
             route.distanceSum[route.markers[i].index],
