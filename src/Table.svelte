@@ -31,36 +31,55 @@
 <h2>Marschzeittabelle</h2>
 <table>
     <tr>
-        <th></th>
+        <th />
         <th>Wegpunkt</th>
-        <th>Distanz</th>
-        <th>Höhe</th>
-        <th>Zeit</th>
+        <th colspan="2">Distanz</th>
+        <th colspan="2">Höhe</th>
+        <th colspan="2">Zeit</th>
     </tr>
     {#each data as row, i}
         {#if i > 0}
             <tr class="alt">
                 <td />
                 <td />
-                <td class="number">{Math.round(row.addedDistance)} m</td>
-                <td class="number">{Math.round(row.addedHeight)} m</td>
-                <td class="number">{Math.round(row.addedTime)} min</td>
+                <td class="number">{Math.round(row.addedDistance)}</td>
+                <td class="unit">m</td>
+                <td class="number">{Math.round(row.addedHeight)}</td>
+                <td class="unit">m</td>
+                <td class="number">{Math.round(row.addedTime)}</td>
+                <td class="unit">min</td>
             </tr>
         {/if}
         <tr>
             <td class="index">{row.index}</td>
             <td class="name">{row.name}</td>
-            <td class="number">{Math.round(row.distance)} m</td>
-            <td class="number">{Math.round(row.height)} m</td>
-            <td class="number">{Math.round(row.time)} min</td>
+            <td class="number">{Math.round(row.distance)}</td>
+            <td class="unit">m</td>
+            <td class="number">{Math.round(row.height)}</td>
+            <td class="unit">m ü.M.</td>
+            <td class="number">{Math.round(row.time)}</td>
+            <td class="unit">min</td>
         </tr>
     {/each}
 </table>
 
 <style>
+    table {
+        table-layout: fixed;
+        white-space: nowrap;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    th, td {
+        padding: 0 0.4em;
+        word-wrap: break-word;
+    }
+
     .index {
-        width: 20px;
-        height: 20px;
+        padding: 0 0.3em;
         border-radius: 50%;
         font-weight: bold;
         text-align: center;
@@ -78,7 +97,11 @@
     }
 
     .number {
-        padding: 0 1em;
+        padding-right: 0;
         text-align: right;
+    }
+
+    .unit {
+        padding-left: 0;
     }
 </style>
