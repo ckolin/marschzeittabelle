@@ -15,6 +15,7 @@ body {
 @media print {
 	body {
 		color-adjust: exact;
+		margin: 0;
 	}
 }
 

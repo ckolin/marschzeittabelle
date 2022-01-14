@@ -47,7 +47,7 @@
                 <button class="secondary" on:click={reverse}>Richtung wechseln</button>
                 <br />
                 <br />
-                <button on:click={print}>Ausdrucken</button>
+                <button on:click={print}>Herunterladen</button>
             </div>
             <div class="table">
                 <h2>Marschzeittabelle</h2>

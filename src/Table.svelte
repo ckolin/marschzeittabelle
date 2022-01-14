@@ -52,7 +52,7 @@
             </tr>
         {/if}
         <tr>
-            <td class="index">{row.index}</td>
+            <td class="index"><span>{row.index}</span></td>
             <td class="name">{row.name}</td>
             <td class="number">{Math.round(row.distance)}</td>
             <td class="unit">m</td>
@@ -80,8 +80,13 @@
     }
 
     .index {
-        padding: 0 0.3em;
-        border-radius: 50%;
+        text-align: right;
+    }
+
+    .index span {
+        display: inline-block;
+        min-width: 1.3em;
+        border-radius: 1em;
         font-weight: bold;
         text-align: center;
         color: var(--background-color);
