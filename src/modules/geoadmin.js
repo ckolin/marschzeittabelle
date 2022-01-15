@@ -1,7 +1,7 @@
 import { Vec } from "./vec.js";
-import { epsilon } from "./import.js";
 
 const baseUrl = "https://api3.geo.admin.ch/rest/services";
+const epsilon = 2;
 
 export function fetchProfile(line, ensureInputPoints, resolution) {
     const geometry = {
