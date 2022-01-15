@@ -125,7 +125,7 @@ export function drawProfile(route, canvas) {
     ctx.lineTo(bottomLeft.x, canvas.height);
     const gradient = ctx.createLinearGradient(0, topLeft.y, 0, canvas.height);
     gradient.addColorStop(0, theme.lighterAccentColor);
-    gradient.addColorStop(1, "transparent");
+    gradient.addColorStop(1, theme.backgroundColor);
     ctx.fillStyle = gradient;
     ctx.globalAlpha = 0.5;
     ctx.fill();
