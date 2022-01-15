@@ -27,10 +27,20 @@
     }
 </script>
 
+<header>
+    <span>
+        <a href="">startseite</a>
+    </span>
+    <span>
+        <a href="#">über diese seite</a> |
+        <a href="#">faq</a> |
+        <a href="https://github.com/ckolin/marschzeittabelle">github</a>
+    </span>
+</header>
 <main>
     {#if route}
         <div class="editor">
-            <div class="header">
+            <div class="general">
                 <div class="info">
                     <h2>Route</h2>
                     <Info {route} />
@@ -61,17 +71,15 @@
         <Upload bind:route />
     {/if}
 </main>
-<footer>
-    <span>marschzeittabelle.ch</span>
-    <span>
-        <a href="#">über diese seite</a> |
-        <a href="#">faq</a> |
-        <a href="https://github.com/ckolin/marschzeittabelle">github</a>
-    </span>
-</footer>
+<footer>marschzeittabelle.ch</footer>
 
 <style>
-    .header {
+    header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .general {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
@@ -86,13 +94,7 @@
         display: block;
     }
 
-    @media print {
-        .options {
-            display: none;
-        }
-    }
-
-    .header, .table, .profile {
+    .general, .table, .profile {
         overflow-x: auto;
     }
 
@@ -101,8 +103,12 @@
     }
 
     footer {
-        margin-top: 2rem;
-        display: flex;
-        justify-content: space-between;
+        margin-top: 1rem;
+    }
+
+    @media print {
+        header, .options {
+            display: none;
+        }
     }
 </style>
