@@ -8,8 +8,6 @@
 
     import { theme } from "./modules/theme.js";
 
-    export let name;
-
     let route;
     let speed = 4;
 
@@ -62,8 +60,15 @@
         <Introduction />
         <Upload bind:route />
     {/if}
-    <p>{name}</p>
 </main>
+<footer>
+    <span>marschzeittabelle.ch</span>
+    <span>
+        <a href="#">über diese seite</a> |
+        <a href="#">faq</a> |
+        <a href="https://github.com/ckolin/marschzeittabelle">github</a>
+    </span>
+</footer>
 
 <style>
     .header {
@@ -93,5 +98,11 @@
 
     .options, .table, .profile {
         grid-column-end: span 2;
+    }
+
+    footer {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: space-between;
     }
 </style>
