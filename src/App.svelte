@@ -18,12 +18,6 @@
     function print() {
         window.print();
     }
-
-    // Set theme styles
-    for (let key of Object.keys(theme)) {
-        const property = "--" + key.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
-        document.documentElement.style.setProperty(property, theme[key]);
-    }
 </script>
 
 <header>
