@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="6.614583mm"
+   height="6.614583mm"
+   viewBox="0 0 6.614583 6.614583"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="icon.svg"
+   inkscape:export-filename="C:\Users\colin\Downloads\favicon.png"
+   inkscape:export-xdpi="245.76003"
+   inkscape:export-ydpi="245.76003"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:zoom="16"
+     inkscape:cx="13.09375"
+     inkscape:cy="15.59375"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:snap-text-baseline="false"
+     inkscape:object-paths="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid9"
+       originx="-18.653126"
+       originy="-15.742708" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4219">
+      <circle
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round"
+         id="circle4221"
+         cx="21.960417"
+         cy="19.049999"
+         r="3.3072915" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-18.653125,-15.742708)">
+    <circle
+       style="fill:#ffffff;stroke:none;stroke-width:0.264583;stroke-linejoin:round"
+       id="path3775-4"
+       cx="21.960417"
+       cy="19.049999"
+       r="3.3072915"
+       inkscape:export-filename="C:\Users\colin\Downloads\favicon.png"
+       inkscape:export-xdpi="236.30775"
+       inkscape:export-ydpi="236.30775" />
+    <path
+       style="fill:#000000;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 26.458333,20.902083 -3.175,-2.910416 -1.5875,1.852083 -1.322917,-1.322917 -2.116667,2.38125 -0.137033,1.408997 6.614583,1.5875 z"
+       id="path3912"
+       clip-path="url(#clipPath4219)" />
+  </g>
+</svg>
