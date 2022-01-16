@@ -1,6 +1,5 @@
 <script>
     import Info from "./Info.svelte";
-    import Map from "./Map.svelte";
     import Profile from "./Profile.svelte";
     import Table from "./Table.svelte";
     import Introduction from "./Introduction.svelte";
@@ -45,17 +44,16 @@
                     <h2>Route</h2>
                     <Info {route} />
                 </div>
-                <Map {route} />
-            </div>
-            <div class="options">
-                <h2>Optionen</h2>
-                <label for="speed">Geschwindigkeit in Lkm/h</label>
-                <input id="speed" type="number" min="0.5" step="0.5" bind:value={speed} />
-                <br />
-                <button class="secondary" on:click={reverse}>Richtung wechseln</button>
-                <br />
-                <br />
-                <button on:click={print}>Herunterladen</button>
+                <div class="options">
+                    <h2>Optionen</h2>
+                    <label for="speed">Geschwindigkeit in Lkm/h</label>
+                    <input id="speed" type="number" min="0.5" step="0.5" bind:value={speed} />
+                    <br />
+                    <button class="secondary" on:click={reverse}>Richtung wechseln</button>
+                    <br />
+                    <br />
+                    <button on:click={print}>Herunterladen</button>
+                </div>
             </div>
             <div class="table">
                 <h2>Marschzeittabelle</h2>
@@ -86,15 +84,11 @@
         flex-wrap: wrap;
     }
 
-    .info {
-        white-space: nowrap;
-    }
-
     .options label, input {
         display: block;
     }
 
-    .general, .table, .profile {
+    .table, .profile {
         overflow-x: auto;
     }
 
