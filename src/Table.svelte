@@ -14,16 +14,19 @@
             res[i] = {
                 index: i + 1,
                 name: route.markers[i].name,
-                distance: route.distanceSum[route.markers[i].index],
                 height: route.markerProfile[i].height,
+                distance: route.distanceSum[route.markers[i].index] / 1000,
+                effort: route.effortSum[i],
+                time: route.effortSum[i] / speed * 60
             };
 
-            res[i].time = res[i].distance / speed / 1000 * 60;
-
             if (i > 0) {
-                res[i].addedDistance = res[i].distance - res[i - 1].distance;
-                res[i].addedHeight = res[i].height - res[i - 1].height;
-                res[i].addedTime = res[i].time - res[i - 1].time;
+                res[i].diff = {
+                    height: res[i].height - res[i - 1].height,
+                    distance: res[i].distance - res[i - 1].distance,
+                    effort: route.effort[i],
+                    time: res[i].time - res[i - 1].time
+                };
             }
         }
         return res;
@@ -34,30 +37,35 @@
     <tr>
         <th />
         <th>Wegpunkt</th>
-        <th colspan="2">Distanz</th>
         <th colspan="2">Höhe</th>
+        <th colspan="2">Distanz</th>
+        <th colspan="2">Aufwand</th>
         <th colspan="2">Zeit</th>
     </tr>
-    {#each data as row, i}
-        {#if i > 0}
+    {#each data as row}
+        {#if row.diff}
             <tr class="alt">
                 <td />
                 <td />
-                <td class="number">{Math.round(row.addedDistance)}</td>
+                <td class="number">{Math.round(row.diff.height)}</td>
                 <td class="unit">m</td>
-                <td class="number">{Math.round(row.addedHeight)}</td>
-                <td class="unit">m</td>
-                <td class="number">{Math.round(row.addedTime)}</td>
+                <td class="number">{row.diff.distance.toFixed(1)}</td>
+                <td class="unit">km</td>
+                <td class="number">{row.diff.effort.toFixed(1)}</td>
+                <td class="unit">Lkm</td>
+                <td class="number">{Math.round(row.diff.time)}</td>
                 <td class="unit">min</td>
             </tr>
         {/if}
         <tr>
             <td class="index"><span>{row.index}</span></td>
             <td class="name">{row.name}</td>
-            <td class="number">{Math.round(row.distance)}</td>
-            <td class="unit">m</td>
             <td class="number">{Math.round(row.height)}</td>
-            <td class="unit">m ü.M.</td>
+            <td class="unit">m</td>
+            <td class="number">{row.distance.toFixed(1)}</td>
+            <td class="unit">km</td>
+            <td class="number">{row.effort.toFixed(1)}</td>
+            <td class="unit">Lkm</td>
             <td class="number">{Math.round(row.time)}</td>
             <td class="unit">min</td>
         </tr>
