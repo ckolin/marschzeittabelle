@@ -34,10 +34,14 @@
 
 <style>
     div {
-        border-radius: 1rem;
+        border-radius: 2rem;
         border: 3px dashed var(--lighter-accent-color);
-        padding: 3rem;
+        padding: 3rem 2rem;
         text-align: center;
+    }
+
+    div h2 {
+        margin: 0;
     }
 
     input {

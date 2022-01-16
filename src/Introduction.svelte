@@ -1,5 +1,5 @@
 <div>
-    <h1>Marschzeittabelle<br>leicht gemacht.</h1>
+    <h1>Marschzeit&shy;tabelle<br />leicht gemacht.</h1>
     <p class="subtitle">Wir übertragen deine Route automatisch in eine Marschzeittabelle, damit du dich auf die wichtigen Teile der Planung konzentrieren kannst.</p>
     <h2>1. Route planen</h2>
     <p>Route einzeichnen, Wegpunkte setzen - das kennst du bereits.</p>
@@ -23,7 +23,7 @@
 
     @media (max-width: 800px) {
         h1 {
-            font-size: 2em;
+            font-size: 3em;
         }
     }
     
