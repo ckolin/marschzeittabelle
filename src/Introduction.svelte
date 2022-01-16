@@ -9,7 +9,7 @@
         <h2>2. Exportieren und hochladen</h2>
         <p>In wenigen Klicks erledigt.</p>
         <h2>3. Voilà!</h2>
-        <p>Schon hast du deine Marschzeittabelle. Jetzt noch Gewschwindigkeit, Uhrzeit und Pausen anpassen.</p>
+        <p>Schon hast du deine Marschzeittabelle. Jetzt noch Geschwindigkeit, Uhrzeit und Pausen anpassen.</p>
     </div>
     <img src="example.png" alt="Beispiel" />
 </div>
