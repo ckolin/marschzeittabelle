@@ -86,10 +86,6 @@
         overflow-x: auto;
     }
 
-    .options, .table, .profile {
-        grid-column-end: span 2;
-    }
-
     footer {
         margin-top: 1rem;
     }

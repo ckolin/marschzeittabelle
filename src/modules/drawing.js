@@ -6,7 +6,7 @@ export function drawProfile(route, canvas) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const dotRadius = 10;
-    const padding = dotRadius;
+    const padding = dotRadius + 2;
     const lineWidth = 4;
     const bottom = 40;
 

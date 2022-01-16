@@ -13,4 +13,9 @@
 <canvas bind:this={canvas} width="800" height="150" />
 
 <style>
+    @media print {
+        canvas {
+            max-width: 100%;
+        }
+    }
 </style>
