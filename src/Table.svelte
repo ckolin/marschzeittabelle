@@ -35,46 +35,34 @@
 
 <table>
     <tr>
-        <th />
         <th>Wegpunkt</th>
-        <th colspan="2">Höhe</th>
-        <th colspan="2">Distanz</th>
-        <th colspan="2">Aufwand</th>
-        <th colspan="2">Zeit</th>
+        <th>Höhe</th>
+        <th>Distanz</th>
+        <th>Aufwand</th>
+        <th>Zeit</th>
     </tr>
     {#each data as row}
         {#if row.diff}
             <tr class="alt">
                 <td />
-                <td />
-                <td class="number">{Math.round(row.diff.height)}</td>
-                <td class="unit">m</td>
-                <td class="number">{row.diff.distance.toFixed(1)}</td>
-                <td class="unit">km</td>
-                <td class="number">{row.diff.effort.toFixed(1)}</td>
-                <td class="unit">Lkm</td>
-                <td class="number">{Math.round(row.diff.time)}</td>
-                <td class="unit">min</td>
+                <td class="number">{Math.round(row.diff.height)} m</td>
+                <td class="number">{row.diff.distance.toFixed(1)} km</td>
+                <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
+                <td class="number">{Math.round(row.diff.time)} min</td>
             </tr>
         {/if}
         <tr>
-            <td class="index"><span>{row.index}</span></td>
-            <td class="name">{row.name}</td>
-            <td class="number">{Math.round(row.height)}</td>
-            <td class="unit">m</td>
-            <td class="number">{row.distance.toFixed(1)}</td>
-            <td class="unit">km</td>
-            <td class="number">{row.effort.toFixed(1)}</td>
-            <td class="unit">Lkm</td>
-            <td class="number">{Math.round(row.time)}</td>
-            <td class="unit">min</td>
+            <td class="name"><span>{row.index}</span> {row.name}</td>
+            <td class="number">{Math.round(row.height)} m</td>
+            <td class="number">{row.distance.toFixed(1)} km</td>
+            <td class="number">{row.effort.toFixed(1)} Lkm</td>
+            <td class="number">{Math.round(row.time)} min</td>
         </tr>
     {/each}
 </table>
 
 <style>
     table {
-        table-layout: fixed;
         white-space: nowrap;
     }
 
@@ -83,15 +71,19 @@
     }
 
     th, td {
-        padding: 0 0.4em;
-        word-wrap: break-word;
+        padding-left: 1rem;
     }
 
-    .index {
-        text-align: right;
+    th:first-child, td:first-child {
+        padding-left: 0;
     }
-
-    .index span {
+    
+    .name {
+        font-weight: bold;
+        color: var(--darker-accent-color);
+    }
+    
+    .name span {
         display: inline-block;
         min-width: 1.3em;
         border-radius: 1em;
@@ -101,21 +93,11 @@
         background: var(--darker-accent-color);
     }
 
-    .name {
-        font-weight: bold;
-        color: var(--darker-accent-color);
-    }
-
     .alt {
         color: var(--accent-color);
     }
 
     .number {
-        padding-right: 0;
         text-align: right;
-    }
-
-    .unit {
-        padding-left: 0;
     }
 </style>
