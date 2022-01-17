@@ -6,8 +6,9 @@ export const theme = {
     lighterAccentColor: "#87BC5E"
 };
 
-// Set theme styles
-for (let key of Object.keys(theme)) {
-    const property = "--" + key.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
-    document.documentElement.style.setProperty(property, theme[key]);
+export function applyStyles() {
+    for (let key of Object.keys(theme)) {
+        const property = "--" + key.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
+        document.documentElement.style.setProperty(property, theme[key]);
+    }
 }

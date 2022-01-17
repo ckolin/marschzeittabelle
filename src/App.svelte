@@ -5,8 +5,6 @@
     import Introduction from "./Introduction.svelte";
     import Upload from "./Upload.svelte";
 
-    import { theme } from "./modules/theme.js";
-
     let route;
     let speed = 4;
 
@@ -68,6 +66,7 @@
 <style>
     header {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
     }
 
