@@ -20,11 +20,10 @@
 
 <header>
     <span>
-        <a href="">startseite</a>
+        <a href=".">startseite</a>
     </span>
     <span>
-        <a href="#">über diese seite</a> |
-        <a href="#">faq</a> |
+        <a href="faq">faq</a> |
         <a href="https://github.com/ckolin/marschzeittabelle">github</a>
     </span>
 </header>
