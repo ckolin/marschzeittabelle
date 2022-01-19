@@ -2,7 +2,7 @@ import { Swisstopo } from "./swisstopo.js";
 import { Vec } from "./vec.js";
 import { Route } from "./route.js";
 
-export const epsilon = 10;
+const epsilon = 10;
 
 export function importFile(file) {
     return readFile(file)

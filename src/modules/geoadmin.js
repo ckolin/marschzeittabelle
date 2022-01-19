@@ -9,14 +9,18 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
         coordinates: line.map(p => [Math.round(p.x), Math.round(p.y)])
     };
     return fetch(`${baseUrl}/profile.json?sr=21781&distinct_points=${ensureInputPoints}&nb_points=${resolution}&geom=${JSON.stringify(geometry)}`)
-        .then(res => res.json())
-        .then(data => new Promise(resolve => {
-            let profile = data.map(p => {
-                return {
-                    point: { x: p.easting, y: p.northing },
-                    height: p.alts.COMB
-                };
-            });
+        .then((res) => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw "Das Höhenprofil konnte nicht geladen werden.";
+            }
+        })
+        .then((data) => new Promise((resolve) => {
+            let profile = data.map(p => ({
+                point: { x: p.easting, y: p.northing },
+                height: p.alts.COMB
+            }));
 
             // Remove extra points not associated with a marker
             if (ensureInputPoints) {
@@ -24,5 +28,6 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
             }
 
             resolve(profile);
-        }));
+        }))
+        .catch(() => { throw "Die Verbindung zu den swisstopo-Servern ist fehlgeschlagen." });
 }
