@@ -34,7 +34,7 @@
             <div class="general">
                 <div class="info">
                     <h2>Route</h2>
-                    <Info {route} />
+                    <Info {route} {speed}/>
                 </div>
                 <div class="options">
                     <h2>Optionen</h2>

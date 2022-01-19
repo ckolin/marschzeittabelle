@@ -1,4 +1,6 @@
 <script>
+    import { formatDuration } from "./modules/formatting.js";
+
     export let route;
     export let speed;
 
@@ -17,7 +19,7 @@
                 height: route.markerProfile[i].height,
                 distance: route.distanceSum[route.markers[i].index] / 1000,
                 effort: route.effortSum[i],
-                time: route.effortSum[i] / speed * 60
+                time: route.effortSum[i] / speed
             };
 
             if (i > 0) {
@@ -39,7 +41,7 @@
         <th>Höhe</th>
         <th>Distanz</th>
         <th>Aufwand</th>
-        <th>Zeit</th>
+        <th>Dauer</th>
     </tr>
     {#each data as row}
         {#if row.diff}
@@ -48,7 +50,7 @@
                 <td class="number">{Math.round(row.diff.height)} m</td>
                 <td class="number">{row.diff.distance.toFixed(1)} km</td>
                 <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
-                <td class="number">{Math.round(row.diff.time)} min</td>
+                <td class="number">{formatDuration(row.diff.time)} h</td>
             </tr>
         {/if}
         <tr>
@@ -56,7 +58,7 @@
             <td class="number">{Math.round(row.height)} m</td>
             <td class="number">{row.distance.toFixed(1)} km</td>
             <td class="number">{row.effort.toFixed(1)} Lkm</td>
-            <td class="number">{Math.round(row.time)} min</td>
+            <td class="number">{formatDuration(row.time)} h</td>
         </tr>
     {/each}
 </table>

@@ -19,7 +19,7 @@
         {#await promise}
             <h3>Route wird gewandert...</h3>
         {:catch error}
-            <h3>Hoppla Schorsch!</h3>
+            <h3>Hoppla!</h3>
             <p>Es gab einen Fehler beim Import:<br />{error}</p>
             <button class="secondary" on:click={() => files = null}>Nochmal versuchen</button>
         {/await}
