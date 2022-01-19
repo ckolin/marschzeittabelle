@@ -101,5 +101,6 @@
 
     .number {
         text-align: right;
+        font-family: "Roboto Mono", monospace;
     }
 </style>
