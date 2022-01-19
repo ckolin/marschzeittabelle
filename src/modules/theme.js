@@ -1,14 +1,14 @@
 export const theme = {
-    backgroundColor: "#fff",
-    textColor: "#222",
-    darkerAccentColor: "#214B00",
-    accentColor: "#3C7113",
-    lighterAccentColor: "#87BC5E"
+    backgroundColor: null,
+    textColor: null,
+    darkerAccentColor: null,
+    accentColor: null,
+    lighterAccentColor: null
 };
 
 export function applyStyles() {
     for (let key of Object.keys(theme)) {
         const property = "--" + key.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
-        document.documentElement.style.setProperty(property, theme[key]);
+        theme[key] = window.getComputedStyle(document.body).getPropertyValue(property);
     }
 }

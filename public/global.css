@@ -1,72 +1,84 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
+:root {
+    --background-color: #fff;
+    --text-color: #222;
+    --darker-accent-color: #224c00;
+    --accent-color: #3e7213;
+    --lighter-accent-color: #8abd5f;
+}
+
 html {
     margin: 0 auto;
     max-width: 820px;
 }
 
 body {
-	margin: 10px;
-	color: var(--text-color);
-	background-color: var(--background-color);
-	font-family: "Inter", sans-serif;
+    margin: 10px;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    font-family: "Inter", sans-serif;
 }
 
 @media print {
-	body {
-		color-adjust: exact;
-		margin: 0;
-	}
+    :root {
+        --text-color: #000;
+    }
+
+    body {
+        color-adjust: exact;
+        margin: 0;
+    }
 }
 
 a {
-	color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 input, button, select, textarea {
-	font-family: inherit;
-	font-size: inherit;
-	color: var(--text-color);
-	background-color: var(--background-color);
-	padding: 0.4em;
-	border: 2px solid var(--accent-color);
-	border-radius: 4px;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 0.4em;
+    border: 2px solid var(--accent-color);
+    border-radius: 4px;
 }
 
 input:focus, button:focus, select:focus, textarea:focus {
-	outline: 3px solid var(--lighter-accent-color);
-	transition: 50ms;
+    outline: 3px solid var(--lighter-accent-color);
+    transition: 50ms;
 }
 
 input:invalid {
-	outline: 3px solid red;
+    outline: 3px solid red;
 }
 
 input:disabled, button:disabled {
-	opacity: 0.5;
+    opacity: 0.5;
 }
 
 button {
-	font-weight: bold;
-	color: var(--background-color);
-	background-color: var(--accent-color);
-	cursor: pointer;
+    font-weight: bold;
+    color: var(--background-color);
+    background-color: var(--accent-color);
+    cursor: pointer;
 }
 
 button:not(:disabled):active {
-	background-color: var(--darker-accent-color);
-	border-color: var(--darker-accent-color);
-	transition: 50ms;
+    background-color: var(--darker-accent-color);
+    border-color: var(--darker-accent-color);
+    transition: 50ms;
 }
 
 button.secondary {
-	color: var(--accent-color);
-	background-color: var(--background-color);
+    color: var(--accent-color);
+    background-color: var(--background-color);
 }
 
 button.secondary:not(:disabled):active {
-	color: var(--darker-accent-color);
-	background-color: var(--background-color);
-	border-color: var(--darker-accent-color);
+    color: var(--darker-accent-color);
+    background-color: var(--background-color);
+    border-color: var(--darker-accent-color);
 }
