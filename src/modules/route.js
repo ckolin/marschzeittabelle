@@ -11,6 +11,7 @@ export class Route {
         this.lineProfile = await fetchProfile(this.line, false, 100);
         this.markerProfile = await fetchProfile(this.markers.map(m => this.line[m.index]), true, this.markers.length);
         this.calculateDistances();
+        return this;
     }
 
     reverse() {

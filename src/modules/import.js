@@ -2,11 +2,29 @@ import { Swisstopo } from "./swisstopo.js";
 import { Vec } from "./vec.js";
 import { Route } from "./route.js";
 
-export const epsilon = 2;
+export const epsilon = 10;
 
-export function parseKml(kmlString) {
+export function importFile(file) {
+    return readFile(file)
+        .then((content) => parseKml(content))
+        .then((route) => route.loadProfiles());
+}
+
+function readFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => resolve(reader.result));
+        reader.addEventListener("error", () => reject("Die Datei konnte nicht gelesen werden."));
+        reader.readAsText(file);
+    });
+}
+
+async function parseKml(kmlString) {
     const parser = new DOMParser();
     const kml = parser.parseFromString(kmlString, "application/xml");
+    if (kml.querySelector("parsererror")) {
+        throw "Die Datei ist nicht in gültigem KML-Format.";
+    }
 
     const lines = [];
     const markers = [];
@@ -36,12 +54,19 @@ export function parseKml(kmlString) {
         }
     }
 
+    // Check if route contains line and markers
+    if (lines.length === 0) {
+        throw "Die Route enthält keine Linie."
+    }
+    if (markers.length === 0) {
+        throw "Die Route enthält keine Wegpunkte."
+    }
+
     // Merge disjointed lines
     while (lines.length > 1) {
         const connected = findConnectedLines(lines, epsilon);
         if (connected == null) {
-            console.error("Lines are not connected");
-            return;
+            throw "Die Route enthält Linien, die nicht miteinander verbunden sind.";
         }
 
         if (connected.reverseFirst) {
@@ -68,6 +93,12 @@ export function parseKml(kmlString) {
                 minDistance = distance;
             }
         }
+
+        // Check if marker is on line
+        if (minDistance > epsilon) {
+            throw `Der Wegpunkt "${marker.name}" ist nicht auf der Linie, bzw. nicht in der Nähe eines Eckpunkts der Linie.`;   
+        }
+
         marker.index = closest;
         delete marker.point;
     }
