@@ -1,6 +1,6 @@
 <div class="title">
 <h1>Marschzeit&shy;tabelle<br />leicht gemacht.</h1>
-<p class="subtitle">Wir übertragen deine Route automatisch in eine Marschzeittabelle, damit du dich auf die wichtigen Teile der Planung konzentrieren kannst.</p>
+<p class="subtitle">Wir übertragen deine Route automatisch in eine Marschzeittabelle, damit du dich auf die Wanderplanung konzentrieren kannst.</p>
 </div>
 <div class="tutorial">
     <div>
