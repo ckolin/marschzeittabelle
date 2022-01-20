@@ -21,17 +21,6 @@ body {
     font-family: "Inter", sans-serif;
 }
 
-@media print {
-    :root {
-        --text-color: #000;
-    }
-
-    body {
-        color-adjust: exact;
-        margin: 0;
-    }
-}
-
 a {
     color: var(--accent-color);
 }
@@ -81,4 +70,19 @@ button.secondary:not(:disabled):active {
     color: var(--darker-accent-color);
     background-color: var(--background-color);
     border-color: var(--darker-accent-color);
+}
+
+@media print {
+    :root {
+        --text-color: #000;
+    }
+
+    body {
+        color-adjust: exact;
+        margin: 0;
+    }
+
+    .noprint {
+        display: none !important;
+    }
 }

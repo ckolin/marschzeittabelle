@@ -18,7 +18,7 @@
     }
 </script>
 
-<header>
+<header class="noprint">
     <span>
         <a href=".">startseite</a>
     </span>
@@ -35,7 +35,7 @@
                     <h2>Route</h2>
                     <Info {route} {speed}/>
                 </div>
-                <div class="options">
+                <div class="options noprint">
                     <h2>Optionen</h2>
                     <label for="speed">Geschwindigkeit in Lkm/h</label>
                     <input id="speed" type="number" min="0.5" step="0.5" bind:value={speed} />
@@ -86,11 +86,5 @@
 
     footer {
         margin-top: 1rem;
-    }
-
-    @media print {
-        header, .options {
-            display: none;
-        }
     }
 </style>
