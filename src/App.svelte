@@ -18,17 +18,16 @@
     }
 </script>
 
-<header class="noprint">
-    <span>
-        <a href=".">startseite</a>
-    </span>
-    <span>
-        <a href="faq">faq</a> |
-        <a href="https://github.com/ckolin/marschzeittabelle">github</a>
-    </span>
-</header>
+{#if route != null}
+    <header class="noprint">
+        <a href=".">❮ startseite</a>
+    </header>
+{/if}
 <main>
-    {#if route}
+    {#if route == null}
+        <Introduction />
+        <Upload bind:route />
+    {:else}
         <div class="editor">
             <div class="general">
                 <div class="info">
@@ -55,20 +54,17 @@
                 <Profile {route} />
             </div>
         </div>
-    {:else}
-        <Introduction />
-        <Upload bind:route />
     {/if}
 </main>
-<footer>marschzeittabelle.ch</footer>
+<footer>
+    <span>marschzeittabelle.ch</span>
+    <span class="noprint">
+        | <a href="faq">faq</a>
+        | <a href="https://github.com/ckolin/marschzeittabelle">github</a>
+    </span>
+</footer>
 
 <style>
-    header {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
     .general {
         display: flex;
         align-items: flex-start;
@@ -85,6 +81,7 @@
     }
 
     footer {
-        margin-top: 1rem;
+        text-align: center;
+        margin-top: 2rem;
     }
 </style>
