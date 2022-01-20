@@ -1,7 +1,17 @@
 export function formatDuration(hours) {
+    const {h, m} = getParts(hours);
+    return `${h}:${pad(m)}`;
+}
+
+export function formatTime(hours) {
+    const {h, m} = getParts(hours);
+    return `${pad(h % 24)}:${pad(m)}`;
+}
+
+function getParts(hours) {
     const h = Math.floor(hours);
     const m = Math.round((hours - h) * 60);
-    return `${h}:${pad(m)}`;
+    return {h, m};
 }
 
 function pad(number) {
