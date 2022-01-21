@@ -1,3 +1,7 @@
+<script>
+    import HelpLink from "./HelpLink.svelte";
+</script>
+
 <div class="title">
 <h1>Marschzeit&shy;tabelle<br />leicht gemacht.</h1>
 <p class="subtitle">Wir übertragen deine Route automatisch in eine Marschzeittabelle, damit du dich auf die Wanderplanung konzentrieren kannst.</p>
@@ -7,7 +11,7 @@
         <h2>1. Route planen</h2>
         <p>Route einzeichnen, Wegpunkte setzen - das kennst du bereits.</p>
         <h2>2. Exportieren und hochladen</h2>
-        <p>In wenigen Klicks erledigt.</p>
+        <p>In wenigen Klicks erledigt. <HelpLink topic="export" /></p>
         <h2>3. Voilà!</h2>
         <p>Schon hast du deine Marschzeittabelle. Jetzt noch Geschwindigkeit, Startzeit und Pausen anpassen.</p>
     </div>

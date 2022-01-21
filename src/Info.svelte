@@ -1,4 +1,6 @@
 <script>
+    import HelpLink from "./HelpLink.svelte";
+
     import { formatDuration } from "./modules/formatting.js";
 
     export let route;
@@ -24,7 +26,7 @@ Start: <b>{route.markers[0].name}</b><br />
 Ende: <b>{route.markers[route.markers.length - 1].name}</b><br />
 Auf-/Abstieg: ↑ <b>{Math.round(ascent)} m</b> ↓ <b>{Math.round(descent)} m</b><br />
 Distanz: <b>{(route.distanceSum[route.line.length - 1] / 1000).toFixed(1)} km</b><br />
-Aufwand: <b>{route.effortSum[route.markers.length - 1].toFixed(1)} Lkm</b><br />
+Aufwand: <b>{route.effortSum[route.markers.length - 1].toFixed(1)} Lkm</b> <HelpLink topic="berechnung" /><br />
 Dauer: <b>{formatDuration(route.effortSum[route.markers.length - 1] / speed)} h</b><br />
 
 <style>

@@ -59,7 +59,7 @@
 <footer>
     <span>marschzeittabelle.ch</span>
     <span class="noprint">
-        | <a href="faq">faq</a>
+        | <a href="hilfe">hilfe</a>
         | <a href="https://github.com/ckolin/marschzeittabelle">github</a>
     </span>
 </footer>
