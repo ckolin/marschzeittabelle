@@ -9,7 +9,7 @@
 <div class="tutorial">
     <div>
         <h2>1. Route planen</h2>
-        <p>Route einzeichnen, Wegpunkte setzen - das kennst du bereits.</p>
+        <p>Route einzeichnen, Wegpunkte benennen - das kennst du bereits.</p>
         <h2>2. Exportieren und hochladen</h2>
         <p>In wenigen Klicks erledigt. <HelpLink topic="export" /></p>
         <h2>3. Voilà!</h2>

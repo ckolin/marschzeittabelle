@@ -25,7 +25,7 @@
         {/await}
     {:else}
         <h2>Route hochladen</h2>
-        <p>Unterstützt sind Exporte im <b>KML-Format</b> von <a href="https://map.geo.admin.ch" target="_blank">map.geo.admin.ch</a> oder der <a href="https://www.swisstopo.admin.ch/en/maps-data-online/maps-geodata-online/swisstopo-app.html" target="_blank">swisstopo-App</a>.</p>
+        <p>Unterstützt sind <b>KML-Dateien</b> von <a href="https://map.geo.admin.ch" target="_blank">map.geo.admin.ch</a> oder der <a href="https://www.swisstopo.admin.ch/en/maps-data-online/maps-geodata-online/swisstopo-app.html" target="_blank">swisstopo-App</a>, sowie <b>GPX-Dateien</b> von <a href="https://www.outdooractive.com/de/routeplanner" target="_blank">outdooractive.com</a>.</p>
         <p>Datei hierher ziehen oder...</p>
         <input type="file" id="upload" accept=".kml, .gpx" bind:files />
         <button>
@@ -39,8 +39,14 @@
     div {
         border-radius: 2rem;
         border: 3px dashed var(--lighter-accent-color);
-        padding: 3rem 2rem;
+        padding: 3rem 6rem;
         text-align: center;
+    }
+
+    @media (max-width: 600px) {
+        div {
+            padding: 2rem;
+        }
     }
 
     div h2 {
