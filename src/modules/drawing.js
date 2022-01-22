@@ -26,8 +26,8 @@ export function drawProfile(route, canvas) {
         (canvas.height - 2 * padding - bottom) / bounds.y);
 
     // Fit canavs to drawing
-    canvas.width = Math.ceil(bounds.x * scale + 2 * padding);
-    canvas.height = Math.ceil(bounds.y * scale + 2 * padding + bottom);
+    canvas.width = Math.floor(bounds.x * scale + 2 * padding);
+    canvas.height = Math.floor(bounds.y * scale + 2 * padding + bottom);
 
     const project = (distance, height) => Vec.add(
         Vec.scale({ x: distance, y: minHeight - height }, scale),

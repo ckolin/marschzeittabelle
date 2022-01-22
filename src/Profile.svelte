@@ -6,11 +6,13 @@
     let canvas;
 
     $: if (canvas) {
+        canvas.width = 800;
+        canvas.height = 150;
         drawProfile(route, canvas);
     }
 </script>
 
-<canvas bind:this={canvas} width="800" height="150" />
+<canvas bind:this={canvas} />
 
 <style>
     @media print {
