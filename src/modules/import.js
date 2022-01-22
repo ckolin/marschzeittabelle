@@ -14,7 +14,7 @@ export function importFile(file) {
                 return readGpx(xml);
             }
         })
-        .then(({lines, markers}) => buildRoute(lines, markers))
+        .then(({ lines, markers }) => buildRoute(lines, markers))
         .then((route) => route.loadProfiles());
 }
 
@@ -40,8 +40,12 @@ async function readKml(xml) {
     const lines = [];
     const markers = [];
 
-    const placemarks = xml
-        .querySelectorAll("Placemark");
+    const coords = (str) => {
+        const [long, lat] = str.split(",");
+        return convertCoordinates(lat, long);
+    };
+
+    const placemarks = xml.querySelectorAll("Placemark");
     for (let placemark of placemarks) {
         // Find lines
         if (placemark.querySelector("LineString")) {
@@ -50,31 +54,56 @@ async function readKml(xml) {
                 .innerHTML
                 .trim()
                 .split(" ")
-                .map(s => parseCoordinates(s));
+                .map(s => coords(s));
             lines.push(points);
         }
+
         // Find markers
         if (placemark.querySelector("Point")) {
             const name = placemark
                 .querySelector("name")
                 .innerHTML
                 .trim();
-            const point = parseCoordinates(
-                placemark.querySelector("Point coordinates").innerHTML);
+            const point = coords(placemark
+                .querySelector("Point coordinates")
+                .innerHTML);
             markers.push({ name, point });
         }
     }
 
-    return {lines, markers};
+    return { lines, markers };
 }
 
 async function readGpx(xml) {
     const lines = [];
     const markers = [];
 
-    // TODO
-    
-    return {lines, markers};
+    const coords = (p) => convertCoordinates(
+        p.getAttribute("lat"), p.getAttribute("lon"));
+
+    // Find lines
+    const segments = xml.querySelectorAll("trkseg");
+    for (let segment of segments) {
+        const points = Array.from(segment.querySelectorAll("trkpt"))
+            .map(p => coords(p));
+        lines.push(points);
+    }
+
+    // Find markers
+    const nameElements = xml.querySelectorAll("trkpt > name");
+    for (let nameElement of nameElements) {
+        const name = nameElement.innerHTML;
+        const point = coords(nameElement.parentElement);
+        markers.push({ name, point });
+    }
+
+    return { lines, markers };
+}
+
+// Converts coordinates from WGS84 to LV03
+function convertCoordinates(lat, long) {
+    const [x, y] = Swisstopo.WGStoCH(Number(lat), Number(long));
+    return { x, y };
 }
 
 async function buildRoute(lines, markers) {
@@ -120,7 +149,7 @@ async function buildRoute(lines, markers) {
 
         // Check if marker is on line
         if (minDistance > epsilon) {
-            throw `Der Wegpunkt "${marker.name}" ist nicht auf der Linie, bzw. nicht in der Nähe eines Eckpunkts der Linie.`;
+            throw `Der Wegpunkt "${marker.name}" ist nicht in der Nähe eines Eckpunkts der Linie.`;
         }
 
         marker.index = closest;
@@ -131,13 +160,6 @@ async function buildRoute(lines, markers) {
     markers.sort((a, b) => a.index - b.index);
 
     return new Route(line, markers);
-}
-
-// Parses and converts coordinates from WGS84 to LV03
-function parseCoordinates(str) {
-    const wgs = str.split(",").map(s => Number(s));
-    const ch = Swisstopo.WGStoCH(wgs[1], wgs[0]);
-    return { x: ch[0], y: ch[1] };
 }
 
 function findConnectedLines(lines) {
