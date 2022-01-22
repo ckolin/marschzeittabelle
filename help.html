@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Hilfe - Marschzeittabelle</title>
+	<link rel="icon" type="image/png" href="favicon.png">
+	<link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <header>
+        <a href="./">❮ startseite</a>
+    </header>
+    <main>
+        <h1>Hilfe</h1>
+        <div id="export">
+            <h2>Wie zeichne und exportiere ich meine Route, damit die automatische Übertragung funktioniert?</h2>
+            <p>Die <b>Linie mit der genauen Route</b>, sowie <b>benannte Wegpunkte</b> müssen in der exportierten Route vorhanden sein, damit eine Marschzeittabelle erstelle werden kann.</p>
+            <p>Das funktioniert natürlich je nach Applikation unterschiedlich:</p>
+            <ul>
+                <li>map.geo.admin.ch: <a href="https://help.geo.admin.ch/?ids=93&lang=de">Linie zeichnen</a>, <a href="https://help.geo.admin.ch/?ids=91&lang=de">Symbole hinzufügen</a>, <a href="https://help.geo.admin.ch/?ids=95&lang=de">KML exportieren</a>.</li>
+                <li>swisstopo-App: ?</li>
+                <li>outdooractive.com: <a href="https://www.outdooractive.com/de/k/wie-funktioniert-der-tourenplaner-/50992312/">Linie zeichnen</a>, <a href="https://www.outdooractive.com/de/k/was-ist-ein-wegpunkt-/45691528/?i=45691528">Wegpunkte benennen</a>, <a href="https://www.outdooractive.com/de/k/was-ist-eine-gpx-datei-/45669912/">GPX exportieren</a> - outdooractive.com exportiert nur im GPX-Format die benannten Wegpunkte.</li>
+            </ul>
+        </div>
+        <div id="calculation">
+            <h2>Wie werden die Leistungskilometer berechnet?</h2>
+            <p>Für die Berechnung der Leistungskilometer werden folgende Werte addiert:</p>
+            <ul>
+                <li>Horizontaldistanz in km</li>
+                <li>Bei Steigung: zusätzlicher Leistungskilometer pro 100 m Höhendifferenz</li>
+                <li>Bei Gefälle über 20%: zusätzlicher Leistungskilometer pro 150 m Höhendifferenz </li>
+            </ul>
+            <p>Weitere Informationen dazu findest du auf <a href="https://de.m.wikipedia.org/wiki/Leistungskilometer" target="_blank">Wikipedia</a>.</p>
+        </div>
+        <div id="availability">
+            <h2>Funktioniert das auch im Ausland?</h2>
+            <p>Grundsätzlich funktioniert diese Seite nur für Routen <b>in der Schweiz</b>, da Höhendaten vom Bundesamt für Landestopografie verwendet werden. Für das unmittelbar <b>angrenzende Ausland</b> sind diese aber ebenfalls verfügbar.</p>
+        </div>
+        <div id="privacy">
+            <h2>Was geschieht mit meinen Daten?</h2>
+            <p>Die gesamte Berechnung der Marschzeittabelle findet lokal im Browser statt. Die "hochgeladenen" Dateien verlassen deinen Computer also nie. Nur die Koordinaten der Linien und Wegpunkte werden an die Server des Bundesamts für Landestopografie übermittelt, um ein Höhenprofil zu erhalten.</p>
+        </div>
+        <div id="contact">
+            <h2>Wo kann ich mich mit Fragen oder Anregungen melden?</h2>
+            <p>Du kannst mich per E-Mail unter <b class="email">mzt<span class="at">colins.computer</span></b> erreichen.</p>
+            <p>Wenn du einen Fehler entdeckt hast oder es ein Problem beim Erstellen einer Marschzeittabelle gibt, kannst du auch gerne eine <a href="https://github.com/ckolin/marschzeittabelle/issues" target="_blank">GitHub-Issue</a> erfassen.</p>
+        </div>
+    </main>
+    <style>
+        div:target {
+            border-right: 3px solid var(--lighter-accent-color);
+            animation: 1s ease-out 1 flash;
+        }
+
+        @keyframes flash {
+            from {
+                background-color: var(--lighter-accent-color);
+                box-shadow: 0 0 0 2rem var(--lighter-accent-color);
+            }
+            to {
+                background-color: transparent;
+                box-shadow: none;
+            }
+        }
+
+        .at::before {
+            content: "@";
+        }
+    </style>
+</body>
+</html>
