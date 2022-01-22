@@ -43,7 +43,7 @@
         </div>
         <div id="kontakt">
             <h2>Wo kann ich mich mit Fragen oder Anregungen melden?</h2>
-            <p>Du kannst mich per E-Mail unter <b>lemon (ät) heitersberg.ch</b> erreichen.</p>
+            <p>Du kannst mich per E-Mail unter <b class="email">mzt<span class="at">colins.computer</span></b> erreichen.</p>
             <p>Wenn du einen Fehler entdeckt hast oder es ein Problem beim Erstellen einer Marschzeittabelle gibt, darfst du auch gerne eine <a href="https://github.com/ckolin/marschzeittabelle/issues" target="_blank">GitHub-Issue</a> erfassen.</p>
         </div>
     </main>
@@ -62,6 +62,10 @@
                 background-color: transparent;
                 box-shadow: none;
             }
+        }
+
+        .at::before {
+            content: "@";
         }
     </style>
 </body>
