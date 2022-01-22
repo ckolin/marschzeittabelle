@@ -27,7 +27,7 @@
         <h2>Route hochladen</h2>
         <p>Unterstützt sind Exporte im <b>KML-Format</b> von <a href="https://map.geo.admin.ch" target="_blank">map.geo.admin.ch</a> oder der <a href="https://www.swisstopo.admin.ch/en/maps-data-online/maps-geodata-online/swisstopo-app.html" target="_blank">swisstopo-App</a>.</p>
         <p>Datei hierher ziehen oder...</p>
-        <input type="file" id="upload" accept=".kml" bind:files />
+        <input type="file" id="upload" accept=".kml, .gpx" bind:files />
         <button>
             <label for="upload">Datei auswählen</label>
         </button>

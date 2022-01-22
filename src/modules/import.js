@@ -6,7 +6,15 @@ const epsilon = 10;
 
 export function importFile(file) {
     return readFile(file)
-        .then((content) => parseKml(content))
+        .then((content) => parseXml(content))
+        .then((xml) => {
+            if (file.name.endsWith(".kml")) {
+                return readKml(xml);
+            } else if (file.name.endsWith(".gpx")) {
+                return readGpx(xml);
+            }
+        })
+        .then(({lines, markers}) => buildRoute(lines, markers))
         .then((route) => route.loadProfiles());
 }
 
@@ -19,17 +27,20 @@ function readFile(file) {
     });
 }
 
-async function parseKml(kmlString) {
+async function parseXml(xmlString) {
     const parser = new DOMParser();
-    const kml = parser.parseFromString(kmlString, "application/xml");
-    if (kml.querySelector("parsererror")) {
-        throw "Die Datei ist nicht in gültigem KML-Format.";
+    const xml = parser.parseFromString(xmlString, "application/xml");
+    if (xml.querySelector("parsererror")) {
+        throw "Die Datei ist nicht in gültigem XML-Format.";
     }
+    return xml;
+}
 
+async function readKml(xml) {
     const lines = [];
     const markers = [];
 
-    const placemarks = kml
+    const placemarks = xml
         .querySelectorAll("Placemark");
     for (let placemark of placemarks) {
         // Find lines
@@ -54,6 +65,19 @@ async function parseKml(kmlString) {
         }
     }
 
+    return {lines, markers};
+}
+
+async function readGpx(xml) {
+    const lines = [];
+    const markers = [];
+
+    // TODO
+    
+    return {lines, markers};
+}
+
+async function buildRoute(lines, markers) {
     // Check if route contains line and markers
     if (lines.length === 0) {
         throw "Die Route enthält keine Linie."
@@ -96,7 +120,7 @@ async function parseKml(kmlString) {
 
         // Check if marker is on line
         if (minDistance > epsilon) {
-            throw `Der Wegpunkt "${marker.name}" ist nicht auf der Linie, bzw. nicht in der Nähe eines Eckpunkts der Linie.`;   
+            throw `Der Wegpunkt "${marker.name}" ist nicht auf der Linie, bzw. nicht in der Nähe eines Eckpunkts der Linie.`;
         }
 
         marker.index = closest;
