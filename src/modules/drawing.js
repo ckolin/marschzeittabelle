@@ -88,4 +88,17 @@ export function drawProfile(route, canvas) {
         ctx.fillStyle = theme.backgroundColor;
         ctx.fillText(i + 1, p.x, p.y + 0.5);
     }
+
+    // Draw scale
+    const thickness = 2;
+    const step = 25;
+    const count = Math.floor(Math.log2(bottom / (step * scale)));
+    const size = step * 2 ** count;
+    ctx.fillStyle = theme.textColor;
+    ctx.fillRect(canvas.width - padding - thickness, canvas.height - size * scale, thickness, size * scale);
+    ctx.fillRect(canvas.width - padding - 2 * thickness, canvas.height - size * scale, 3 * thickness, thickness);
+    ctx.fillRect(canvas.width - padding - 2 * thickness, canvas.height - thickness, 3 * thickness, thickness);
+    ctx.textAlign = "right";
+    ctx.textBaseline = "bottom";
+    ctx.fillText(`${size} m`, canvas.width - 2 * padding, canvas.height);
 }
