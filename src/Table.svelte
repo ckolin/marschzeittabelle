@@ -33,6 +33,45 @@
         }
         return res;
     }
+
+    function exportCsv() {
+        const header = [
+            "Nr.",
+            "Name",
+            "Höhe / m",
+            "Unterschied Höhe / m",
+            "Total Distanz / km",
+            "Unterschied Distanz / km",
+            "Total Aufwand / Lkm",
+            "Unterschied Aufwand / Lkm",
+            "Total Dauer / h",
+            "Unterschied Dauer / h",
+            "Uhrzeit / h",
+        ];
+
+        const rows = data.map((row) => [
+            row.index,
+            row.name,
+            row.height,
+            row.diff?.height ?? 0,
+            row.distance,
+            row.diff?.distance ?? 0,
+            row.effort,
+            row.diff?.effort ?? 0,
+            row.duration,
+            row.diff?.duration ?? 0,
+            row.duration,
+        ]);
+
+        const csv = [header, ...rows]
+            .map((fields) => fields.map((f) => `"${f}"`).join(","))
+            .join("\n");
+
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+        a.download = "marschzeittabelle.csv";
+        a.click();
+    }
 </script>
 
 <table>
@@ -65,6 +104,8 @@
         </tr>
     {/each}
 </table>
+<br />
+<button on:click={exportCsv}>CSV herunterladen</button>
 
 <style>
     table {
@@ -82,12 +123,12 @@
     th:first-child, td:first-child {
         padding-left: 0;
     }
-    
+
     .name {
         font-weight: bold;
         color: var(--darker-accent-color);
     }
-    
+
     .name span {
         display: inline-block;
         min-width: 1.3em;
