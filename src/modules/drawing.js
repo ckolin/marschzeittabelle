@@ -59,9 +59,7 @@ export function drawProfile(route, canvas) {
     gradient.addColorStop(0, theme.lighterAccentColor);
     gradient.addColorStop(1, theme.backgroundColor);
     ctx.fillStyle = gradient;
-    ctx.globalAlpha = 0.5;
     ctx.fill();
-    ctx.globalAlpha = 1;
 
     // Draw line
     ctx.beginPath();
