@@ -1,4 +1,6 @@
 <script>
+    import Icon from "./Icon.svelte";
+
     import { importFile } from "./modules/import.js";
 
     export let route = null;
@@ -29,7 +31,7 @@
         <p>Datei hierher ziehen oder...</p>
         <input type="file" id="upload" accept=".kml, .gpx" bind:files />
         <button>
-            <label for="upload">Datei auswählen</label>
+            <label for="upload"><Icon name="upload_file" /> Datei auswählen</label>
         </button>
         <br>
     {/if}

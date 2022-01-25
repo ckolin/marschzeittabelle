@@ -1,4 +1,5 @@
 <script>
+    import Icon from "./Icon.svelte";
     import Info from "./Info.svelte";
     import Profile from "./Profile.svelte";
     import Table from "./Table.svelte";
@@ -39,10 +40,10 @@
                     <label for="speed">Geschwindigkeit in Lkm/h</label>
                     <input id="speed" type="number" min="0.5" step="0.5" bind:value={speed} />
                     <br />
-                    <button class="secondary" on:click={reverse}>Richtung wechseln</button>
+                    <button class="secondary" on:click={reverse}><Icon name="swap_horiz" /> Richtung wechseln</button>
                     <br />
                     <br />
-                    <button on:click={print}>Herunterladen</button>
+                    <button on:click={print}><Icon name="download" /> Herunterladen</button>
                 </div>
             </div>
             <div class="table">

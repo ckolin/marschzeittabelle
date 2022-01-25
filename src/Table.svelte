@@ -1,4 +1,6 @@
 <script>
+    import Icon from "./Icon.svelte";
+
     import { formatDuration, formatTime } from "./modules/formatting.js";
 
     export let route;
@@ -105,7 +107,7 @@
     {/each}
 </table>
 <br />
-<button on:click={exportCsv}>CSV herunterladen</button>
+<button on:click={exportCsv} class="noprint"><Icon name="output" /> CSV exportieren</button>
 
 <style>
     table {
