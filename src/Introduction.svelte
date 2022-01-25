@@ -8,12 +8,12 @@
 </div>
 <div class="tutorial">
     <div>
-        <h2>1. Route planen</h2>
-        <p>Route einzeichnen, Wegpunkte benennen - das kennst du bereits.</p>
-        <h2>2. Exportieren und hochladen</h2>
-        <p>In wenigen Klicks erledigt. <HelpLink topic="export" /></p>
-        <h2>3. Voilà!</h2>
-        <p>Schon hast du deine Marschzeittabelle. Jetzt noch Geschwindigkeit, Startzeit und Pausen anpassen.</p>
+        <h2>1. Planen</h2>
+        <p>Route einzeichnen und Wegpunkte benennen - das kennst du bereits.</p>
+        <h2>2. Exportieren</h2>
+        <p>In wenigen Klicks erledigt. <HelpLink topic="export" label="Wie geht das?" /></p>
+        <h2>3. Hochladen</h2>
+        <p>Jetzt noch Geschwindigkeit, Startzeit, Bemerkungen und Pausen hinzufügen.</p>
     </div>
     <img src="example.png" alt="Beispiel" />
 </div>
