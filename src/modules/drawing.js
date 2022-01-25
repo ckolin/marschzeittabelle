@@ -89,8 +89,8 @@ export function drawProfile(route, canvas) {
 
     // Draw scale
     const thickness = 2;
-    const step = 25;
-    const maxWidth = 100;
+    const step = 125;
+    const maxWidth = 120;
     const count = Math.floor(Math.log2(maxWidth / (step * scale)));
     const meters = step * 2 ** count;
     const size = meters * scale;
