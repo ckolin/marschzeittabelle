@@ -89,12 +89,27 @@ async function readGpx(xml) {
         lines.push(points);
     }
 
-    // Find markers
+    // Find markers stored as track points
     const nameElements = xml.querySelectorAll("trkpt > name");
     for (let nameElement of nameElements) {
-        const name = nameElement.innerHTML;
+        const name = nameElement
+            .innerHTML
+            .trim();
         const point = coords(nameElement.parentElement);
         markers.push({ name, point });
+    }
+
+    // Find markers stored as waypoints
+    if (markers.length === 0) {
+        const waypoints = xml.querySelectorAll("wpt");
+        for (let waypoint of waypoints) {
+            const name = waypoint
+                .querySelector("name")
+                .innerHTML
+                .trim();
+            const point = coords(waypoint);
+            markers.push({ name, point });
+        }
     }
 
     return { lines, markers };
