@@ -8,7 +8,11 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
         type: "LineString",
         coordinates: line.map(p => [Math.round(p.x), Math.round(p.y)])
     };
-    return fetch(`${baseUrl}/profile.json?sr=21781&distinct_points=${ensureInputPoints}&nb_points=${resolution}&geom=${JSON.stringify(geometry)}`)
+    return fetch(`${baseUrl}/profile.json`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `sr=21781&distinct_points=${ensureInputPoints}&nb_points=${resolution}&geom=${JSON.stringify(geometry)}`
+    })
         .then((res) => {
             if (res.ok) {
                 return res.json();
