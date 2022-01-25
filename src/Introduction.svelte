@@ -15,7 +15,7 @@
         <h2>3. Hochladen</h2>
         <p>Jetzt noch Geschwindigkeit, Startzeit, Bemerkungen und Pausen hinzufügen.</p>
     </div>
-    <img src="example.png" alt="Beispiel" />
+    <img src="example.jpg" alt="Beispiel" />
 </div>
 
 <style>
