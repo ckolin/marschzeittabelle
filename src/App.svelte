@@ -77,8 +77,10 @@
         display: block;
     }
 
-    .table, .profile {
-        overflow-x: auto;
+    @media not print {
+        .table, .profile {
+            overflow-x: auto;
+        }
     }
 
     footer {
