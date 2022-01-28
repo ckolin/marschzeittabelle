@@ -38,7 +38,7 @@ export class Route {
             if (slope > 0) {
                 this.effort[i] += rise / 100;
             } else if (slope < -0.2) {
-                this.effort[i] += Math.abs(slope) / 150;
+                this.effort[i] += Math.abs(rise) / 150;
             }
         }
 
