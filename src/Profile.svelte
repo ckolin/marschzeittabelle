@@ -7,7 +7,7 @@
 
     $: if (canvas) {
         canvas.width = 800;
-        canvas.height = 150;
+        canvas.height = 200;
         drawProfile(route, canvas);
     }
 </script>
