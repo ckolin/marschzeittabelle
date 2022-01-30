@@ -1,4 +1,8 @@
 export class Vec {
+    static equal(a, b) {
+        return a.x === b.x && a.y === b.y;
+    }
+    
     static add(a, b) {
         return { x: a.x + b.x, y: a.y + b.y };
     }

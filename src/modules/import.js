@@ -151,24 +151,52 @@ async function buildRoute(lines, markers) {
     const line = lines[0];
 
     // Assign markers to points on line
-    for (let marker of markers) {
-        let closest = 0;
-        let minDistance = Infinity;
-        for (let i = 0; i < line.length; i++) {
-            const distance = Vec.distance(marker.point, line[i]);
-            if (distance < minDistance) {
-                closest = i;
-                minDistance = distance;
-            }
+    let lastPoint = null;
+    for (let i = 0; i < line.length; i++) {
+        // Find matching markers while not using markers twice in a row
+        const matches = markers
+            .filter(m => lastPoint == null || !Vec.equal(m.point, lastPoint))
+            .filter(m => Vec.distance(m.point, line[i]) < epsilon);
+        if (matches.length === 0) {
+            continue; // No markers here
         }
 
-        // Check if marker is on line
-        if (minDistance > epsilon) {
-            throw `Der Wegpunkt "${marker.name}" ist nicht in der Nähe eines Eckpunkts der Linie.`;
+        // Detect multiple markers in the same place
+        const duplicates = matches
+            .filter(m => m.index == null);
+        if (matches.length > 1) {
+            const list = duplicates
+                .map(m => `"${m.name}"`)
+                .join(", ");
+            throw `Mehrere Wegpunkte am selben Ort: ${list}.`;
         }
 
-        marker.index = closest;
-        delete marker.point;
+        // Assign index
+        const marker = matches[0];
+        if (marker.index == null) {
+            // Marker has not been used
+            marker.index = i;
+        } else {
+            // Line has looped back to this marker
+            // Create duplicate of used marker
+            markers.push({
+                name: marker.name,
+                point: marker.point,
+                index: i
+            });
+        }
+
+        lastPoint = marker.point;
+    }
+
+    // Check if all markers have been assigned
+    const unassigned = markers
+        .filter(m => m.index == null);
+    if (unassigned.length > 0) {
+        const list = unassigned
+            .map(m => `"${m.name}"`)
+            .join(", ");
+        throw `Wegpunkte nicht in der Nähe von Eckpunkten der Linie: ${list}.`;
     }
 
     // Bring markers in right order
