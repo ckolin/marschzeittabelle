@@ -1,6 +1,6 @@
+import { loadProfiles } from "./route.js";
 import { Swisstopo } from "./swisstopo.js";
 import * as vec from "./vec.js";
-import { Route } from "./route.js";
 
 const epsilon = 10;
 
@@ -15,7 +15,7 @@ export function importFile(file) {
             }
         })
         .then(({ lines, markers }) => buildRoute(lines, markers))
-        .then((route) => route.loadProfiles());
+        .then((route) => loadProfiles(route));
 }
 
 function readFile(file) {
@@ -202,7 +202,7 @@ async function buildRoute(lines, markers) {
     // Bring markers in right order
     markers.sort((a, b) => a.index - b.index);
 
-    return new Route(line, markers);
+    return { line, markers };
 }
 
 function findConnectedLines(lines) {

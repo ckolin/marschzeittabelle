@@ -10,7 +10,7 @@
 
     $: if (files && files[0]) {
         promise = importFile(files[0])
-            .then((result) => route = result); // Trigger reactivity
+            .then((result) => route = result);
     }
 </script>
 

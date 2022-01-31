@@ -1,16 +1,18 @@
 <script>
     import Icon from "./Icon.svelte";
     import Info from "./Info.svelte";
+    import Introduction from "./Introduction.svelte";
     import Profile from "./Profile.svelte";
     import Table from "./Table.svelte";
-    import Introduction from "./Introduction.svelte";
     import Upload from "./Upload.svelte";
+
+    import { reverseRoute } from "./modules/route.js";
 
     let route;
     let speed = 4;
 
     function reverse() {
-        route.reverse();
+        reverseRoute(route);
         route = route;
     }
 

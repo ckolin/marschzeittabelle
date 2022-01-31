@@ -1,53 +1,41 @@
 import * as vec from "./vec.js";
 import { fetchProfile } from "./geoadmin.js";
 
-export class Route {
-    constructor(line, markers) {
-        this.line = line;
-        this.markers = markers;
-    }
+export async function loadProfiles(route) {
+    // Load data from api
+    route.lineProfile = await fetchProfile(route.line, false, 100);
+    route.markerProfile = await fetchProfile(route.markers.map(m => route.line[m.index]), true, route.markers.length);
 
-    async loadProfiles() {
-        this.lineProfile = await fetchProfile(this.line, false, 100);
-        this.markerProfile = await fetchProfile(this.markers.map(m => this.line[m.index]), true, this.markers.length);
-        this.calculateDistances();
-        return this;
-    }
+    // Calculate distance and effort
+    recalculate(route);
 
-    reverse() {
-        this.line.reverse();
-        this.markers.reverse();
-        this.markers.forEach(m => m.index = this.line.length - m.index - 1);
-        this.lineProfile?.reverse();
-        this.markerProfile?.reverse();
-        this.calculateDistances();
-    }
+    return route;
+}
 
-    calculateDistances() {
-        this.distanceSum = calculateDistanceSum(this.line);
-        this.lineProfileDistanceSum = calculateDistanceSum(this.lineProfile.map(p => p.point));
+export function reverseRoute(route) {
+    // Reverse order
+    route.line.reverse();
+    route.markers.reverse();
+    route.lineProfile?.reverse();
+    route.markerProfile?.reverse();
 
-        this.effort = [];
-        this.effort[0] = 0;
-        for (let i = 1; i < this.markers.length; i++) {
-            const run = this.distanceSum[this.markers[i].index] - this.distanceSum[this.markers[i - 1].index];
-            const rise = this.markerProfile[i].height - this.markerProfile[i - 1].height;
-            const slope = rise / run;
+    // Get new marker indexes
+    route.markers.forEach(m => m.index = route.line.length - m.index - 1);
 
-            this.effort[i] = run / 1000;
-            if (slope > 0) {
-                this.effort[i] += rise / 100;
-            } else if (slope < -0.2) {
-                this.effort[i] += Math.abs(rise) / 150;
-            }
-        }
+    // Recalculate distance and effort
+    recalculate(route);
+}
 
-        this.effortSum = calculateSum(this.effort);
-    }
+function recalculate(route) {
+    route.distanceSum = calculateDistanceSum(route.line);
+    route.lineProfileDistanceSum = calculateDistanceSum(route.lineProfile.map(p => p.point));
+    route.effort = calculateEffort(route);
+    route.effortSum = calculateSum(route.effort);
 }
 
 function calculateDistanceSum(line) {
-    const distances = line.map((_, i) => vec.distance(line[Math.max(0, i - 1)], line[i]));
+    const distances = line
+        .map((_, i) => vec.distance(line[Math.max(0, i - 1)], line[i]));
     return calculateSum(distances);
 }
 
@@ -59,4 +47,23 @@ function calculateSum(values) {
         res[i] = sum;
     }
     return res;
+}
+
+// Calculate effort (Leistungskilometer) using formula found here: https://de.wikipedia.org/wiki/Leistungskilometer
+function calculateEffort(route) {
+    const effort = [];
+    effort[0] = 0;
+    for (let i = 1; i < route.markers.length; i++) {
+        const run = route.distanceSum[route.markers[i].index] - route.distanceSum[route.markers[i - 1].index];
+        const rise = route.markerProfile[i].height - route.markerProfile[i - 1].height;
+        const slope = rise / run;
+
+        effort[i] = run / 1000;
+        if (slope > 0) {
+            effort[i] += rise / 100;
+        } else if (slope < -0.2) {
+            effort[i] += Math.abs(rise) / 150;
+        }
+    }
+    return effort;
 }
