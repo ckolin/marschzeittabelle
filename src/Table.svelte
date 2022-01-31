@@ -18,21 +18,23 @@
             res[i] = {
                 index: i + 1,
                 name: route.markers[i].name,
+                comment: route.markers[i].comment,
                 height: route.markerProfile[i].height,
                 distance: route.distanceSum[route.markers[i].index] / 1000,
                 effort: route.effortSum[i],
                 duration: route.effortSum[i] / speed
             };
-
-            if (i > 0) {
-                res[i].diff = {
-                    height: res[i].height - res[i - 1].height,
-                    distance: res[i].distance - res[i - 1].distance,
-                    effort: route.effort[i],
-                    duration: res[i].duration - res[i - 1].duration
-                };
-            }
         }
+
+        for (let i = 1; i < route.markers.length; i++) {
+            res[i - 1].diff = {
+                height: res[i].height - res[i - 1].height,
+                distance: res[i].distance - res[i - 1].distance,
+                effort: route.effort[i],
+                duration: res[i].duration - res[i - 1].duration
+            };
+        }
+
         return res;
     }
 
@@ -78,7 +80,8 @@
 
 <table>
     <tr>
-        <th>Wegpunkt</th>
+        <th />
+        <th class="close">Wegpunkt</th>
         <th>Höhe</th>
         <th>Distanz</th>
         <th>Aufwand</th>
@@ -86,24 +89,33 @@
         <th>Uhrzeit</th>
     </tr>
     {#each data as row}
-        {#if row.diff}
-            <tr class="alt">
-                <td />
-                <td class="number">{Math.round(row.diff.height)} m</td>
-                <td class="number">{row.diff.distance.toFixed(1)} km</td>
-                <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
-                <td class="number">{formatDuration(row.diff.duration)} h</td>
-                <td />
-            </tr>
-        {/if}
         <tr>
-            <td class="name"><span>{row.index}</span> {row.name}</td>
+            <td><span class="index">{row.index}</span></td>
+            <td class="name close">{row.name}</td>
             <td class="number">{Math.round(row.height)} m</td>
             <td class="number">{row.distance.toFixed(1)} km</td>
             <td class="number">{row.effort.toFixed(1)} Lkm</td>
             <td class="number">{formatDuration(row.duration)} h</td>
             <td class="number">{formatTime(row.duration)}</td>
         </tr>
+        {#if row.comment || row.diff}
+            <tr class="alt">
+                <td />
+                <td class="comment close">{row.comment ?? ""}</td>
+                {#if row.diff}
+                    <td class="number">{Math.round(row.diff.height)} m</td>
+                    <td class="number">{row.diff.distance.toFixed(1)} km</td>
+                    <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
+                    <td class="number">{formatDuration(row.diff.duration)} h</td>
+                {:else}
+                    <td />
+                    <td />
+                    <td />
+                    <td />
+                {/if}
+                <td />
+            </tr>
+        {/if}
     {/each}
 </table>
 <br />
@@ -114,24 +126,30 @@
         white-space: nowrap;
     }
 
-    th {
+    th, td {
         text-align: left;
+        vertical-align: bottom;
     }
 
-    th, td {
+    th:not(:first-child), td:not(:first-child) {
         padding-left: 1rem;
     }
 
-    th:first-child, td:first-child {
-        padding-left: 0;
+    .close {
+        padding-left: 0.25rem;
     }
 
-    .name {
-        font-weight: bold;
-        color: var(--darker-accent-color);
+    .alt td {
+        vertical-align: top;
+        color: var(--accent-color);
     }
 
-    .name span {
+    .number {
+        text-align: right;
+        font-family: "Roboto Mono", monospace;
+    }
+
+    .index {
         display: inline-block;
         min-width: 1.3em;
         border-radius: 1em;
@@ -141,12 +159,13 @@
         background: var(--darker-accent-color);
     }
 
-    .alt {
-        color: var(--accent-color);
+    .name {
+        font-weight: bold;
+        color: var(--darker-accent-color);
     }
 
-    .number {
-        text-align: right;
-        font-family: "Roboto Mono", monospace;
+    .comment {
+        max-width: 20rem;
+        white-space: normal;
     }
 </style>
