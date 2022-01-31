@@ -155,7 +155,7 @@ async function buildRoute(lines, markers) {
     for (let i = 0; i < line.length; i++) {
         // Find matching markers while not using markers twice in a row
         const matches = markers
-            .filter(m => lastPoint == null || !Vec.equal(m.point, lastPoint))
+            .filter(m => lastPoint == null || !vec.equal(m.point, lastPoint))
             .filter(m => vec.distance(m.point, line[i]) < epsilon);
         if (matches.length === 0) {
             continue; // No markers here
