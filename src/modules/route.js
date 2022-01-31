@@ -1,4 +1,4 @@
-import { Vec } from "./vec.js";
+import * as vec from "./vec.js";
 import { fetchProfile } from "./geoadmin.js";
 
 export class Route {
@@ -47,7 +47,7 @@ export class Route {
 }
 
 function calculateDistanceSum(line) {
-    const distances = line.map((_, i) => Vec.distance(line[Math.max(0, i - 1)], line[i]));
+    const distances = line.map((_, i) => vec.distance(line[Math.max(0, i - 1)], line[i]));
     return calculateSum(distances);
 }
 

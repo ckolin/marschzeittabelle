@@ -1,4 +1,4 @@
-import { Vec } from "./vec.js";
+import * as vec from "./vec.js";
 
 const baseUrl = "https://api3.geo.admin.ch/rest/services";
 const epsilon = 2;
@@ -28,7 +28,7 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
 
             // Remove extra points not associated with a marker
             if (ensureInputPoints) {
-                profile = profile.filter(p => line.some(l => Vec.distance(p.point, l) < epsilon));
+                profile = profile.filter(p => line.some(l => vec.distance(p.point, l) < epsilon));
             }
 
             resolve(profile);

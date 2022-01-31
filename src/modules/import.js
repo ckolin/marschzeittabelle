@@ -1,5 +1,5 @@
 import { Swisstopo } from "./swisstopo.js";
-import { Vec } from "./vec.js";
+import * as vec from "./vec.js";
 import { Route } from "./route.js";
 
 const epsilon = 10;
@@ -156,7 +156,7 @@ async function buildRoute(lines, markers) {
         // Find matching markers while not using markers twice in a row
         const matches = markers
             .filter(m => lastPoint == null || !Vec.equal(m.point, lastPoint))
-            .filter(m => Vec.distance(m.point, line[i]) < epsilon);
+            .filter(m => vec.distance(m.point, line[i]) < epsilon);
         if (matches.length === 0) {
             continue; // No markers here
         }
@@ -206,7 +206,7 @@ async function buildRoute(lines, markers) {
 }
 
 function findConnectedLines(lines) {
-    const areEqual = (a, b) => Vec.distance(a, b) < epsilon;
+    const areEqual = (a, b) => vec.distance(a, b) < epsilon;
 
     for (let i = 0; i < lines.length; i++) {
         for (let j = i + 1; j < lines.length; j++) {

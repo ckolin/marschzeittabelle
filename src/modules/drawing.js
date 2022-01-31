@@ -1,4 +1,4 @@
-import { Vec } from "./vec.js";
+import * as vec from "./vec.js";
 import { theme } from "./theme.js";
 
 export function drawProfile(route, canvas) {
@@ -29,8 +29,8 @@ export function drawProfile(route, canvas) {
     canvas.width = Math.floor(bounds.x * scale + 2 * padding);
     canvas.height = Math.floor(bounds.y * scale + 2 * padding + bottom);
 
-    const project = (distance, height) => Vec.add(
-        Vec.scale({ x: distance, y: minHeight - height }, scale),
+    const project = (distance, height) => vec.add(
+        vec.scale({ x: distance, y: minHeight - height }, scale),
         { x: padding, y: canvas.height - padding - bottom });
 
     const followLineProfile = () => {

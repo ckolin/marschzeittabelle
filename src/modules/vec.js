@@ -1,25 +1,23 @@
-export class Vec {
-    static equal(a, b) {
-        return a.x === b.x && a.y === b.y;
-    }
-    
-    static add(a, b) {
-        return { x: a.x + b.x, y: a.y + b.y };
-    }
+export function equal(a, b) {
+    return a.x === b.x && a.y === b.y;
+}
 
-    static subtract(a, b) {
-        return { x: a.x - b.x, y: a.y - b.y };
-    }
+export function add(a, b) {
+    return { x: a.x + b.x, y: a.y + b.y };
+}
 
-    static scale(vec, fac) {
-        return { x: vec.x * fac, y: vec.y * fac };
-    }
+export function subtract(a, b) {
+    return { x: a.x - b.x, y: a.y - b.y };
+}
 
-    static length(vec) {
-        return Math.hypot(vec.x, vec.y);
-    }
+export function scale(vec, fac) {
+    return { x: vec.x * fac, y: vec.y * fac };
+}
 
-    static distance(a, b) {
-        return Vec.length(Vec.subtract(b, a));
-    }
+export function length(vec) {
+    return Math.hypot(vec.x, vec.y);
+}
+
+export function distance(a, b) {
+    return length(subtract(b, a));
 }
