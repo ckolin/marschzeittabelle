@@ -10,12 +10,17 @@
     export let route;
     
     let speedInput = 4;
-    let speed = speedInput;
+    let speed;
     $: if (!window.isNaN(speedInput) && speedInput > 0) {
         speed = speedInput;
     }
     
     let startInput = "00:00";
+    let start;
+    $: start = startInput
+        .split(":")
+        .map((n, i) => Number(n) / 60 ** i)
+        .reduce((a, b) => a + b);
 
     function reverse() {
         reverseRoute(route);
@@ -23,7 +28,7 @@
     }
 
     function exportCsv() {
-        const csv = getCsv(calculateData(route, speed));
+        const csv = getCsv(calculateData(route, speed, start));
         const a = document.createElement("a");
         a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
         a.download = "marschzeittabelle.csv";
@@ -34,10 +39,9 @@
 <div class="general">
     <div class="info">
         <h2>Route</h2>
-        <Info {route} {speed}/>
+        <Info {route} {speed} {start} />
     </div>
     <div class="options noprint">
-        <h2>Optionen</h2>
         <label for="start">Abreise</label>
         <input id="start" type="time" required bind:value={startInput} />
         <label for="speed">Geschwindigkeit in Lkm/h</label>
@@ -45,25 +49,24 @@
         <button class="secondary" on:click={reverse}>
             <Icon name="swap_horiz" /> Richtung wechseln
         </button>
+        <br />
+        <br />
+        <button on:click={() => window.print()}>
+            <Icon name="print" /> Drucken
+        </button>
+        &nbsp;
+        <button on:click={exportCsv} class="secondary">
+            <Icon name="output" /> Exportieren (CSV)
+        </button>
     </div>
 </div>
 <div class="table">
     <h2>Marschzeittabelle</h2>
-    <Table bind:route {speed} />
+    <Table bind:route {speed} {start} />
 </div>
 <div class="profile">
     <h2>Höhenprofil</h2>
     <Profile {route} />
-</div>
-<div class="noprint">
-    <br />
-    <button on:click={() => window.print()}>
-        <Icon name="print" /> Drucken
-    </button>
-    &nbsp;
-    <button on:click={exportCsv} class="secondary">
-        <Icon name="output" /> Exportieren (CSV)
-    </button>
 </div>
 
 <style>
@@ -79,6 +82,7 @@
     }
 
     .options input {
+        width: 100%;
         margin-bottom: 0.5rem;
     }
 

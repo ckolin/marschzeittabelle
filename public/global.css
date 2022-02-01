@@ -15,6 +15,10 @@ html {
     max-width: 820px;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 10px;
     color: var(--text-color);

@@ -1,4 +1,6 @@
-export function calculateData(route, speed) {
+import { formatTime } from "./formatting.js";
+
+export function calculateData(route, speed, start) {
     const res = [];
 
     // Calculate information and totals
@@ -10,7 +12,8 @@ export function calculateData(route, speed) {
             height: route.markerProfile[i].height,
             distance: route.distanceSum[route.markers[i].index] / 1000,
             effort: route.effortSum[i],
-            duration: route.effortSum[i] / speed
+            duration: route.effortSum[i] / speed,
+            time: route.effortSum[i] / speed + start
         };
     }
 
@@ -40,7 +43,7 @@ export function getCsv(data) {
         "Unterschied Aufwand / Lkm",
         "Total Dauer / h",
         "Unterschied Dauer / h",
-        "Uhrzeit / h",
+        "Uhrzeit / hh:mm",
     ];
 
     const rows = data.map((row) => [
@@ -55,7 +58,7 @@ export function getCsv(data) {
         row.diff?.effort ?? 0,
         row.duration,
         row.diff?.duration ?? 0,
-        row.duration,
+        formatTime(row.time),
     ]);
 
     return [header, ...rows]

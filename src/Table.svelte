@@ -6,11 +6,12 @@
 
     export let route;
     export let speed;
+    export let start;
 
     let data = [];
     let selected;
 
-    $: data = calculateData(route, speed);
+    $: data = calculateData(route, speed, start);
 </script>
 
 <MarkerDetail bind:route bind:selected />
@@ -32,7 +33,7 @@
             <td class="number">{row.distance.toFixed(1)} km</td>
             <td class="number">{row.effort.toFixed(1)} Lkm</td>
             <td class="number">{formatDuration(row.duration)} h</td>
-            <td class="number">{formatTime(row.duration)}</td>
+            <td class="number">{formatTime(row.time)}</td>
         </tr>
         {#if row.comment || row.diff}
             <tr class="alt">
