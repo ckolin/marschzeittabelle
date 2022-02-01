@@ -42,14 +42,14 @@
         <Info {route} {speed} {start} />
     </div>
     <div class="options noprint">
-        <label for="start">Abreise</label>
-        <input id="start" type="time" required bind:value={startInput} />
-        <label for="speed">Geschwindigkeit in Lkm/h</label>
-        <input id="speed" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
         <button class="secondary" on:click={reverse}>
             <Icon name="swap_horiz" /> Richtung wechseln
         </button>
         <br />
+        <label for="start">Abreise</label>
+        <input id="start" type="time" required bind:value={startInput} />
+        <label for="speed">Geschwindigkeit in Lkm/h</label>
+        <input id="speed" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
         <br />
         <button on:click={() => window.print()}>
             <Icon name="print" /> Drucken
@@ -83,6 +83,9 @@
 
     .options input {
         width: 100%;
+    }
+
+    .options input, button {
         margin-bottom: 0.5rem;
     }
 
