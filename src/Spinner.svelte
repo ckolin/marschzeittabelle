@@ -5,7 +5,7 @@
         display: inline-block;
         width: 2rem;
         height: 2rem;
-        border: 0.2rem solid var(--lighter-accent-color);
+        border: 3px solid var(--lighter-accent-color);
         border-bottom-color: var(--accent-color);
         border-radius: 50%;
         animation: rotation 1s linear infinite;
