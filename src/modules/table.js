@@ -4,7 +4,7 @@ export function calculateData(route, speed) {
     // Calculate information and totals
     for (let i = 0; i < route.markers.length; i++) {
         res[i] = {
-            index: i + 1,
+            index: i,
             name: route.markers[i].name,
             comment: route.markers[i].comment,
             height: route.markerProfile[i].height,
@@ -44,9 +44,9 @@ export function getCsv(data) {
     ];
 
     const rows = data.map((row) => [
-        row.index,
+        row.index + 1,
         row.name,
-        row.comment,
+        row.comment ?? "",
         row.height,
         row.diff?.height ?? 0,
         row.distance,

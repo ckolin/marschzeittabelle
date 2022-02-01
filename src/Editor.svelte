@@ -55,14 +55,14 @@
     <h2>Höhenprofil</h2>
     <Profile {route} />
 </div>
-<div class="export noprint">
+<div class="noprint">
     <br />
     <button on:click={() => window.print()}>
-        <Icon name="download" /> Herunterladen
+        <Icon name="print" /> Drucken
     </button>
     &nbsp;
     <button on:click={exportCsv} class="secondary">
-        <Icon name="output" /> CSV exportieren
+        <Icon name="output" /> Exportieren (CSV)
     </button>
 </div>
 

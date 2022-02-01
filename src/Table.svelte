@@ -2,7 +2,7 @@
     import MarkerDetail from "./MarkerDetail.svelte";
 
     import { formatDuration, formatTime } from "./modules/formatting.js";
-    import { calculateData, getCsv } from "./modules/table.js";
+    import { calculateData } from "./modules/table.js";
 
     export let route;
     export let speed;
@@ -26,8 +26,8 @@
     </tr>
     {#each data as row}
         <tr>
-            <td><span class="index">{row.index}</span></td>
-            <td class="name" on:click={() => selected = row.index - 1}>{row.name}</td>
+            <td><span class="index">{row.index + 1}</span></td>
+            <td class="name" on:click={() => selected = row.index}>{row.name}</td>
             <td class="number">{Math.round(row.height)} m</td>
             <td class="number">{row.distance.toFixed(1)} km</td>
             <td class="number">{row.effort.toFixed(1)} Lkm</td>
