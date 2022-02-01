@@ -11,6 +11,7 @@
 
     $: if (files && files[0]) {
         promise = importFile(files[0])
+            .then((result) => new Promise((resolve) => setTimeout(() => resolve(result), 500)))
             .then((result) => route = result);
     }
 </script>
