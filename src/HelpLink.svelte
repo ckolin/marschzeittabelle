@@ -3,7 +3,9 @@
     export let label = "?";
 </script>
 
-<a href={topic == null ? "help" : `help#${topic}`} target="_blank" class="noprint">{label}</a>
+<a href={topic == null ? "help" : `help#${topic}`} target="_blank" class="noprint">
+    {label}
+</a>
 
 <style>
     a {

@@ -5,7 +5,7 @@
 
     export let route;
     export let selected = null;
-
+    
     $: marker = route.markers[selected];
 </script>
 

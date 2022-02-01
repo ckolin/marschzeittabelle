@@ -1,5 +1,6 @@
 <script>
     import Icon from "./Icon.svelte";
+    import Spinner from "./Spinner.svelte";
 
     import { importFile } from "./modules/import.js";
 
@@ -19,11 +20,15 @@
     on:dragover|preventDefault>
     {#if files && files[0]}
         {#await promise}
-            <h3>Route wird gewandert...</h3>
+            <h2>Route wird gewandert...</h2>
+            <br />
+            <Spinner />
         {:catch error}
-            <h3>Hoppla!</h3>
+            <h2>Hoppla!</h2>
             <p>Es gab einen Fehler beim Import:<br />{error}</p>
-            <button class="secondary" on:click={() => files = null}>Nochmal versuchen</button>
+            <button class="secondary" on:click={() => files = null}>
+                <Icon name="refresh" /> Nochmal versuchen
+            </button>
         {/await}
     {:else}
         <h2>Route hochladen</h2>

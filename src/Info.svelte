@@ -29,6 +29,3 @@ Distanz: <b>{(route.distanceSum[route.line.length - 1] / 1000).toFixed(1)} km</b
 Aufwand: <b>{route.effortSum[route.markers.length - 1].toFixed(1)} Lkm</b> <HelpLink topic="calculation" /><br />
 Geschwindigkeit: <b>{speed} Lkm/h</b><br />
 Dauer: <b>{formatDuration(route.effortSum[route.markers.length - 1] / speed)} h</b><br />
-
-<style>
-</style>
