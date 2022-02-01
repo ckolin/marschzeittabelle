@@ -30,8 +30,8 @@
         <p>Unterstützt sind <b>KML-Dateien</b> von <a href="https://map.geo.admin.ch" target="_blank">map.geo.admin.ch</a> oder der <a href="https://www.swisstopo.admin.ch/en/maps-data-online/maps-geodata-online/swisstopo-app.html" target="_blank">swisstopo-App</a>, sowie <b>GPX-Dateien</b> von <a href="https://www.outdooractive.com/de/routeplanner" target="_blank">outdooractive.com</a>.</p>
         <p>Datei hierher ziehen oder...</p>
         <input type="file" id="upload" accept=".kml, .gpx" bind:files />
-        <button>
-            <label for="upload"><Icon name="upload_file" /> Datei auswählen</label>
+        <button on:click={() => document.getElementById("upload").click()}>
+            <Icon name="upload_file" /> Datei auswählen
         </button>
         <br>
     {/if}
@@ -56,13 +56,6 @@
     }
 
     input {
-        opacity: 0;
-        position: absolute;
-        width: 0;
-        height: 0;
-    }
-
-    label {
-        cursor: inherit;
+        display: none;
     }
 </style>
