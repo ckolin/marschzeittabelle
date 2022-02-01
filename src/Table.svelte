@@ -1,5 +1,4 @@
 <script>
-    import Icon from "./Icon.svelte";
     import MarkerDetail from "./MarkerDetail.svelte";
 
     import { formatDuration, formatTime } from "./modules/formatting.js";
@@ -9,22 +8,12 @@
     export let speed;
 
     let data = [];
-    let detailIndex;
+    let selected;
 
-    $: if (!window.isNaN(speed) && speed > 0) {
-        data = calculateData(route, speed);
-    }
-
-    function exportCsv() {
-        const csv = getCsv(data);
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-        a.download = "marschzeittabelle.csv";
-        a.click();
-    }
+    $: data = calculateData(route, speed);
 </script>
 
-<MarkerDetail {route} bind:index={detailIndex} />
+<MarkerDetail bind:route bind:selected />
 <table>
     <tr>
         <th />
@@ -38,7 +27,7 @@
     {#each data as row}
         <tr>
             <td><span class="index">{row.index}</span></td>
-            <td class="name" on:click={() => detailIndex = row.index - 1}>{row.name}</td>
+            <td class="name" on:click={() => selected = row.index - 1}>{row.name}</td>
             <td class="number">{Math.round(row.height)} m</td>
             <td class="number">{row.distance.toFixed(1)} km</td>
             <td class="number">{row.effort.toFixed(1)} Lkm</td>
@@ -65,10 +54,6 @@
         {/if}
     {/each}
 </table>
-<br />
-<button on:click={exportCsv} class="noprint">
-    <Icon name="output" /> CSV exportieren
-</button>
 
 <style>
     table {

@@ -1,5 +1,7 @@
 export function calculateData(route, speed) {
     const res = [];
+
+    // Calculate information and totals
     for (let i = 0; i < route.markers.length; i++) {
         res[i] = {
             index: i + 1,
@@ -12,6 +14,7 @@ export function calculateData(route, speed) {
         };
     }
 
+    // Calculate differences (alternate rows)
     for (let i = 1; i < route.markers.length; i++) {
         res[i - 1].diff = {
             height: res[i].height - res[i - 1].height,
@@ -28,6 +31,7 @@ export function getCsv(data) {
     const header = [
         "Nr.",
         "Name",
+        "Kommentar",
         "Höhe / m",
         "Unterschied Höhe / m",
         "Total Distanz / km",
@@ -42,6 +46,7 @@ export function getCsv(data) {
     const rows = data.map((row) => [
         row.index,
         row.name,
+        row.comment,
         row.height,
         row.diff?.height ?? 0,
         row.distance,

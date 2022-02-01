@@ -22,7 +22,7 @@ body {
     font-family: "Inter", sans-serif;
 }
 
-a {
+a, label {
     color: var(--accent-color);
 }
 

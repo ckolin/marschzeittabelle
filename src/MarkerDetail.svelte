@@ -4,19 +4,26 @@
     import { fade } from "svelte/transition";
 
     export let route;
-    export let index = null;
+    export let selected = null;
 
-    $: marker = route.markers[index];
+    $: marker = route.markers[selected];
 </script>
 
-{#if index != null}
-    <div transition:fade={{duration: 100}}>
-        <div class="background" />
-        <div class="content">
-            <h2>{marker.name}</h2>
-            <button on:click={() => (index = null)}>
-                <Icon name="done" /> Fertig
-            </button>
+{#if selected != null}
+    <div transition:fade={{ duration: 100 }}>
+        <div class="background"></div>
+        <div class="detail">
+            <h2>Wegpunkt bearbeiten</h2>
+            <form on:submit|preventDefault>
+                <label for="name">Name</label>
+                <input id="name" type="text" bind:value={marker.name} />
+                <label for="comment">Kommentar</label>
+                <input id="comment" type="text" bind:value={marker.comment} />
+                <br />
+                <button on:click={() => (selected = null)}>
+                    <Icon name="done" /> Fertig
+                </button>
+            </form>
         </div>
     </div>
 {/if}
@@ -29,10 +36,10 @@
         width: 100vw;
         height: 100vh;
         background-color: var(--background-color);
-        opacity: 0.6;
+        opacity: 0.8;
     }
 
-    .content {
+    .detail {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -40,6 +47,18 @@
         padding: 3rem;
         border-radius: 2rem;
         background-color: var(--background-color);
-        box-shadow: 1rem 1rem 2rem rgba(0, 0, 0, 0.2);
+        box-shadow: 1rem 1rem 2rem rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    label, input {
+        display: block;
+    }
+
+    input {
+        margin-bottom: 0.5rem;
     }
 </style>

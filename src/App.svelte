@@ -3,22 +3,24 @@
     import Introduction from "./Introduction.svelte";
     import Upload from "./Upload.svelte";
 
+    import { fade } from "svelte/transition";
+
     let route;
 </script>
 
-{#if route != null}
+{#if route == null}
+    <main>
+        <Introduction />
+        <Upload bind:route />
+    </main>
+{:else}
     <header class="noprint">
         <a href=".">❮ startseite</a>
     </header>
-{/if}
-<main>
-    {#if route == null}
-        <Introduction />
-        <Upload bind:route />
-    {:else}
+    <main transition:fade>
         <Editor {route} />
-    {/if}
-</main>
+    </main>
+{/if}
 <footer>
     <span>marschzeittabelle.ch</span>
     <span class="noprint">
