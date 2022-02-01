@@ -24,10 +24,11 @@
     }
 </script>
 
+<MarkerDetail {route} bind:index={detailIndex} />
 <table>
     <tr>
         <th />
-        <th class="close">Wegpunkt</th>
+        <th>Wegpunkt</th>
         <th>Höhe</th>
         <th>Distanz</th>
         <th>Aufwand</th>
@@ -37,7 +38,7 @@
     {#each data as row}
         <tr>
             <td><span class="index">{row.index}</span></td>
-            <td class="name close">{row.name}</td>
+            <td class="name" on:click={() => detailIndex = row.index - 1}>{row.name}</td>
             <td class="number">{Math.round(row.height)} m</td>
             <td class="number">{row.distance.toFixed(1)} km</td>
             <td class="number">{row.effort.toFixed(1)} Lkm</td>
@@ -47,7 +48,7 @@
         {#if row.comment || row.diff}
             <tr class="alt">
                 <td />
-                <td class="comment close">{row.comment ?? ""}</td>
+                <td class="comment">{row.comment ?? ""}</td>
                 {#if row.diff}
                     <td class="number">{Math.round(row.diff.height)} m</td>
                     <td class="number">{row.diff.distance.toFixed(1)} km</td>
@@ -65,7 +66,9 @@
     {/each}
 </table>
 <br />
-<button on:click={exportCsv} class="noprint"><Icon name="output" /> CSV exportieren</button>
+<button on:click={exportCsv} class="noprint">
+    <Icon name="output" /> CSV exportieren
+</button>
 
 <style>
     table {
@@ -77,12 +80,12 @@
         vertical-align: bottom;
     }
 
-    th:not(:first-child), td:not(:first-child) {
-        padding-left: 1rem;
+    th:not(:last-child), td:not(:last-child) {
+        padding-right: 1rem;
     }
 
-    .close {
-        padding-left: 0.25rem;
+    th:first-child, td:first-child {
+        padding-right: 0.2rem;
     }
 
     .alt td {
