@@ -1,5 +1,5 @@
 <script>
-    import MarkerDetail from "./MarkerDetail.svelte";
+    import MarkerDetail from "./MarkerDialog.svelte";
 
     import { formatDuration, formatTime } from "./modules/formatting.js";
     import { calculateData } from "./modules/table.js";
