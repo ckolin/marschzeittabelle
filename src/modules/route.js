@@ -6,9 +6,7 @@ export async function loadProfiles(route) {
     route.lineProfile = await fetchProfile(route.line, false, 100);
     route.markerProfile = await fetchProfile(route.markers.map(m => route.line[m.index]), true, route.markers.length);
 
-    // Calculate distance and effort
     recalculate(route);
-
     return route;
 }
 
@@ -22,15 +20,15 @@ export function reverseRoute(route) {
     // Get new marker indexes
     route.markers.forEach(m => m.index = route.line.length - m.index - 1);
 
-    // Recalculate distance and effort
     recalculate(route);
 }
 
-function recalculate(route) {
+export function recalculate(route) {
     route.distanceSum = calculateDistanceSum(route.line);
     route.lineProfileDistanceSum = calculateDistanceSum(route.lineProfile.map(p => p.point));
     route.effort = calculateEffort(route);
     route.effortSum = calculateSum(route.effort);
+    route.breakSum = [0, ...calculateSum(route.markers.map(m => m.break))];
 }
 
 function calculateDistanceSum(line) {

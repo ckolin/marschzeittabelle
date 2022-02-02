@@ -13,7 +13,8 @@ export function calculateData(route, speed, start) {
             distance: route.distanceSum[route.markers[i].index] / 1000,
             effort: route.effortSum[i],
             duration: route.effortSum[i] / speed,
-            time: route.effortSum[i] / speed + start
+            time: route.effortSum[i] / speed + route.breakSum[i] / 60 + start,
+            break: route.markers[i].break
         };
     }
 

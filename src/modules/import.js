@@ -202,6 +202,11 @@ async function buildRoute(lines, markers) {
     // Bring markers in right order
     markers.sort((a, b) => a.index - b.index);
 
+    // Initialize break duration
+    for (let marker of markers) {
+        marker.break = 0;
+    }
+
     return { line, markers };
 }
 

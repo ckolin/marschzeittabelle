@@ -50,6 +50,9 @@
                     <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
                     <td class="number">{formatDuration(row.diff.duration)} h</td>
                 {/if}
+                {#if row.break > 0}
+                    <td class="number">+{formatDuration(row.break / 60)}</td>
+                {/if}
                 <td />
             </tr>
         {/if}
