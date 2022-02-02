@@ -1,5 +1,6 @@
 <script>
-    import MarkerDetail from "./MarkerDialog.svelte";
+    import Icon from "./Icon.svelte";
+    import MarkerDialog from "./MarkerDialog.svelte";
 
     import { formatDuration, formatTime } from "./modules/formatting.js";
     import { calculateData } from "./modules/table.js";
@@ -14,10 +15,9 @@
     $: data = calculateData(route, speed, start);
 </script>
 
-<MarkerDetail bind:route bind:selected />
+<MarkerDialog bind:route bind:selected />
 <table>
     <tr>
-        <th />
         <th>Wegpunkt</th>
         <th>Höhe</th>
         <th>Distanz</th>
@@ -27,28 +27,28 @@
     </tr>
     {#each data as row}
         <tr>
-            <td><span class="index">{row.index + 1}</span></td>
-            <td class="name" on:click={() => selected = row.index}>{row.name}</td>
+            <td class="name">
+                <span class="pill">{row.index + 1}</span> {row.name}
+            </td>
             <td class="number">{Math.round(row.height)} m</td>
             <td class="number">{row.distance.toFixed(1)} km</td>
             <td class="number">{row.effort.toFixed(1)} Lkm</td>
             <td class="number">{formatDuration(row.duration)} h</td>
             <td class="number">{formatTime(row.time)}</td>
+            <td class="noprint">
+                <button class="pill" on:click={() => selected = row.index}>
+                    <Icon name="edit" />
+                </button>
+            </td>
         </tr>
         {#if row.comment || row.diff}
             <tr class="alt">
-                <td />
                 <td class="comment">{row.comment ?? ""}</td>
                 {#if row.diff}
                     <td class="number">{Math.round(row.diff.height)} m</td>
                     <td class="number">{row.diff.distance.toFixed(1)} km</td>
                     <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
                     <td class="number">{formatDuration(row.diff.duration)} h</td>
-                {:else}
-                    <td />
-                    <td />
-                    <td />
-                    <td />
                 {/if}
                 <td />
             </tr>
@@ -59,6 +59,7 @@
 <style>
     table {
         white-space: nowrap;
+        border-spacing: 1px;
     }
 
     th, td {
@@ -70,33 +71,24 @@
         padding-right: 1rem;
     }
 
-    th:first-child, td:first-child {
-        padding-right: 0.2rem;
-    }
-
     .alt td {
         vertical-align: top;
         color: var(--accent-color);
+    }
+    
+    .name {
+        font-weight: bold;
+        color: var(--darker-accent-color);
+    }
+    
+    .name .pill {
+        color: var(--background-color);
+        background: var(--darker-accent-color);
     }
 
     .number {
         text-align: right;
         font-family: "Roboto Mono", monospace;
-    }
-
-    .index {
-        display: inline-block;
-        min-width: 1.3em;
-        border-radius: 1em;
-        font-weight: bold;
-        text-align: center;
-        color: var(--background-color);
-        background: var(--darker-accent-color);
-    }
-
-    .name {
-        font-weight: bold;
-        color: var(--darker-accent-color);
     }
 
     .comment {
