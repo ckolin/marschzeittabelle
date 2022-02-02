@@ -77,6 +77,25 @@ button.secondary:not(:disabled):active {
     border-color: var(--darker-accent-color);
 }
 
+.pill {
+    display: inline-block;
+    text-align: center;
+    padding: 0 0.35em;
+    border-radius: 1em;
+    min-width: 1.3em;
+}
+
+button.pill {
+    border: none;
+    color: var(--text-color);
+    background: var(--lighter-accent-color);
+}
+
+button.pill:not(:disabled):active {
+    color: var(--text-color);
+    background: var(--lighter-accent-color);
+}
+
 @media print {
     :root {
         --text-color: #000;

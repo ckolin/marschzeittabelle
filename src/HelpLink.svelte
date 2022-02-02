@@ -3,17 +3,6 @@
     export let label = "?";
 </script>
 
-<a href={topic == null ? "help" : `help#${topic}`} target="_blank" class="noprint">
-    {label}
+<a class="noprint" href={topic == null ? "help" : `help#${topic}`} target="_blank">
+   <button class="pill">{label}</button>
 </a>
-
-<style>
-    a {
-        padding: 0 0.35em;
-        border-radius: 1em;
-        font-weight: bold;
-        text-decoration: none;
-        color: var(--text-color);
-        background: var(--lighter-accent-color);
-    }
-</style>
