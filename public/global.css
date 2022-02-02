@@ -40,9 +40,9 @@ input, button, select, textarea {
     border-radius: 4px;
 }
 
-:is(input, button, select, textarea):focus {
+:is(input, button, select, textarea, a):focus {
     outline: 3px solid var(--lighter-accent-color);
-    transition: 50ms;
+    transition: outline-width 50ms;
 }
 
 input:invalid {
