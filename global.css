@@ -15,6 +15,10 @@ html {
     max-width: 820px;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 10px;
     color: var(--text-color);
@@ -22,7 +26,7 @@ body {
     font-family: "Inter", sans-serif;
 }
 
-a {
+a, label {
     color: var(--accent-color);
 }
 
@@ -36,16 +40,16 @@ input, button, select, textarea {
     border-radius: 4px;
 }
 
-input:focus, button:focus, select:focus, textarea:focus {
+:is(input, button, select, textarea, a):focus {
     outline: 3px solid var(--lighter-accent-color);
-    transition: 50ms;
+    transition: outline-width 50ms;
 }
 
 input:invalid {
     outline: 3px solid red;
 }
 
-input:disabled, button:disabled {
+:is(input, button):disabled {
     opacity: 0.5;
 }
 
@@ -71,6 +75,25 @@ button.secondary:not(:disabled):active {
     color: var(--darker-accent-color);
     background-color: var(--background-color);
     border-color: var(--darker-accent-color);
+}
+
+.pill {
+    display: inline-block;
+    text-align: center;
+    padding: 0 0.35em;
+    border-radius: 1em;
+    min-width: 1.3em;
+}
+
+button.pill {
+    border: none;
+    color: var(--text-color);
+    background: var(--lighter-accent-color);
+}
+
+button.pill:not(:disabled):active {
+    color: var(--text-color);
+    background: var(--lighter-accent-color);
 }
 
 @media print {
