@@ -7,6 +7,6 @@
 <style>
     span {
         font-size: 18px;
-        vertical-align: bottom;
+        vertical-align: sub;
     }
 </style>
