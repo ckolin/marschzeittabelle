@@ -25,8 +25,8 @@
             <label for="comment">Kommentar</label>
             <textarea id="comment" bind:value={marker.comment} />
             {#if selected < route.markers.length - 1}
-                <label for="break">Pause</label>
-                <input id="break" type="number" step="5" required bind:value={marker.break} />
+                <label for="break">Pause (min)</label>
+                <input id="break" type="number" step="5" min="0" required bind:value={marker.break} />
             {/if}
             <br />
             <button on:click={close}>

@@ -22,7 +22,7 @@
         <th>Höhe</th>
         <th>Distanz</th>
         <th>Aufwand</th>
-        <th>Dauer</th>
+        <th>Gehzeit</th>
         <th>Uhrzeit</th>
     </tr>
     {#each data as row}

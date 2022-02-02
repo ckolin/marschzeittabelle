@@ -38,19 +38,10 @@
 
 <div class="general">
     <div class="info">
-        <h2>Route</h2>
+        <h1>Route</h1>
         <Info {route} {speed} {start} />
     </div>
     <div class="options noprint">
-        <button class="secondary" on:click={reverse}>
-            <Icon name="swap_horiz" /> Richtung wechseln
-        </button>
-        <br />
-        <label for="start">Abreise</label>
-        <input id="start" type="time" required bind:value={startInput} />
-        <label for="speed">Geschwindigkeit in Lkm/h</label>
-        <input id="speed" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
-        <br />
         <button on:click={() => window.print()}>
             <Icon name="print" /> Drucken
         </button>
@@ -58,6 +49,16 @@
         <button on:click={exportCsv} class="secondary">
             <Icon name="output" /> Exportieren (CSV)
         </button>
+        <br />
+        <br />
+        <button class="stretch secondary" on:click={reverse}>
+            <Icon name="swap_horiz" /> Richtung wechseln
+        </button>
+        <br />
+        <label for="speed">Geschwindigkeit (Lkm/h)</label>
+        <input id="speed" class="stretch" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
+        <label for="start">Abreise</label>
+        <input id="start" class="stretch" type="time" required bind:value={startInput} />
     </div>
 </div>
 <div class="table">
@@ -70,18 +71,26 @@
 </div>
 
 <style>
-    .general {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        flex-wrap: wrap;
+    h1, h2 {
+        margin-bottom: 0.5rem;
     }
 
-    .options label, input {
+    .general {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+
+    .general h1 {
+        margin-top: 0;
+    }
+
+    .options label {
         display: block;
     }
 
-    .options input {
+    .options .stretch {
         width: 100%;
     }
 

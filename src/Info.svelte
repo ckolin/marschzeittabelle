@@ -10,6 +10,8 @@
     $: distance = route.distanceSum[route.line.length - 1] / 1000;
     $: effort = route.effortSum[route.markers.length - 1]
     $: duration = effort / speed;
+    $: breaks = route.breakSum[route.markers.length - 1] / 60;
+    $: total = duration + breaks;
     $: ({ascent, descent} = calculateHeightDifference(route));
 
     function calculateHeightDifference(route) {
@@ -26,10 +28,24 @@
     }
 </script>
 
-Start: <b>{route.markers[0].name}</b>, <b>{formatTime(start)}</b><br />
-Ende: <b>{route.markers[route.markers.length - 1].name}</b>, <b>{formatTime(start + duration)}</b><br />
-Auf-/Abstieg: ↑ <b>{Math.round(ascent)} m</b> ↓ <b>{Math.round(descent)} m</b><br />
-Distanz: <b>{distance.toFixed(1)} km</b><br />
-Aufwand: <b>{effort.toFixed(1)} Lkm</b> <HelpLink topic="calculation" /><br />
-Geschwindigkeit: <b>{speed} Lkm/h</b><br />
-Dauer: <b>{formatDuration(duration)} h</b><br />
+<p>
+    Start: <b>{route.markers[0].name}</b><br />
+    Ziel: <b>{route.markers[route.markers.length - 1].name}</b><br />
+</p>
+<p>
+    Auf-/Abstieg: ↑ <b>{Math.round(ascent)} m</b> ↓ <b>{Math.round(descent)} m</b><br />
+    Distanz: <b>{distance.toFixed(1)} km</b><br />
+    Aufwand: <b>{effort.toFixed(1)} Lkm</b> <HelpLink topic="calculation" /><br />
+</p>
+<p>
+    Geschwindigkeit: <b>{speed} Lkm/h</b><br />
+    Dauer: <b>{formatTime(start)}</b> - <b>{formatTime(start + total)}</b> (<b>{formatDuration(total)} h</b>)<br />
+    davon Gehzeit: <b>{formatDuration(duration)} h</b><br />
+    davon Pausen: <b>{formatDuration(breaks)} h</b><br />
+</p>
+
+<style>
+    p {
+        margin-top: 0;
+    }
+</style>
