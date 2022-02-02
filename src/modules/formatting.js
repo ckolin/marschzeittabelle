@@ -10,7 +10,7 @@ export function formatTime(hours) {
 
 function getParts(hours) {
     const h = Math.floor(hours);
-    const m = Math.round((hours - h) * 60);
+    const m = Math.floor((hours - h) * 60);
     return {h, m};
 }
 
