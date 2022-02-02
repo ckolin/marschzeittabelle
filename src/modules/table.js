@@ -42,9 +42,10 @@ export function getCsv(data) {
         "Unterschied Distanz / km",
         "Total Aufwand / Lkm",
         "Unterschied Aufwand / Lkm",
-        "Total Dauer / h",
-        "Unterschied Dauer / h",
+        "Total Gehzeit / h",
+        "Unterschied Gehzeit / h",
         "Uhrzeit / hh:mm",
+        "Pausen / min"
     ];
 
     const rows = data.map((row) => [
@@ -60,6 +61,7 @@ export function getCsv(data) {
         row.duration,
         row.diff?.duration ?? 0,
         formatTime(row.time),
+        row.break
     ]);
 
     return [header, ...rows]
