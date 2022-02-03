@@ -31,7 +31,7 @@
     <h2>Höhenprofil</h2>
     <button class="pill noprint" on:click={() => (showProfile = !showProfile)}>
         {#if showProfile}
-            <Icon name="visibility_off" /> Verstecken
+            <Icon name="visibility_off" /> Ausblenden
         {:else}
             <Icon name="visibility" /> Anzeigen
         {/if}
