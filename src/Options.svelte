@@ -1,11 +1,14 @@
 <script>
+    import HelpLink from "./HelpLink.svelte";
     import Icon from "./Icon.svelte";
 
-    import { formatTime } from "./modules/formatting";
-    import { reverseRoute } from "./modules/route.js";
+    import { formatDuration, formatTime } from "./modules/formatting";
+    import { calculateTotals, reverseRoute } from "./modules/route.js";
     import { calculateData, getCsv } from "./modules/table.js";
 
     export let route;
+
+    $: total = calculateTotals(route);
     
     let speedInput = route.speed;
     $: if (!window.isNaN(speedInput) && speedInput > 0) {
@@ -32,17 +35,38 @@
     }
 </script>
 
-<p>
-    <button class="stretch secondary" on:click={reverse}>
-        <Icon name="swap_horiz" /> Richtung wechseln
-    </button>
+<div class="container">
+    <div>
+        <p>
+            Start: <b>{route.markers[0].name}</b><br />
+            Ziel: <b>{route.markers[route.markers.length - 1].name}</b>
+        </p>
+        <button class="pill noprint" on:click={reverse}>
+            <Icon name="swap_vert" /> Richtung wechseln
+        </button>
+    </div>
+    <div>
+        Horizontaldistanz: <b>{total.distance.toFixed(1)} km</b><br />
+        Auf-/Abstieg: ↑ <b>{Math.round(total.ascent)} m</b> ↓ <b>{Math.round(total.descent)} m</b><br />
+        Aufwand: <b>{total.effort.toFixed(1)} Lkm</b> <HelpLink topic="calculation" /><br />
+        Geschwindigkeit: <b id="speed" contenteditable="true" inputmode="number" bind:textContent={speedInput}></b><b>&nbsp;Lkm/h</b>
+        <button class="pill noprint" on:click={() => document.getElementById("speed").focus()}>
+            <Icon name="edit" />
+        </button>
+    </div>
+    <div>
+        Abreise: <b id="start" contenteditable="true" bind:textContent={startInput}></b>
+        <button class="pill noprint" on:click={() => document.getElementById("start").focus()}>
+            <Icon name="edit" />
+        </button>
+        <br />
+        Ankunft: <b>{formatTime(route.start + total.duration)}</b><br />
+        Gehzeit: <b>{formatDuration(total.duration)} h</b><br />
+        Pausen: <b>{formatDuration(total.breakDuration)} h</b>
+    </div>
+</div>
+<div class="noprint">
     <br />
-    <label for="speed">Geschwindigkeit (Lkm/h)</label>
-    <input id="speed" class="stretch" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
-    <label for="start">Abreise</label>
-    <input id="start" class="stretch" type="time" required bind:value={startInput} />
-</p>
-<p>
     <button on:click={() => window.print()}>
         <Icon name="print" /> Drucken
     </button>
@@ -50,26 +74,16 @@
     <button on:click={exportCsv} class="secondary">
         <Icon name="output" /> Exportieren (CSV)
     </button>
-</p>
+</div>
 
 <style>
-    p:first-of-type {
-        margin-top: 0
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
     }
 
-    p {
-        margin-bottom: 0;
-    }
-
-    label {
-        display: block;
-    }
-
-    .stretch {
-        width: 100%;
-    }
-
-    input, button {
-        margin-bottom: 0.5rem;
+    .container p {
+        margin-top: 0;
     }
 </style>

@@ -36,8 +36,11 @@ input, button, select, textarea {
     font-size: inherit;
     color: var(--text-color);
     background-color: var(--background-color);
-    padding: 0.4em;
+    padding: 0.4rem;
     border: 2px solid var(--accent-color);
+}
+
+input, button, select, textarea, *[contenteditable="true"] {
     border-radius: 4px;
 }
 

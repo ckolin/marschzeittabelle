@@ -1,6 +1,39 @@
 import * as vec from "./vec.js";
 import { fetchProfile } from "./geoadmin.js";
 
+export function calculateTotals(route) {
+    const distance = route.distanceSum[route.line.length - 1] / 1000;
+    const effort = route.effortSum[route.markers.length - 1]
+    const walkingDuration = effort / route.speed;
+    const breakDuration = route.breakSum[route.markers.length - 1] / 60;
+    const duration = walkingDuration + breakDuration;
+    const {ascent, descent} = calculateHeightDifference(route);
+
+    return {
+        distance,
+        effort,
+        walkingDuration,
+        breakDuration,
+        duration,
+        ascent,
+        descent
+    };
+}
+
+function calculateHeightDifference(route) {
+    let ascent = 0, descent = 0;
+    for (let i = 1; i < route.markers.length; i++) {
+        const diff = route.markerProfile[i].height - route.markerProfile[i - 1].height;
+        if (diff > 0) {
+            ascent += diff;
+        } else {
+            descent -= diff;
+        }
+    }
+    
+    return { ascent, descent };
+}
+
 export async function loadProfiles(route) {
     // Load data from api
     route.lineProfile = await fetchProfile(route.line, false, 100);
