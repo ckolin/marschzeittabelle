@@ -6,6 +6,8 @@
     import Table from "./Table.svelte";
 
     export let route;
+
+    let showProfile = true;
 </script>
 
 <div class="general">
@@ -25,14 +27,28 @@
     <h2>Marschzeittabelle</h2>
     <Table bind:route />
 </div>
-<div class="profile">
+<div class="profile" class:noprint={!showProfile}>
     <h2>Höhenprofil</h2>
-    <Profile {route} />
+    <button class="pill noprint" on:click={() => (showProfile = !showProfile)}>
+        {#if showProfile}
+            <Icon name="visibility_off" /> Verstecken
+        {:else}
+            <Icon name="visibility" /> Anzeigen
+        {/if}
+    </button>
+    {#if showProfile}
+        <Profile {route} />
+    {/if}
 </div>
 
 <style>
     h1, h2 {
+        display: inline-block;
         margin-bottom: 0.5rem;
+    }
+
+    :is(h1, h2) + button {
+        vertical-align: 0.2em;
     }
 
     .general {
@@ -44,10 +60,6 @@
 
     .info {
         flex: 1 1 20rem;
-    }
-
-    .info h1 {
-        display: inline-block;
     }
 
     @media not print {
