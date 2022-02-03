@@ -4,12 +4,10 @@
     import { formatDuration, formatTime } from "./modules/formatting.js";
 
     export let route;
-    export let speed;
-    export let start;
 
     $: distance = route.distanceSum[route.line.length - 1] / 1000;
     $: effort = route.effortSum[route.markers.length - 1]
-    $: duration = effort / speed;
+    $: duration = effort / route.speed;
     $: breaks = route.breakSum[route.markers.length - 1] / 60;
     $: total = duration + breaks;
     $: ({ascent, descent} = calculateHeightDifference(route));
@@ -38,8 +36,8 @@
     Aufwand: <b>{effort.toFixed(1)} Lkm</b> <HelpLink topic="calculation" /><br />
 </p>
 <p>
-    Geschwindigkeit: <b>{speed} Lkm/h</b><br />
-    Dauer: <b>{formatTime(start)}</b> - <b>{formatTime(start + total)}</b> (<b>{formatDuration(total)} h</b>)<br />
+    Geschwindigkeit: <b>{route.speed} Lkm/h</b><br />
+    Dauer: <b>{formatTime(route.start)}</b> - <b>{formatTime(route.start + total)}</b> (<b>{formatDuration(total)} h</b>)<br />
     davon Gehzeit: <b>{formatDuration(duration)} h</b><br />
     davon Pausen: <b>{formatDuration(breaks)} h</b><br />
 </p>

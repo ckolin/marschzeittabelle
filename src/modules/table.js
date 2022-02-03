@@ -1,6 +1,6 @@
 import { formatTime } from "./formatting.js";
 
-export function calculateData(route, speed, start) {
+export function calculateData(route) {
     const res = [];
 
     // Calculate information and totals
@@ -12,8 +12,8 @@ export function calculateData(route, speed, start) {
             height: route.markerProfile[i].height,
             distance: route.distanceSum[route.markers[i].index] / 1000,
             effort: route.effortSum[i],
-            duration: route.effortSum[i] / speed,
-            time: route.effortSum[i] / speed + route.breakSum[i] / 60 + start,
+            duration: route.effortSum[i] / route.speed,
+            time: route.effortSum[i] / route.speed + route.breakSum[i] / 60 + route.start,
             break: route.markers[i].break
         };
     }

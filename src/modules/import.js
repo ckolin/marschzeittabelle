@@ -14,7 +14,7 @@ export function importFile(file) {
                 return readGpx(xml);
             }
         })
-        .then(({ lines, markers }) => buildRoute(lines, markers))
+        .then(({ lines, markers }) => buildRoute(lines, markers, file.name))
         .then((route) => loadProfiles(route));
 }
 
@@ -121,7 +121,7 @@ function convertCoordinates(lat, long) {
     return { x, y };
 }
 
-async function buildRoute(lines, markers) {
+async function buildRoute(lines, markers, title) {
     // Check if route contains line and markers
     if (lines.length === 0) {
         throw "Die Route enthält keine Linie."
@@ -207,7 +207,13 @@ async function buildRoute(lines, markers) {
         marker.break = 0;
     }
 
-    return { line, markers };
+    return {
+        line,
+        markers,
+        speed: 4,
+        start: 0,
+        title
+    };
 }
 
 function findConnectedLines(lines) {

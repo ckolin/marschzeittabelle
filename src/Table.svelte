@@ -6,13 +6,11 @@
     import { calculateData } from "./modules/table.js";
 
     export let route;
-    export let speed;
-    export let start;
 
     let data = [];
     let selected;
 
-    $: data = calculateData(route, speed, start);
+    $: data = calculateData(route);
 </script>
 
 <MarkerDialog bind:route bind:selected />
