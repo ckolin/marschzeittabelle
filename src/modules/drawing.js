@@ -1,7 +1,8 @@
 import * as vec from "./vec.js";
-import { theme } from "./theme.js";
+import { getTheme } from "./theme.js";
 
 export function drawProfile(route, canvas) {
+    const theme = getTheme();
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 

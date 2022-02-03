@@ -13,7 +13,7 @@
         <h2>2. Exportieren</h2>
         <p>In wenigen Klicks erledigt. <HelpLink topic="export" label="Wie geht das?" /></p>
         <h2>3. Hochladen</h2>
-        <p>Jetzt noch Geschwindigkeit, Startzeit, Bemerkungen und Pausen hinzufügen.</p>
+        <p>Jetzt noch Geschwindigkeit, Startzeit, Kommentare und Pausen hinzufügen.</p>
     </div>
     <img src="example.jpg" alt="Beispiel" />
 </div>
@@ -57,7 +57,7 @@
         width: 100%;
         flex: 0 1 20rem;
         border-radius: 1rem;
-        box-shadow: 1rem 1rem 2rem rgba(0, 0, 0, 0.1);
+        box-shadow: 1rem 1rem 2rem var(--shadow-color);
     }
 
     h2 {

@@ -45,9 +45,9 @@
 
 <style>
     div {
+        padding: 3rem 6rem;
         border-radius: 2rem;
         border: 3px dashed var(--lighter-accent-color);
-        padding: 3rem 6rem;
         text-align: center;
     }
 

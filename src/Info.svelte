@@ -45,7 +45,11 @@
 </p>
 
 <style>
+    p:first-of-type {
+        margin-top: 0
+    }
+
     p {
-        margin-top: 0;
+        margin-bottom: 0;
     }
 </style>

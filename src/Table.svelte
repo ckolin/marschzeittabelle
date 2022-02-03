@@ -67,7 +67,6 @@
 
     th, td {
         text-align: left;
-        vertical-align: bottom;
     }
 
     th:not(:last-child), td:not(:last-child) {
