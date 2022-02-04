@@ -40,6 +40,7 @@
     }
 
     .dialog {
+        max-width: 25rem;
         position: fixed;
         top: 50%;
         left: 50%;

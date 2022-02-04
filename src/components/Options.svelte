@@ -5,6 +5,7 @@
     import Dialog from "./Dialog.svelte";
     import HelpLink from "./HelpLink.svelte";
     import Icon from "./Icon.svelte";
+    import TimeInput from "./TimeInput.svelte";
 
     export let route;
 
@@ -17,11 +18,6 @@
     }
     
     let showStartDialog = false;
-    let startInput = formatTime(route.start);
-    $: route.start = startInput
-        .split(":")
-        .map((n, i) => Number(n) / 60 ** i)
-        .reduce((a, b) => a + b);
 
     function reverse() {
         reverseRoute(route);
@@ -42,8 +38,8 @@
     <input id="speed" class="stretch" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
 </Dialog>
 <Dialog title="Abreise anpassen" bind:show={showStartDialog}>
-    <label for="start">Abreise</label>
-    <input id="start" class="stretch" type="time" required bind:value={startInput} />
+    <label for="start">Abreise (hh:mm)</label>
+    <TimeInput id="start" bind:hours={route.start} />
 </Dialog>
 <div class="container">
     <div>
