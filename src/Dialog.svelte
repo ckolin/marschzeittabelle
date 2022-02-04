@@ -1,13 +1,19 @@
 <script>
     import { fade } from "svelte/transition";
+
+    export let title;
+    export let show = false;
 </script>
 
-<div transition:fade={{ duration: 100 }}>
-    <div class="background"></div>
-    <div class="dialog">
-        <slot></slot>
+{#if show}
+    <div transition:fade={{ duration: 100 }}>
+        <div class="background"></div>
+        <div class="dialog">
+            <h2>{title}</h2>
+            <slot></slot>
+        </div>
     </div>
-</div>
+{/if}
 
 <style>
     .background {
@@ -28,5 +34,9 @@
         border-radius: 2rem;
         background-color: var(--background-color);
         box-shadow: 1rem 1rem 2rem var(--shadow-color);
+    }
+
+    h2 {
+        margin-top: 0;
     }
 </style>
