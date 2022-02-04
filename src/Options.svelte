@@ -1,8 +1,7 @@
 <script>
     import HelpLink from "./HelpLink.svelte";
     import Icon from "./Icon.svelte";
-    import SpeedDialog from "./SpeedDialog.svelte";
-    import StartDialog from "./StartDialog.svelte";
+    import Dialog from "./Dialog.svelte";
 
     import { formatDuration, formatTime } from "./modules/formatting";
     import { calculateTotals, reverseRoute } from "./modules/route.js";
@@ -13,7 +12,17 @@
     $: total = calculateTotals(route);
     
     let showSpeedDialog = false;
+    let speedInput = route.speed;
+    $: if (!window.isNaN(speedInput) && speedInput > 0) {
+        route.speed = speedInput;
+    }
+    
     let showStartDialog = false;
+    let startInput = formatTime(route.start);
+    $: route.start = startInput
+        .split(":")
+        .map((n, i) => Number(n) / 60 ** i)
+        .reduce((a, b) => a + b);
 
     function reverse() {
         reverseRoute(route);
@@ -29,8 +38,14 @@
     }
 </script>
 
-<SpeedDialog bind:route bind:show={showSpeedDialog} />
-<StartDialog bind:route bind:show={showStartDialog} />
+<Dialog title="Geschwindigkeit anpassen" bind:show={showSpeedDialog}>
+    <label for="speed">Geschwindigkeit (Lkm/h)</label>
+    <input id="speed" class="stretch" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
+</Dialog>
+<Dialog title="Abreise anpassen" bind:show={showStartDialog}>
+    <label for="start">Abreise</label>
+    <input id="start" class="stretch" type="time" required bind:value={startInput} />
+</Dialog>
 <div class="container">
     <div>
         <p>

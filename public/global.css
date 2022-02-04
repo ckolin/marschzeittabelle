@@ -61,11 +61,11 @@ input:invalid {
     opacity: 0.5;
 }
 
-form :is(label, input, textarea) {
+form > :is(label, input, textarea) {
     display: block;
 }
 
-form :is(input, textarea) {
+form > :is(input, textarea) {
     width: 100%;
     margin-bottom: 0.5rem;
 }

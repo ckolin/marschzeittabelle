@@ -1,8 +1,18 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import { fade } from "svelte/transition";
+    
+    import Icon from "./Icon.svelte";
 
     export let title;
     export let show = false;
+
+    const dispatch = createEventDispatcher();
+
+    function close() {
+        show = false;
+        dispatch("close");
+    }
 </script>
 
 {#if show}
@@ -10,7 +20,13 @@
         <div class="background"></div>
         <div class="dialog">
             <h2>{title}</h2>
-            <slot></slot>
+            <form on:submit|preventDefault={close}>
+                <slot></slot>
+                <br />
+                <button>
+                    <Icon name="done" /> Fertig
+                </button>
+            </form>
         </div>
     </div>
 {/if}
@@ -38,5 +54,9 @@
 
     h2 {
         margin-top: 0;
+    }
+    
+    button {
+        float: right;
     }
 </style>
