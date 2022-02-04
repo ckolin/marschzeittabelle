@@ -1,9 +1,8 @@
 <script>
+    import { fade } from "svelte/transition";
     import Editor from "./Editor.svelte";
     import Introduction from "./Introduction.svelte";
     import Upload from "./Upload.svelte";
-
-    import { fade } from "svelte/transition";
 
     let route;
 </script>

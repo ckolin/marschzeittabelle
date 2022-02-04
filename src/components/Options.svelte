@@ -1,11 +1,10 @@
 <script>
+    import { formatDuration, formatTime } from "../modules/formatting";
+    import { calculateTotals, reverseRoute } from "../modules/route.js";
+    import { calculateData, getCsv } from "../modules/table.js";
+    import Dialog from "./Dialog.svelte";
     import HelpLink from "./HelpLink.svelte";
     import Icon from "./Icon.svelte";
-    import Dialog from "./Dialog.svelte";
-
-    import { formatDuration, formatTime } from "./modules/formatting";
-    import { calculateTotals, reverseRoute } from "./modules/route.js";
-    import { calculateData, getCsv } from "./modules/table.js";
 
     export let route;
 

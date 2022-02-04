@@ -1,8 +1,7 @@
 <script>
+    import { importFile } from "../modules/import.js";
     import Icon from "./Icon.svelte";
     import Spinner from "./Spinner.svelte";
-
-    import { importFile } from "./modules/import.js";
 
     export let route = null;
 

@@ -1,7 +1,6 @@
 <script>
+    import { recalculate } from "../modules/route.js";
     import Dialog from "./Dialog.svelte";
-
-    import { recalculate } from "./modules/route.js";
 
     export let route;
     export let selected = null;

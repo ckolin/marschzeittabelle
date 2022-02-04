@@ -1,5 +1,5 @@
 <script>
-    import { drawProfile } from "./modules/drawing.js";
+    import { drawProfile } from "../modules/drawing.js";
 
     export let route;
 

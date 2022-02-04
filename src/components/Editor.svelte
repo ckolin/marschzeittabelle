@@ -1,6 +1,5 @@
 <script>
     import { slide } from "svelte/transition";
-
     import Icon from "./Icon.svelte";
     import Options from "./Options.svelte";
     import Profile from "./Profile.svelte";

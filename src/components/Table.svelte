@@ -1,9 +1,9 @@
 <script>
+    import { calculateData } from "../modules/table.js";
+    import { formatDuration, formatTime } from "../modules/formatting.js";
     import Icon from "./Icon.svelte";
     import MarkerDialog from "./MarkerDialog.svelte";
 
-    import { formatDuration, formatTime } from "./modules/formatting.js";
-    import { calculateData } from "./modules/table.js";
 
     export let route;
 
