@@ -64,10 +64,14 @@ async function readKml(xml) {
                 .querySelector("name")
                 .innerHTML
                 .trim();
+            const comment = placemark
+                .querySelector("description")
+                ?.innerHTML
+                ?.trim();
             const point = coords(placemark
                 .querySelector("Point coordinates")
                 .innerHTML);
-            markers.push({ name, point });
+            markers.push({ name, comment, point });
         }
     }
 
@@ -90,16 +94,23 @@ async function readGpx(xml) {
     }
 
     // Find markers stored as track points
+    // Used by outdooractive.com
     const nameElements = xml.querySelectorAll("trkpt > name");
     for (let nameElement of nameElements) {
+        const parent = nameElement.parentElement;
         const name = nameElement
             .innerHTML
             .trim();
-        const point = coords(nameElement.parentElement);
-        markers.push({ name, point });
+        const comment = parent
+            .querySelector("desc")
+            ?.innerHTML
+            ?.trim();
+        const point = coords(parent);
+        markers.push({ name, comment, point });
     }
 
     // Find markers stored as waypoints
+    // Used by swisstopo app
     if (markers.length === 0) {
         const waypoints = xml.querySelectorAll("wpt");
         for (let waypoint of waypoints) {
@@ -176,11 +187,9 @@ async function buildRoute(lines, markers, title) {
         } else {
             // Line has looped back to this marker
             // Create duplicate of used marker
-            markers.push({
-                name: marker.name,
-                point: marker.point,
-                index: i
-            });
+            const clone = Object.assign({}, marker);
+            clone.index = i;
+            markers.push(clone);
         }
 
         lastPoint = marker.point;
