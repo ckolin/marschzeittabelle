@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gpx version="1.1" creator="outdooractive - http://www.outdooractive.com" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" xmlns:oa="http://www.outdooractive.com/GPX/Extensions/1">
+  <metadata>
+    <name>Tourenplanung am 2022-02-04</name>
+    <author>
+      <name>asdf asdf - Community</name>
+    </author>
+    <link href="https://www.outdooractive.com/r/234988066"/>
+    <time>2022-02-04T17:06:31.978</time>
+    <extensions>
+      <oa:oaCategory>hikingTourTrail</oa:oaCategory>
+    </extensions>
+  </metadata>
+  <trk>
+    <name>Tourenplanung am 2022-02-04</name>
+    <type>hikingTourTrail</type>
+    <trkseg>
+      <trkpt lat="46.699501" lon="9.430793">
+        <ele>831.9</ele>
+        <name>46.699509,9.430776</name>
+        <extensions>
+          <oa:mapZoom>15</oa:mapZoom>
+        </extensions>
+      </trkpt>
+      <trkpt lat="46.699533" lon="9.430827">
+        <ele>831.9</ele>
+      </trkpt>
+      <trkpt lat="46.699747" lon="9.431011">
+        <ele>831.7</ele>
+      </trkpt>
+      <trkpt lat="46.69996" lon="9.431195">
+        <ele>831.1</ele>
+      </trkpt>
+      <trkpt lat="46.700134" lon="9.431425">
+        <ele>830.1</ele>
+      </trkpt>
+      <trkpt lat="46.70024" lon="9.431779">
+        <ele>831.2</ele>
+      </trkpt>
+      <trkpt lat="46.700344" lon="9.432371">
+        <ele>834.6</ele>
+      </trkpt>
+      <trkpt lat="46.70035" lon="9.432628">
+        <ele>835.5</ele>
+      </trkpt>
+      <trkpt lat="46.700321" lon="9.432732">
+        <ele>835.8</ele>
+      </trkpt>
+      <trkpt lat="46.700244" lon="9.432968">
+        <ele>836.3</ele>
+      </trkpt>
+      <trkpt lat="46.700227" lon="9.43302">
+        <ele>836.2</ele>
+      </trkpt>
+      <trkpt lat="46.700079" lon="9.433472">
+        <ele>834.8</ele>
+      </trkpt>
+      <trkpt lat="46.699984" lon="9.433797">
+        <ele>832.4</ele>
+      </trkpt>
+      <trkpt lat="46.699889" lon="9.434122">
+        <ele>830.0</ele>
+      </trkpt>
+      <trkpt lat="46.699775" lon="9.434476">
+        <ele>827.4</ele>
+      </trkpt>
+      <trkpt lat="46.699662" lon="9.434829">
+        <ele>824.7</ele>
+      </trkpt>
+      <trkpt lat="46.699628" lon="9.435003">
+        <ele>823.6</ele>
+      </trkpt>
+      <trkpt lat="46.69963" lon="9.435142">
+        <ele>822.8</ele>
+      </trkpt>
+      <trkpt lat="46.699641" lon="9.435147">
+        <ele>822.9</ele>
+      </trkpt>
+      <trkpt lat="46.699641" lon="9.435147">
+        <ele>822.9</ele>
+        <name>b</name>
+        <desc>Hier ist Punkt b</desc>
+        <sym>waypointFlagComb</sym>
+        <extensions>
+          <oa:mapZoom>17</oa:mapZoom>
+        </extensions>
+      </trkpt>
+      <trkpt lat="46.69963" lon="9.435142">
+        <ele>822.8</ele>
+      </trkpt>
+      <trkpt lat="46.699642" lon="9.435206">
+        <ele>822.3</ele>
+      </trkpt>
+      <trkpt lat="46.699409" lon="9.435072">
+        <ele>821.4</ele>
+      </trkpt>
+      <trkpt lat="46.699176" lon="9.434938">
+        <ele>820.1</ele>
+      </trkpt>
+      <trkpt lat="46.698778" lon="9.434888">
+        <ele>820.6</ele>
+      </trkpt>
+      <trkpt lat="46.698541" lon="9.434913">
+        <ele>819.6</ele>
+      </trkpt>
+      <trkpt lat="46.698245" lon="9.434972">
+        <ele>818.8</ele>
+      </trkpt>
+      <trkpt lat="46.697999" lon="9.435023">
+        <ele>813.9</ele>
+      </trkpt>
+      <trkpt lat="46.697855" lon="9.435023">
+        <ele>811.9</ele>
+      </trkpt>
+      <trkpt lat="46.697728" lon="9.435023">
+        <ele>810.3</ele>
+      </trkpt>
+      <trkpt lat="46.697415" lon="9.435159">
+        <ele>806.7</ele>
+      </trkpt>
+      <trkpt lat="46.697442" lon="9.435205">
+        <ele>806.1</ele>
+      </trkpt>
+      <trkpt lat="46.697442" lon="9.435205">
+        <ele>806.1</ele>
+        <name>c</name>
+        <desc>Woah ein C</desc>
+        <sym>waypointFlagComb</sym>
+        <extensions>
+          <oa:mapZoom>17</oa:mapZoom>
+        </extensions>
+      </trkpt>
+      <trkpt lat="46.697415" lon="9.435159">
+        <ele>806.7</ele>
+      </trkpt>
+      <trkpt lat="46.69728" lon="9.434866">
+        <ele>808.4</ele>
+      </trkpt>
+      <trkpt lat="46.697144" lon="9.434574">
+        <ele>811.7</ele>
+      </trkpt>
+      <trkpt lat="46.696856" lon="9.434126">
+        <ele>819.9</ele>
+      </trkpt>
+      <trkpt lat="46.696636" lon="9.433854">
+        <ele>824.7</ele>
+      </trkpt>
+      <trkpt lat="46.696416" lon="9.433584">
+        <ele>828.2</ele>
+      </trkpt>
+      <trkpt lat="46.696128" lon="9.433118">
+        <ele>833.8</ele>
+      </trkpt>
+      <trkpt lat="46.695941" lon="9.432805">
+        <ele>837.4</ele>
+      </trkpt>
+      <trkpt lat="46.695649" lon="9.432634">
+        <ele>837.8</ele>
+      </trkpt>
+      <trkpt lat="46.695436" lon="9.432479">
+        <ele>841.8</ele>
+      </trkpt>
+      <trkpt lat="46.695222" lon="9.432324">
+        <ele>840.4</ele>
+      </trkpt>
+      <trkpt lat="46.695095" lon="9.432181">
+        <ele>841.6</ele>
+      </trkpt>
+      <trkpt lat="46.694908" lon="9.431897">
+        <ele>843.6</ele>
+      </trkpt>
+      <trkpt lat="46.694832" lon="9.431541">
+        <ele>846.5</ele>
+      </trkpt>
+      <trkpt lat="46.694744" lon="9.431068">
+        <ele>851.0</ele>
+      </trkpt>
+      <trkpt lat="46.694621" lon="9.430798">
+        <ele>853.1</ele>
+      </trkpt>
+      <trkpt lat="46.694628" lon="9.430729">
+        <ele>853.8</ele>
+      </trkpt>
+      <trkpt lat="46.694641" lon="9.430713">
+        <ele>854.1</ele>
+      </trkpt>
+      <trkpt lat="46.694641" lon="9.430713">
+        <ele>854.1</ele>
+        <name>d</name>
+        <desc>...</desc>
+        <sym>waypointFlagComb</sym>
+        <extensions>
+          <oa:mapZoom>17</oa:mapZoom>
+        </extensions>
+      </trkpt>
+      <trkpt lat="46.694663" lon="9.430688">
+        <ele>854.5</ele>
+      </trkpt>
+      <trkpt lat="46.694716" lon="9.430699">
+        <ele>855.3</ele>
+      </trkpt>
+      <trkpt lat="46.694817" lon="9.430734">
+        <ele>856.7</ele>
+      </trkpt>
+      <trkpt lat="46.694942" lon="9.430769">
+        <ele>858.3</ele>
+      </trkpt>
+      <trkpt lat="46.695029" lon="9.430756">
+        <ele>859.4</ele>
+      </trkpt>
+      <trkpt lat="46.695103" lon="9.430704">
+        <ele>861.3</ele>
+      </trkpt>
+      <trkpt lat="46.695213" lon="9.430577">
+        <ele>863.5</ele>
+      </trkpt>
+      <trkpt lat="46.695307" lon="9.43045">
+        <ele>863.9</ele>
+      </trkpt>
+      <trkpt lat="46.695459" lon="9.430603">
+        <ele>863.6</ele>
+      </trkpt>
+      <trkpt lat="46.695611" lon="9.430806">
+        <ele>863.7</ele>
+      </trkpt>
+      <trkpt lat="46.695781" lon="9.430865">
+        <ele>865.3</ele>
+      </trkpt>
+      <trkpt lat="46.69617" lon="9.430958">
+        <ele>866.7</ele>
+      </trkpt>
+      <trkpt lat="46.69645" lon="9.431022">
+        <ele>865.7</ele>
+      </trkpt>
+      <trkpt lat="46.696729" lon="9.431086">
+        <ele>868.4</ele>
+      </trkpt>
+      <trkpt lat="46.697017" lon="9.431094">
+        <ele>868.7</ele>
+      </trkpt>
+      <trkpt lat="46.697305" lon="9.431102">
+        <ele>864.4</ele>
+      </trkpt>
+      <trkpt lat="46.697589" lon="9.431098">
+        <ele>858.6</ele>
+      </trkpt>
+      <trkpt lat="46.697872" lon="9.431094">
+        <ele>854.8</ele>
+      </trkpt>
+      <trkpt lat="46.698139" lon="9.431069">
+        <ele>852.5</ele>
+      </trkpt>
+      <trkpt lat="46.698406" lon="9.431043">
+        <ele>849.2</ele>
+      </trkpt>
+      <trkpt lat="46.69869" lon="9.430997">
+        <ele>844.2</ele>
+      </trkpt>
+      <trkpt lat="46.698973" lon="9.43095">
+        <ele>838.9</ele>
+      </trkpt>
+      <trkpt lat="46.699253" lon="9.430888">
+        <ele>833.8</ele>
+      </trkpt>
+      <trkpt lat="46.699533" lon="9.430827">
+        <ele>831.9</ele>
+      </trkpt>
+      <trkpt lat="46.699501" lon="9.430793">
+        <ele>831.9</ele>
+        <name>a</name>
+        <desc>bro</desc>
+        <sym>waypointFlagComb</sym>
+        <extensions>
+          <oa:mapZoom>17</oa:mapZoom>
+        </extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
