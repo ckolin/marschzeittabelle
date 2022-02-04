@@ -47,10 +47,10 @@ async function readKml(xml) {
 
     const placemarks = xml.querySelectorAll("Placemark");
     for (let placemark of placemarks) {
-        // Find lines
-        if (placemark.querySelector("LineString")) {
+        // Find lines and polygons
+        if (placemark.querySelector("LineString, LinearRing")) {
             const points = placemark
-                .querySelector("LineString coordinates")
+                .querySelector(":is(LineString, LinearRing) coordinates")
                 .innerHTML
                 .trim()
                 .split(" ")
@@ -161,18 +161,15 @@ async function buildRoute(lines, markers, title) {
             continue; // No markers here
         }
 
-        // Detect multiple markers in the same place
+        const marker = matches[0];
+
+        // Remove any duplicates
         const duplicates = matches
-            .filter(m => m.index == null);
-        if (matches.length > 1) {
-            const list = duplicates
-                .map(m => `"${m.name}"`)
-                .join(", ");
-            throw `Mehrere Wegpunkte am selben Ort: ${list}.`;
-        }
+            .filter(m => m.index == null && m !== marker);
+        markers = markers
+            .filter(m => !duplicates.includes(m));
 
         // Assign index
-        const marker = matches[0];
         if (marker.index == null) {
             // Marker has not been used
             marker.index = i;
