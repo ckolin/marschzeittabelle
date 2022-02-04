@@ -8,6 +8,7 @@
     --darker-accent-color: #224c00;
     --accent-color: #3e7213;
     --lighter-accent-color: #bae397;
+    --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 html {
@@ -35,14 +36,21 @@ input, button, select, textarea {
     font-size: inherit;
     color: var(--text-color);
     background-color: var(--background-color);
-    padding: 0.4em;
+    padding: 0.4rem;
     border: 2px solid var(--accent-color);
+}
+
+input, button, select, textarea, *[contenteditable="true"] {
     border-radius: 4px;
 }
 
-:is(input, button, select, textarea, a):focus {
-    outline: 3px solid var(--lighter-accent-color);
-    transition: outline-width 50ms;
+input, button, select, textarea, a, *[contenteditable="true"] {
+    outline: 0 solid var(--lighter-accent-color);
+    transition: color 50ms, background-color 50ms, border-color 50ms, outline-width 100ms;
+}
+
+:is(input, button, select, textarea, a, *[contenteditable="true"]):focus {
+    outline-width: 3px;
 }
 
 input:invalid {
@@ -51,6 +59,15 @@ input:invalid {
 
 :is(input, button):disabled {
     opacity: 0.5;
+}
+
+form > :is(label, input, textarea) {
+    display: block;
+}
+
+form > :is(input, textarea) {
+    width: 100%;
+    margin-bottom: 0.5rem;
 }
 
 button {
@@ -63,7 +80,6 @@ button {
 button:not(:disabled):active {
     background-color: var(--darker-accent-color);
     border-color: var(--darker-accent-color);
-    transition: 50ms;
 }
 
 button.secondary {
