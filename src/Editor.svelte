@@ -1,4 +1,6 @@
 <script>
+    import { slide } from "svelte/transition";
+
     import Icon from "./Icon.svelte";
     import Options from "./Options.svelte";
     import Profile from "./Profile.svelte";
@@ -30,7 +32,9 @@
         {/if}
     </button>
     {#if showProfile}
-        <Profile {route} />
+        <div transition:slide={{ duration: 100 }}>
+            <Profile {route} />
+        </div>
     {/if}
 </div>
 

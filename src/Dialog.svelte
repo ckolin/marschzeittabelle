@@ -16,8 +16,7 @@
 </script>
 
 {#if show}
-    <div transition:fade={{ duration: 100 }}>
-        <div class="background"></div>
+    <div class="background" transition:fade={{ duration: 100 }}>
         <div class="dialog">
             <h2>{title}</h2>
             <form on:submit|preventDefault={close}>
