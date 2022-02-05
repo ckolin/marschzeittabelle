@@ -22,6 +22,10 @@
     {#if selected < route.markers.length - 1}
         <label for="break">Pause (min)</label>
         <input id="break" type="number" step="5" min="0" required bind:value={marker.break} />
+        <button type="button" class="pill" on:click={() => marker.break = 5}>5 min</button>
+        <button type="button" class="pill" on:click={() => marker.break = 15}>15 min</button>
+        <button type="button" class="pill" on:click={() => marker.break = 30}>30 min</button>
+        <br />
     {/if}
 </Dialog>
 
