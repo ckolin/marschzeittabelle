@@ -2,21 +2,16 @@
     import { formatDuration, formatTime } from "../modules/formatting";
     import { calculateTotals, reverseRoute } from "../modules/route.js";
     import { calculateData, getCsv } from "../modules/table.js";
-    import Dialog from "./Dialog.svelte";
     import HelpLink from "./HelpLink.svelte";
     import Icon from "./Icon.svelte";
-    import TimeInput from "./TimeInput.svelte";
+    import SpeedDialog from "./SpeedDialog.svelte";
+    import StartDialog from "./StartDialog.svelte";
 
     export let route;
 
     $: total = calculateTotals(route);
     
-    let showSpeedDialog = false;
-    let speedInput = route.speed;
-    $: if (!window.isNaN(speedInput) && speedInput > 0) {
-        route.speed = speedInput;
-    }
-    
+    let showSpeedDialog = false;    
     let showStartDialog = false;
 
     function reverse() {
@@ -33,14 +28,8 @@
     }
 </script>
 
-<Dialog title="Geschwindigkeit anpassen" bind:show={showSpeedDialog}>
-    <label for="speed">Geschwindigkeit (Lkm/h)</label>
-    <input id="speed" class="stretch" type="number" min="0.5" step="0.5" required bind:value={speedInput} />
-</Dialog>
-<Dialog title="Abreise anpassen" bind:show={showStartDialog}>
-    <label for="start">Abreise (hh:mm)</label>
-    <TimeInput id="start" bind:hours={route.start} />
-</Dialog>
+<SpeedDialog bind:show={showSpeedDialog} bind:speed={route.speed} />
+<StartDialog bind:show={showStartDialog} bind:start={route.start} />
 <div class="container">
     <div>
         <p>
