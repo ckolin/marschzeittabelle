@@ -46,7 +46,7 @@
         justify-content: center;
         align-items: center;
         gap: 1rem;
-        margin: 2rem;
+        margin: 2rem 1rem;
     }
 
     .tutorial div {

@@ -9,6 +9,7 @@
 
 <style>
     a {
+        white-space: nowrap;
         font-weight: bold;
         cursor: help;
     }
