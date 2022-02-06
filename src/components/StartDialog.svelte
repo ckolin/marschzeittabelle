@@ -12,9 +12,6 @@
 
     function pad(event) {
         const input = event.target;
-        if (window.isNaN(input.value)) {
-            input.value = 0;
-        }
         if (input.value.length > 2) {
             input.value = input.value.slice(-2);
         }
