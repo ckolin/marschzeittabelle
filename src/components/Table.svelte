@@ -16,12 +16,12 @@
 <MarkerDialog bind:route bind:selected />
 <table>
     <tr>
-        <th>Wegpunkt</th>
+        <th>Wegpunkt<br />Kommentar</th>
         <th>Höhe</th>
         <th>Distanz</th>
         <th>Aufwand</th>
         <th>Gehzeit</th>
-        <th>Uhrzeit</th>
+        <th>Uhrzeit<br />Pause</th>
     </tr>
     {#each data as row}
         <tr>
@@ -72,7 +72,6 @@
     }
 
     .alt td {
-        vertical-align: top;
         color: var(--accent-color);
     }
     
