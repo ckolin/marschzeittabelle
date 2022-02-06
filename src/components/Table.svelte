@@ -81,6 +81,7 @@
     }
     
     .name .pill {
+        padding: 0;
         color: var(--background-color);
         background: var(--darker-accent-color);
     }
