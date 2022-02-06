@@ -132,7 +132,7 @@ function convertCoordinates(lat, long) {
     return { x, y };
 }
 
-async function buildRoute(lines, markers, title) {
+async function buildRoute(lines, markers, fileName) {
     // Check if route contains line and markers
     if (lines.length === 0) {
         throw "Die Route enthält keine Linie."
@@ -212,6 +212,9 @@ async function buildRoute(lines, markers, title) {
     for (let marker of markers) {
         marker.break = 0;
     }
+
+    // Remove file extension from title
+    const title = fileName.substring(0, fileName.lastIndexOf(".")) || fileName;
 
     return {
         line,
