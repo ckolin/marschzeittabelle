@@ -2,7 +2,7 @@
     export let name;
 </script>
 
-<span class="material-icons">{name}</span>
+<span class="material-icons-round">{name}</span>
 
 <style>
     span {
