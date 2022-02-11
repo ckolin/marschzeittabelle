@@ -92,6 +92,6 @@
         grid-column: 2 / span 2;
         width: 70%;
         transform: rotate(3deg);
-        border: 2px solid var(--lighter-accent-color);
+        border: 2px solid var(--shadow-color);
     }
 </style>
