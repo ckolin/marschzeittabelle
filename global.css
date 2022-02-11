@@ -50,7 +50,7 @@ input, button, select, textarea, a, *[contenteditable="true"] {
 }
 
 :is(input, button, select, textarea, a, *[contenteditable="true"]):focus {
-    outline-width: 3px;
+    outline-width: 2px;
 }
 
 input:invalid {
@@ -80,6 +80,7 @@ button {
 button:not(:disabled):active {
     background-color: var(--darker-accent-color);
     border-color: var(--darker-accent-color);
+    outline-width: 3px;
 }
 
 button.secondary {
