@@ -17,7 +17,10 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
             if (res.ok) {
                 return res.json();
             } else {
-                throw "Das Höhenprofil konnte nicht geladen werden.";
+                throw {
+                    id: "response-not-ok",
+                    message: "Das Höhenprofil konnte nicht geladen werden."
+                };
             }
         })
         .then((data) => new Promise((resolve) => {
@@ -33,5 +36,10 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
 
             resolve(profile);
         }))
-        .catch(() => { throw "Die Verbindung zu den swisstopo-Servern ist fehlgeschlagen." });
+        .catch(() => {
+            throw {
+                id: "connection-failed",
+                message: "Die Verbindung zu den swisstopo-Servern ist fehlgeschlagen."
+            };
+        });
 }

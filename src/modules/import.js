@@ -31,7 +31,10 @@ async function parseXml(xmlString) {
     const parser = new DOMParser();
     const xml = parser.parseFromString(xmlString, "application/xml");
     if (xml.querySelector("parsererror")) {
-        throw "Die Datei ist nicht in gültigem XML-Format.";
+        throw {
+            id: "invalid-xml",
+            message: "Die Datei ist nicht in gültigem XML-Format."
+        };
     }
     return xml;
 }
@@ -135,17 +138,26 @@ function convertCoordinates(lat, long) {
 async function buildRoute(lines, markers, fileName) {
     // Check if route contains line and markers
     if (lines.length === 0) {
-        throw "Die Route enthält keine Linie."
+        throw {
+            id: "no-line",
+            message: "Die Route enthält keine Linie."
+        };
     }
     if (markers.length === 0) {
-        throw "Die Route enthält keine Wegpunkte."
+        throw {
+            id: "no-markers",
+            message: "Die Route enthält keine Wegpunkte."
+        };
     }
 
     // Merge disjointed lines
     while (lines.length > 1) {
         const connected = findConnectedLines(lines, epsilon);
         if (connected == null) {
-            throw "Die Route enthält Linien, die nicht miteinander verbunden sind.";
+            throw {
+                id: "disjoint-lines",
+                message: "Die Route enthält Linien, die nicht miteinander verbunden sind."
+            };
         }
 
         if (connected.reverseFirst) {
@@ -202,7 +214,10 @@ async function buildRoute(lines, markers, fileName) {
         const list = unassigned
             .map(m => `"${m.name}"`)
             .join(", ");
-        throw `Wegpunkte nicht in der Nähe von Eckpunkten der Linie: ${list}.`;
+        throw {
+            id: "marker-not-on-line",
+            message: `Wegpunkte nicht in der Nähe von Eckpunkten der Linie: ${list}.`
+        };
     }
 
     // Bring markers in right order

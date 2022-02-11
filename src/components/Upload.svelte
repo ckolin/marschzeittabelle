@@ -1,5 +1,6 @@
 <script>
     import { importFile } from "../modules/import.js";
+    import { logEvent } from "../modules/logging.js";
     import Icon from "./Icon.svelte";
     import Spinner from "./Spinner.svelte";
 
@@ -10,8 +11,18 @@
 
     $: if (files && files[0]) {
         promise = importFile(files[0])
-            .then((result) => new Promise((resolve) => setTimeout(() => resolve(result), 500)))
-            .then((result) => route = result);
+            .then((result) => new Promise((resolve) => {
+                // Log successful upload
+                logEvent("upload");
+                // Fake loading to prevent flickering and make upload times more consistent
+                setTimeout(() => resolve(result), 500);
+            }))
+            .then((result) => route = result)
+            .catch((error) => {
+                // Log upload error
+                logEvent(`error-${error.id}`);
+                throw error;
+            });
     }
 </script>
 
@@ -25,7 +36,7 @@
             <Spinner />
         {:catch error}
             <h2>Hoppla!</h2>
-            <p>Es gab einen Fehler beim Import:<br />{error}</p>
+            <p>Es gab einen Fehler beim Import:<br />{error.message}</p>
             <button class="secondary" on:click={() => files = null}>
                 <Icon name="refresh" /> Nochmal versuchen
             </button>

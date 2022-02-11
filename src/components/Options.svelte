@@ -1,5 +1,6 @@
 <script>
-    import { formatDuration, formatTime } from "../modules/formatting";
+    import { formatDuration, formatTime } from "../modules/formatting.js";
+    import { logEvent } from "../modules/logging.js";
     import { calculateTotals, reverseRoute } from "../modules/route.js";
     import { calculateData, getCsv } from "../modules/table.js";
     import HelpLink from "./HelpLink.svelte";
@@ -19,7 +20,17 @@
         route = route;
     }
 
+    function print() {
+        // Log print event
+        logEvent("print");
+        // Open system print dialog
+        window.print();
+    }
+
     function downloadCsv() {
+        // Log csv export event
+        logEvent("export-csv");
+        // Download csv as file
         const csv = getCsv(calculateData(route));
         const a = document.createElement("a");
         a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
@@ -62,7 +73,7 @@
 </div>
 <div class="noprint">
     <br />
-    <button on:click={() => window.print()}>
+    <button on:click={print}>
         <Icon name="print" /> Drucken
     </button>
     &nbsp;
