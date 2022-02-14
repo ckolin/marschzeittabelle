@@ -11,7 +11,7 @@
 </script>
 
 <div class="options">
-    <h1 id="title" contenteditable="true" bind:textContent={route.title}></h1>
+    <h1 id="title" role="textbox" contenteditable="true" bind:textContent={route.title}></h1>
     <button class="pill noprint" on:click={() => document.getElementById("title").focus()}>
         <Icon name="edit" />
     </button>
