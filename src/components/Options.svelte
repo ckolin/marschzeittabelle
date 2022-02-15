@@ -44,31 +44,31 @@
 <div class="container">
     <div>
         <p>
-            Start: <b>{route.markers[0].name}</b><br />
-            Ziel: <b>{route.markers[route.markers.length - 1].name}</b>
+            <span>Start: </span><b>{route.markers[0].name}</b><br />
+            <span>Ziel: </span><b>{route.markers[route.markers.length - 1].name}</b>
         </p>
         <button class="pill noprint" on:click={reverse}>
             <Icon name="swap_vert" /> Richtung wechseln
         </button>
     </div>
     <div>
-        Horizontaldistanz: <b>{total.distance.toFixed(1)} km</b><br />
-        Auf-/Abstieg: ↑ <b>{Math.round(total.ascent)} m</b> ↓ <b>{Math.round(total.descent)} m</b><br />
-        Aufwand: <b>{total.effort.toFixed(1)} Lkm</b> <HelpLink topic="calculation" /><br />
-        Geschwindigkeit: <b>{route.speed} Lkm/h</b>
+        <span>Horizontaldistanz: </span><b>{total.distance.toFixed(1)} km</b><br />
+        <span>Auf-/Abstieg: </span>↑ <b>{Math.round(total.ascent)} m</b> ↓ <b>{Math.round(total.descent)} m</b><br />
+        <span>Aufwand: </span><b>{total.effort.toFixed(1)} Lkm</b> <HelpLink topic="calculation" /><br />
+        <span>Geschwindigkeit: </span><b>{route.speed} Lkm/h</b>
         <button class="pill noprint" on:click={() => showSpeedDialog = true}>
             <Icon name="edit" />
         </button>
     </div>
     <div>
-        Abreise: <b>{formatTime(route.start)}</b>
+        <span>Abreise: </span><b>{formatTime(route.start)}</b>
         <button class="pill noprint" on:click={() => showStartDialog = true}>
             <Icon name="edit" />
         </button>
         <br />
-        Ankunft: <b>{formatTime(route.start + total.duration)}</b><br />
-        Gehzeit: <b>{formatDuration(total.duration)} h</b><br />
-        Pausen: <b>{formatDuration(total.breakDuration)} h</b>
+        <span>Ankunft: </span><b>{formatTime(route.start + total.duration)}</b><br />
+        <span>Gehzeit: </span><b>{formatDuration(total.duration)} h</b><br />
+        <span>Pausen: </span><b>{formatDuration(total.breakDuration)} h</b>
     </div>
 </div>
 <div class="noprint">
