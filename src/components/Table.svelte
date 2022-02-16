@@ -1,6 +1,7 @@
 <script>
     import { calculateData } from "../modules/table.js";
     import { formatDuration, formatTime } from "../modules/formatting.js";
+    import { recalculate } from "../modules/route.js";
     import Icon from "./Icon.svelte";
     import MarkerDialog from "./MarkerDialog.svelte";
 
@@ -8,12 +9,20 @@
     export let route;
 
     let data = [];
-    let selected;
-
     $: data = calculateData(route);
+    
+    let selectedMarker;
+    // Hide break input for last marker
+    $: showBreak = selectedMarker !== route.markers[route.markers.length - 1];
+
+    function close() {
+        recalculate(route);
+        route = route;
+        selectedMarker = null;
+    }
 </script>
 
-<MarkerDialog bind:route bind:selected />
+<MarkerDialog marker={selectedMarker} {showBreak} on:close={close} />
 <table>
     <tr>
         <th>Wegpunkt<br />Kommentar</th>
@@ -34,7 +43,7 @@
             <td class="number">{formatDuration(row.duration)} h</td>
             <td class="number">{formatTime(row.time)}</td>
             <td class="noprint">
-                <button class="pill" on:click={() => selected = row.index}>
+                <button class="pill" on:click={() => selectedMarker = route.markers[row.index]}>
                     <Icon name="edit" />
                 </button>
             </td>
