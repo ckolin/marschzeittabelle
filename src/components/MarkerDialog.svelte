@@ -1,6 +1,7 @@
 <script>
     import { recalculate } from "../modules/route.js";
     import Dialog from "./Dialog.svelte";
+    import Icon from "./Icon.svelte";
 
     export let route;
     export let selected = null;
@@ -22,9 +23,9 @@
     {#if selected < route.markers.length - 1}
         <label for="break">Pause (min)</label>
         <input id="break" type="number" step="5" min="0" required bind:value={marker.break} />
-        <button type="button" class="pill" on:click={() => marker.break = 5}>5 min</button>
-        <button type="button" class="pill" on:click={() => marker.break = 15}>15 min</button>
-        <button type="button" class="pill" on:click={() => marker.break = 30}>30 min</button>
+        <button type="button" class="pill" on:click={() => marker.break = 0}><Icon name="block" /> Keine</button>
+        <button type="button" class="pill" on:click={() => marker.break = 5}><Icon name="hourglass_bottom" /> 5 min</button>
+        <button type="button" class="pill" on:click={() => marker.break = 15}><Icon name="hourglass_full" /> 15 min</button>
         <br />
     {/if}
 </Dialog>
