@@ -13,16 +13,8 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `sr=21781&distinct_points=${ensureInputPoints}&nb_points=${resolution}&geom=${JSON.stringify(geometry)}`
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                throw {
-                    id: "response-not-ok",
-                    message: "Das Höhenprofil konnte nicht geladen werden."
-                };
-            }
-        })
+        .catch(handleConnectionError)
+        .then((res) => handleResponse(res, "Das Höhenprofil konnten nicht geladen werden."))
         .then((data) => new Promise((resolve) => {
             let profile = data.map(p => ({
                 point: { x: p.easting, y: p.northing },
@@ -35,13 +27,7 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
             }
 
             resolve(profile);
-        }))
-        .catch(() => {
-            throw {
-                id: "connection-failed",
-                message: "Die Verbindung zu den swisstopo-Servern ist fehlgeschlagen."
-            };
-        });
+        }));
 }
 
 export function fetchMaps(line) {
@@ -53,25 +39,29 @@ export function fetchMaps(line) {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `geometry=${JSON.stringify(geometry)}&geometryType=esriGeometryPolyline&layers=all:ch.swisstopo.pixelkarte-pk25.metadata&tolerance=0&returnGeometry=false`
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                throw {
-                    id: "response-not-ok",
-                    message: "Die Landeskarten konnten nicht geladen werden."
-                }
-            }
-        })
+        .catch(handleConnectionError)
+        .then((res) => handleResponse(res, "Die Landeskarten konnten nicht geladen werden."))
         .then((data) => new Promise((resolve) => {
             const maps = data.results
                 .map((r) => ({ id: r.id, label: r.attributes.lk_name }));
             resolve(maps);
-        }))
-        .catch(() => {
-            throw {
-                id: "connection-failed",
-                message: "Die Verbindung zu den swisstopo-Servern ist fehlgeschlagen."
-            };
-        });
+        }));
+}
+
+function handleConnectionError() {
+    throw {
+        id: "connection-failed",
+        message: "Die Verbindung zu den swisstopo-Servern ist fehlgeschlagen."
+    };
+}
+
+function handleResponse(response, message) {
+    if (response.ok) {
+        return response.json();
+    } else {
+        throw {
+            id: "response-not-ok",
+            message
+        };
+    }
 }
