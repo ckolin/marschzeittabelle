@@ -1,6 +1,6 @@
 <script>
     import { importFile } from "../modules/import.js";
-    import { logEvent } from "../modules/logging.js";
+    import { logError, logEvent } from "../modules/logging.js";
     import Icon from "./Icon.svelte";
     import Spinner from "./Spinner.svelte";
 
@@ -20,7 +20,7 @@
             .then((result) => route = result)
             .catch((error) => {
                 // Log upload error
-                logEvent(`error-${error.id}`);
+                logError(error.id);
                 throw error;
             });
     }

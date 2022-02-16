@@ -1,10 +1,11 @@
 <script>
     import { formatDuration, formatTime } from "../modules/formatting.js";
-    import { logEvent } from "../modules/logging.js";
-    import { calculateTotals, reverseRoute } from "../modules/route.js";
+    import { logError, logEvent } from "../modules/logging.js";
+    import { calculateTotals, loadMaps, reverseRoute } from "../modules/route.js";
     import { calculateData, getCsv } from "../modules/table.js";
     import HelpLink from "./HelpLink.svelte";
     import Icon from "./Icon.svelte";
+    import MapScaleDialog from "./MapScaleDialog.svelte";
     import SpeedDialog from "./SpeedDialog.svelte";
     import StartDialog from "./StartDialog.svelte";
 
@@ -14,10 +15,22 @@
     
     let showSpeedDialog = false;    
     let showStartDialog = false;
+    let showMapScaleDialog = false;
 
     function reverse() {
         reverseRoute(route);
         route = route;
+    }
+
+    function reloadMaps() {
+        loadMaps(route)
+            .then(() => route = route)
+            .catch((error) => {
+                // Log error loading maps
+                logError(error.id);
+                
+                alert(error.message);
+            });
     }
 
     function print() {
@@ -41,12 +54,17 @@
 
 <SpeedDialog bind:show={showSpeedDialog} bind:speed={route.speed} />
 <StartDialog bind:show={showStartDialog} bind:start={route.start} />
+<MapScaleDialog bind:show={showMapScaleDialog} bind:scale={route.mapScale} on:close={reloadMaps} />
 <div class="container">
     <div>
         <p>
             <span>Start: </span><b>{route.markers[0].name}</b><br />
             <span>Ziel: </span><b>{route.markers[route.markers.length - 1].name}</b><br />
-            <span>Landeskarten: </span><b>{route.maps.map(m => `${m.id}`).join(", ")}</b>
+            <span>Landeskarten 1:{route.mapScale}'000: </span><br />
+            <b>{route.maps.map(m => `${m.id}`).join(", ")}</b>
+            <button class="pill noprint" on:click={() => showMapScaleDialog = true}>
+                <Icon name="edit" />
+            </button>
         </p>
         <button class="pill noprint" on:click={reverse}>
             <Icon name="swap_vert" /> Richtung wechseln

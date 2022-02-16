@@ -30,14 +30,14 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
         }));
 }
 
-export function fetchMaps(line) {
+export function fetchMaps(line, mapScale) {
     const geometry = {
         paths: [line.map(p => [Math.round(p.x), Math.round(p.y)])]
     };
     return fetch(`${baseUrl}/all/MapServer/identify`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `geometry=${JSON.stringify(geometry)}&geometryType=esriGeometryPolyline&layers=all:ch.swisstopo.pixelkarte-pk25.metadata&tolerance=0&returnGeometry=false`
+        body: `geometry=${JSON.stringify(geometry)}&geometryType=esriGeometryPolyline&layers=all:ch.swisstopo.pixelkarte-pk${mapScale}.metadata&tolerance=0&returnGeometry=false`
     })
         .catch(handleConnectionError)
         .then((res) => handleResponse(res, "Die Landeskarten konnten nicht geladen werden."))

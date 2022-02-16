@@ -1,4 +1,4 @@
-import { loadData } from "./route.js";
+import { loadProfiles, loadMaps } from "./route.js";
 import { Swisstopo } from "./swisstopo.js";
 import * as vec from "./vec.js";
 
@@ -15,7 +15,8 @@ export function importFile(file) {
             }
         })
         .then(({ lines, markers }) => buildRoute(lines, markers, file.name))
-        .then((route) => loadData(route));
+        .then((route) => loadProfiles(route))
+        .then((route) => loadMaps(route));
 }
 
 function readFile(file) {
@@ -233,6 +234,7 @@ async function buildRoute(lines, markers, fileName) {
 
     return {
         line,
+        mapScale: 25,
         markers,
         speed: 4,
         start: 0,
