@@ -1,58 +1,23 @@
 <script>
-    import { formatTime } from "../modules/formatting";
+    import { formatTime } from "../modules/formatting.js";
     import Dialog from "./Dialog.svelte";
+    import Icon from "./Icon.svelte";
     
     export let show;
     export let start;
 
-    let [hours, minutes] = formatTime(start)
-        .split(":");
-
-    $: start = Number(hours) + Number(minutes) / 60;
-
-    function pad(event) {
-        const input = event.target;
-        if (input.value.length > 2) {
-            input.value = input.value.slice(-2);
-        }
-        input.value = input.value.padStart(2, "0");
-    }
-
-    function select(event) {
-        event.target.select();
-    }
+    let input = formatTime(start);
+    $: start = input
+        .split(":")
+        .map((n, i) => Number(n) / 60 ** i)
+        .reduce((a, b) => a + b);
 </script>
 
 <Dialog title="Abreise anpassen" bind:show>
-    <label for="hours">Abreise (hh:mm)</label>
-    <div>
-        <input
-            id="hours"
-            type="number"
-            min="0"
-            max="23"
-            required
-            bind:value={hours}
-            on:input={pad}
-            on:focus={select} />
-        <span>:</span>
-        <input
-            type="number"
-            min="0"
-            max="59"
-            required
-            bind:value={minutes}
-            on:input={pad}
-            on:focus={select} />
-    </div>
+    <label for="start">Abreise</label>
+    <input id="start" type="time" required bind:value={input} />
+    <button type="button" class="pill" on:click={() => input = "08:00"}><Icon name="brightness_low" /> 08:00</button>
+    <button type="button" class="pill" on:click={() => input = "12:00"}><Icon name="brightness_medium" /> 12:00</button>
+    <button type="button" class="pill" on:click={() => input = "16:00"}><Icon name="brightness_high" /> 16:00</button>
+    <br />
 </Dialog>
-
-<style>
-    div {
-        font-size: 1.4rem;
-    }
-
-    input {
-        width: 3em;
-    }
-</style>
