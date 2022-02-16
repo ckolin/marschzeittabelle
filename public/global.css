@@ -119,7 +119,6 @@ button.pill:not(:disabled):active {
     }
 
     body {
-        color-adjust: exact;
         margin: 0;
     }
 

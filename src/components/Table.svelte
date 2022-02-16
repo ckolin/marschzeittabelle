@@ -93,6 +93,8 @@
         padding: 0;
         color: var(--background-color);
         background: var(--darker-accent-color);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 
     .number {
