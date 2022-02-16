@@ -34,10 +34,14 @@
     }
 
     function print() {
-        // Log print event
-        logEvent("print");
-        // Open system print dialog
-        window.print();
+        if (window.print) {
+            logEvent("print");
+            // Open system print dialog
+            window.print();
+        } else {
+            logError("print");
+            alert("Dein Browser unterstützt das Drucken nicht.")
+        }
     }
 
     function downloadCsv() {
