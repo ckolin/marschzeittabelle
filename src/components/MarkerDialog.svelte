@@ -23,9 +23,15 @@
     {#if selected < route.markers.length - 1}
         <label for="break">Pause (min)</label>
         <input id="break" type="number" min="0" required bind:value={marker.break} />
-        <button type="button" class="pill" on:click={() => marker.break = 0}><Icon name="block" /> Keine</button>
-        <button type="button" class="pill" on:click={() => marker.break = 5}><Icon name="hourglass_bottom" /> 5 min</button>
-        <button type="button" class="pill" on:click={() => marker.break = 15}><Icon name="hourglass_full" /> 15 min</button>
+        <button type="button" class="pill" on:click={() => marker.break = 0}>
+            <Icon name="block" /> Keine
+        </button>
+        <button type="button" class="pill" on:click={() => marker.break = 5}>
+            <Icon name="hourglass_bottom" /> 5 min
+        </button>
+        <button type="button" class="pill" on:click={() => marker.break = 15}>
+            <Icon name="hourglass_full" /> 15 min
+        </button>
         <br />
     {/if}
 </Dialog>
