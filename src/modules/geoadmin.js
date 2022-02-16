@@ -43,3 +43,35 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
             };
         });
 }
+
+export function fetchMaps(line) {
+    const geometry = {
+        paths: [line.map(p => [Math.round(p.x), Math.round(p.y)])]
+    };
+    return fetch(`${baseUrl}/all/MapServer/identify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `geometry=${JSON.stringify(geometry)}&geometryType=esriGeometryPolyline&layers=all:ch.swisstopo.pixelkarte-pk25.metadata&tolerance=0&returnGeometry=false`
+    })
+        .then((res) => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw {
+                    id: "response-not-ok",
+                    message: "Die Landeskarten konnten nicht geladen werden."
+                }
+            }
+        })
+        .then((data) => new Promise((resolve) => {
+            const maps = data.results
+                .map((r) => ({ id: r.id, label: r.attributes.lk_name }));
+            resolve(maps);
+        }))
+        .catch(() => {
+            throw {
+                id: "connection-failed",
+                message: "Die Verbindung zu den swisstopo-Servern ist fehlgeschlagen."
+            };
+        });
+}

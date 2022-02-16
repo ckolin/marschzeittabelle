@@ -45,7 +45,8 @@
     <div>
         <p>
             <span>Start: </span><b>{route.markers[0].name}</b><br />
-            <span>Ziel: </span><b>{route.markers[route.markers.length - 1].name}</b>
+            <span>Ziel: </span><b>{route.markers[route.markers.length - 1].name}</b><br />
+            <span>Landeskarten: </span><b>{route.maps.map(m => `${m.id}`).join(", ")}</b>
         </p>
         <button class="pill noprint" on:click={reverse}>
             <Icon name="swap_vert" /> Richtung wechseln
@@ -86,7 +87,7 @@
     .container {
         display: flex;
         flex-wrap: wrap;
-        gap: 2rem;
+        gap: 1rem;
     }
 
     .container div {
