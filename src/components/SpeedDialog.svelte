@@ -6,7 +6,6 @@
     export let speed;
 
     let input = speed;
-    
     $: if (!window.isNaN(input) && input > 0) {
         speed = input;
     }
