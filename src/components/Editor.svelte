@@ -11,10 +11,16 @@
 </script>
 
 <div class="options">
-    <h1 id="title" role="textbox" contenteditable="true" bind:textContent={route.title}></h1>
-    <button class="pill noprint" on:click={() => document.getElementById("title").focus()}>
-        <Icon name="edit" />
-    </button>
+    <h1>
+        <input id="title" type="text" bind:value={route.title} />
+    </h1>
+    <div class="noprint">
+        <button class="pill" on:click={() => document.getElementById("title").select()}>
+            <Icon name="edit" /> Titel bearbeiten
+        </button>
+        <br />
+        <br />
+    </div>
     <Options bind:route />
 </div>
 <div class="table">
@@ -39,11 +45,21 @@
 
 <style>
     h1, h2 {
-        display: inline-block;
         margin-bottom: 0.5rem;
     }
 
-    :is(h1, h2) + button {
+    h1 input {
+        width: 100%;
+        padding: 0;
+        border: none;
+        font-weight: inherit;
+    }
+
+    h2 {
+        display: inline-block;
+    }
+
+    h2 + button {
         vertical-align: 0.2em;
     }
 
