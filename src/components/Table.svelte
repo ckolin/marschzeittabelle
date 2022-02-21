@@ -102,6 +102,10 @@
         font-family: "Roboto Mono", monospace;
     }
 
+    .alt .number {
+        font-style: italic;
+    }
+
     .comment {
         max-width: 20rem;
         white-space: normal;
