@@ -2,7 +2,7 @@
     import { fade } from "svelte/transition";
     import Editor from "./Editor.svelte";
     import Introduction from "./Introduction.svelte";
-    import Upload from "./Upload.svelte";
+    import Import from "./Import.svelte";
 
     let route;
 </script>
@@ -10,7 +10,7 @@
 {#if route == null}
     <main>
         <Introduction />
-        <Upload bind:route />
+        <Import bind:route />
     </main>
 {:else}
     <header class="noprint">

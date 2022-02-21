@@ -1,3 +1,26 @@
+export function formatRelative(timestamp) {
+    const diff = Date.now() - timestamp;
+    const minutes = diff / 1000 / 60;
+    const hours = minutes / 60;
+    const days = hours / 24;
+    const months = days / 30;
+    const years = months / 12;
+
+    if (minutes < 1) {
+        return "gerade eben";
+    } else if (hours < 1) {
+        return `vor ${Math.round(minutes)} Minuten`;
+    } else if (days < 1) {
+        return `vor ${Math.round(hours)} Stunden`;
+    } else if (months < 1) {
+        return `vor ${Math.round(days)} Tagen`;
+    } else if (years < 1) {
+        return `vor ${Math.round(months)} Monaten`;
+    } else {
+        return `vor ${Math.round(years)} Jahren`;
+    }
+}
+
 export function formatDuration(hours) {
     const {h, m} = getParts(hours);
     return `${h}:${pad(m)}`;

@@ -1,11 +1,13 @@
 <script>
     import { slide } from "svelte/transition";
+    import { saveRoute } from "../modules/storage.js";
     import Icon from "./Icon.svelte";
     import Options from "./Options.svelte";
     import Profile from "./Profile.svelte";
     import Table from "./Table.svelte";
 
     export let route;
+    $: saveRoute(route); // Save route whenever it is changed
 
     let showProfile = true;
 </script>
