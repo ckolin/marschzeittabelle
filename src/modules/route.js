@@ -34,7 +34,12 @@ function calculateHeightDifference(route) {
     return { ascent, descent };
 }
 
-export async function loadProfiles(route) {
+export async function loadData(route) {
+    await Promise.all([loadProfiles(route), loadMaps(route)]);
+    return route;
+}
+
+async function loadProfiles(route) {
     // Fetch profiles from api
     route.lineProfile = await fetchProfile(route.line, false, 100);
     route.markerProfile = await fetchProfile(route.markers.map(m => route.line[m.index]), true, route.markers.length);
