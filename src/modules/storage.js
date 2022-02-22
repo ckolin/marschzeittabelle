@@ -15,5 +15,9 @@ export function saveRoute(route) {
 }
 
 export function loadRoute() {
-    return JSON.parse(localStorage.getItem(key));
+    try {
+        return JSON.parse(localStorage.getItem(key));
+    } catch {
+        return null;
+    }
 }
