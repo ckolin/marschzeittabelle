@@ -34,18 +34,18 @@ export function calculateData(route) {
 export function getCsv(data) {
     const header = [
         "Nr.",
-        "Name",
+        "Wegpunkt",
         "Kommentar",
         "Höhe / m",
-        "Unterschied Höhe / m",
+        "Differenz Höhe / m",
         "Total Distanz / km",
-        "Unterschied Distanz / km",
+        "Differenz Distanz / km",
         "Total Aufwand / Lkm",
-        "Unterschied Aufwand / Lkm",
+        "Differenz Aufwand / Lkm",
         "Total Gehzeit / h",
-        "Unterschied Gehzeit / h",
+        "Differenz Gehzeit / h",
         "Uhrzeit / hh:mm",
-        "Pausen / min"
+        "Pause / min"
     ];
 
     const rows = data.map((row) => [
