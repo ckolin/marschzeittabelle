@@ -5,7 +5,7 @@
 
 <div class="title">
     <h1>Marschzeit&shy;tabelle<br />leicht gemacht.</h1>
-    <p class="subtitle">Wir übertragen deine Route automatisch in eine Marschzeittabelle, damit dir mehr Zeit für den Rest der Wanderplanung bleibt.</p>
+    <h2>Übertrage deine Route automatisch in eine Marschzeittabelle.</h2>
 </div>
 <div class="tutorial">
     <div class="steps">
@@ -27,23 +27,27 @@
         text-align: center;
     }
     
-    h1 {
+    .title h1 {
         font-size: 4rem;
         font-weight: 900;
-        color: var(--darker-accent-color);
         margin-bottom: 1rem;
+        background: linear-gradient(-35deg, var(--accent-color), var(--darker-accent-color));
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
     }
 
-    .subtitle {
+    .title h2 {
+        font-weight: normal;
         font-size: 1.4rem;
     }
     
     @media (max-width: 800px) {
-        h1 {
+        .title h1 {
             font-size: 2.5rem;
         }
 
-        .subtitle {
+        .title h2 {
             font-size: 1.2rem;
         }
     }
