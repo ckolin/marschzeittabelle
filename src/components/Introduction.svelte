@@ -31,7 +31,7 @@
         font-size: 4rem;
         font-weight: 900;
         margin-bottom: 1rem;
-        background: linear-gradient(-35deg, var(--accent-color), var(--darker-accent-color));
+        background: linear-gradient(35deg, var(--accent-color), var(--darker-accent-color));
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
@@ -39,10 +39,10 @@
 
     .title h2 {
         font-weight: normal;
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
     
-    @media (max-width: 800px) {
+    @media (max-width: 700px) {
         .title h1 {
             font-size: 2.5rem;
         }
@@ -95,7 +95,7 @@
     .output {
         grid-column: 2 / span 2;
         width: 70%;
-        transform: rotate(3deg);
+        transform: rotate(4deg);
         border: 2px solid var(--shadow-color);
     }
 </style>
