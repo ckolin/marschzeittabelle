@@ -23,8 +23,8 @@
 <footer>
     <span>marschzeittabelle.ch</span>
     <span class="noprint">
-        | <a href="help">hilfe</a>
-        | <a href="https://github.com/ckolin/marschzeittabelle">github</a>
+        | <a href="help" target="_blank">hilfe</a>
+        | <a href="https://github.com/ckolin/marschzeittabelle" target="_blank">github</a>
     </span>
 </footer>
 
