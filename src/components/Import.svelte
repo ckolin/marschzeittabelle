@@ -16,18 +16,22 @@
     let promise;
 
     $: if (files && files[0]) {
+        // Log file upload attempt
+        logEvent("upload-file");
         promise = finish(importFile(files[0]));
     }
 
     function openRecent() {
+        // Log attempt to open recent
+        logEvent("open-recent");
         promise = finish(loadData(recent));
     }
 
     function finish(importPromise) {
         return importPromise
             .then((result) => new Promise((resolve) => {
-                // Log successful upload
-                logEvent("upload");
+                // Log successful import
+                logEvent("import-success");
                 // Fake loading to prevent flickering and make upload times more consistent
                 setTimeout(() => resolve(result), 500);
             }))
@@ -80,7 +84,10 @@
             <Spinner />
         {:catch error}
             <h2>Hoppla!</h2>
-            <p>Es gab einen Fehler beim Import:<br />{error.message}</p>
+            <p>
+                Es gab einen Fehler beim Import:<br />
+                <b>{error.message}</b>
+            </p>
             <button class="secondary" on:click={reset}>
                 <Icon name="refresh" /> Nochmal versuchen
             </button>
@@ -98,18 +105,18 @@
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        gap: 1rem;
+        gap: 2rem;
         text-align: center;
     }
 
     .upload {
-        flex: 5 0 25rem;
+        flex: 4 0 25rem;
         padding: 3rem 5rem;
         border-radius: 2rem;
         border: 3px dashed var(--lighter-accent-color);
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
         .upload {
             padding: 1rem;
         }
