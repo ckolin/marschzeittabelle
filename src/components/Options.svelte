@@ -81,6 +81,7 @@
         <br />
         {#if loadingMaps}
             <Spinner small />
+            <br />
         {:else}
             {#each route.maps as map}
                 <b>{map.name} ({map.id})</b><br />
