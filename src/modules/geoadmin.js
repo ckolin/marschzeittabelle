@@ -43,7 +43,7 @@ export function fetchMaps(line, mapScale) {
         .then((res) => handleResponse(res, "Die Landeskarten konnten nicht geladen werden."))
         .then((data) => new Promise((resolve) => {
             const maps = data.results
-                .map((r) => ({ id: r.id, label: r.attributes.lk_name }));
+                .map((r) => ({ id: r.id, name: r.attributes.lk_name }));
             resolve(maps);
         }));
 }

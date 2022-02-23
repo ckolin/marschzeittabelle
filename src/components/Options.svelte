@@ -7,6 +7,7 @@
     import Icon from "./Icon.svelte";
     import MapScaleDialog from "./MapScaleDialog.svelte";
     import SpeedDialog from "./SpeedDialog.svelte";
+    import Spinner from "./Spinner.svelte";
     import StartDialog from "./StartDialog.svelte";
 
     export let route;
@@ -17,14 +18,24 @@
     let showStartDialog = false;
     let showMapScaleDialog = false;
 
+    let loadingMaps;
+
     function reverse() {
         reverseRoute(route);
         route = route;
     }
 
     function reloadMaps() {
+        loadingMaps = true;
         loadMaps(route)
-            .then(() => route = route)
+            .then(() => new Promise((resolve) => {
+                // Fake loading to prevent flickering
+                setTimeout(resolve, 300);
+            }))
+            .then(() => {
+                route = route;
+                loadingMaps = false;
+            })
             .catch((error) => {
                 // Log error loading maps
                 logError(error.id);
@@ -64,11 +75,18 @@
         <p>
             <span>Start: </span><b>{route.markers[0].name}</b><br />
             <span>Ziel: </span><b>{route.markers[route.markers.length - 1].name}</b><br />
-            <span>Landeskarten 1:{route.mapScale}'000: </span><br />
-            <b>{route.maps.map(m => `${m.id}`).join(", ")}</b>
-            <button class="pill noprint" on:click={() => showMapScaleDialog = true}>
+            <span>Landeskarten 1:{route.mapScale}'000: </span>
+            <button class="pill noprint" disabled={loadingMaps} on:click={() => showMapScaleDialog = true}>
                 <Icon name="edit" />
             </button>
+            <br />
+            {#if loadingMaps}
+                <Spinner small />
+            {:else}
+                {#each route.maps as map}
+                    <b>{map.name} ({map.id})</b><br />
+                {/each}
+            {/if}
         </p>
         <button class="pill noprint" on:click={reverse}>
             <Icon name="swap_vert" /> Richtung wechseln

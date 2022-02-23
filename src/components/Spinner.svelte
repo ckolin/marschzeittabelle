@@ -1,4 +1,8 @@
-<div></div>
+<script>
+    export let small = false;
+</script>
+
+<div class:small></div>
 
 <style>
     div {
@@ -9,6 +13,12 @@
         border-bottom-color: var(--accent-color);
         border-radius: 50%;
         animation: rotation 1s linear infinite;
+    }
+
+    div.small {
+        width: 1rem;
+        height: 1rem;
+        border-width: 2px;
     }
 
     @keyframes rotation {
