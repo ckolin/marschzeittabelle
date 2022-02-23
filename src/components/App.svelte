@@ -7,6 +7,9 @@
     let route;
 </script>
 
+<svelte:head>
+    <title>{route == null ? "" : `${route.title} - `}Marschzeittabelle</title>
+</svelte:head>
 {#if route == null}
     <main>
         <Introduction />
@@ -17,7 +20,7 @@
         <a href=".">❮ startseite</a>
     </header>
     <main transition:fade>
-        <Editor {route} />
+        <Editor bind:route />
     </main>
 {/if}
 <footer>
