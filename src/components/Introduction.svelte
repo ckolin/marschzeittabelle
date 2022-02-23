@@ -31,7 +31,7 @@
         font-size: 4rem;
         font-weight: 900;
         margin-bottom: 1rem;
-        background: linear-gradient(35deg, var(--accent-color), var(--darker-accent-color));
+        background: linear-gradient(to bottom right, var(--accent-color), var(--darker-accent-color));
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
