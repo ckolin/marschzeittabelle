@@ -72,23 +72,21 @@
 <MapScaleDialog bind:show={showMapScaleDialog} bind:scale={route.mapScale} on:close={reloadMaps} />
 <div class="container">
     <div>
-        <p>
-            <span>Start: </span><b>{route.markers[0].name}</b><br />
-            <span>Ziel: </span><b>{route.markers[route.markers.length - 1].name}</b><br />
-            <span>Landeskarten 1:{route.mapScale}'000: </span>
-            <button class="pill noprint" disabled={loadingMaps} on:click={() => showMapScaleDialog = true}>
-                <Icon name="edit" />
-            </button>
-            <br />
-            {#if loadingMaps}
-                <Spinner small />
-            {:else}
-                {#each route.maps as map}
-                    <b>{map.name} ({map.id})</b><br />
-                {/each}
-            {/if}
-        </p>
-        <button class="pill noprint" on:click={reverse}>
+        <span>Start: </span><b>{route.markers[0].name}</b><br />
+        <span>Ziel: </span><b>{route.markers[route.markers.length - 1].name}</b><br />
+        <span>Landeskarten 1:{route.mapScale}'000: </span>
+        <button class="pill noprint" disabled={loadingMaps} on:click={() => showMapScaleDialog = true}>
+            <Icon name="edit" />
+        </button>
+        <br />
+        {#if loadingMaps}
+            <Spinner small />
+        {:else}
+            {#each route.maps as map}
+                <b>{map.name} ({map.id})</b><br />
+            {/each}
+        {/if}
+        <button class="pill noprint pad" on:click={reverse}>
             <Icon name="swap_vert" /> Richtung wechseln
         </button>
     </div>
@@ -134,7 +132,7 @@
         flex: 1 0 auto;
     }
 
-    .container p {
-        margin-top: 0;
+    button.pad {
+        margin-top: 0.5rem;
     }
 </style>
