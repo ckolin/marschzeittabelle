@@ -27,7 +27,7 @@
     <span>marschzeittabelle.ch</span>
     <span class="noprint">
         | <a href="help" target="_blank">hilfe</a>
-        | <a href="https://github.com/ckolin/marschzeittabelle" target="_blank">github</a>
+        | <a href="https://github.com/ckolin/marschzeittabelle" target="_blank">quellcode</a>
     </span>
 </footer>
 
