@@ -5,6 +5,7 @@ export function logEvent(event) {
 
     window.goatcounter.count({
         path: event,
+        title: "",
         event: true
     });
 }

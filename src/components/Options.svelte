@@ -39,7 +39,6 @@
             .catch((error) => {
                 // Log error loading maps
                 logError(error.id);
-                
                 alert(error.message);
             });
     }
