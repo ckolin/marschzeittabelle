@@ -143,10 +143,10 @@ async function buildRoute(lines, markers, fileName) {
             message: "Die Route enthält keine Linie."
         };
     }
-    if (markers.length === 0) {
+    if (markers.length < 2) {
         throw {
             id: "no-markers",
-            message: "Die Route enthält keine Wegpunkte."
+            message: "Die Route enthält weniger als zwei Wegpunkte."
         };
     }
 
