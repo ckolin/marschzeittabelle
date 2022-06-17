@@ -16,6 +16,14 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
         .catch(handleConnectionError)
         .then((res) => handleResponse(res, "Das Höhenprofil konnten nicht geladen werden."))
         .then((data) => new Promise((resolve) => {
+            // Check for empty response
+            if (data.length === 0) {
+                throw {
+                    id: "empty-response",
+                    message: "Für die Route sind keine Höhendaten verfügbar."
+                };
+            }
+
             let profile = data.map(p => ({
                 point: { x: p.easting, y: p.northing },
                 height: p.alts.COMB
