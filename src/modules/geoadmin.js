@@ -63,12 +63,19 @@ function handleConnectionError() {
     };
 }
 
-function handleResponse(response, message) {
-    if (response.ok) {
-        return response.json();
-    } else {
+async function handleResponse(response, message) {
+    if (!response.ok) {
         throw {
             id: "response-not-ok",
+            message
+        };
+    }
+    
+    try {
+        return await response.json();
+    } catch {
+        throw {
+            id: "invalid-json",
             message
         };
     }
