@@ -6,7 +6,15 @@ const epsilon = 10;
 
 export function importFile(file) {
     return readFile(file)
-        .then((content) => parseXml(content))
+        .then(
+            (content) => parseXml(content),
+            () => {
+                // Promise was rejected
+                throw {
+                    id: "file-error",
+                    message: "Die Datei konnte nicht gelesen werden."
+                };
+            })
         .then((xml) => {
             if (file.name.endsWith(".kml")) {
                 return readKml(xml);
@@ -22,7 +30,7 @@ function readFile(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.addEventListener("load", () => resolve(reader.result));
-        reader.addEventListener("error", () => reject("Die Datei konnte nicht gelesen werden."));
+        reader.addEventListener("error", reject);
         reader.readAsText(file);
     });
 }
