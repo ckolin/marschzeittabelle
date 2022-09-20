@@ -113,11 +113,11 @@
 <div class="noprint">
     <br />
     <button on:click={print}>
-        <Icon name="print" /> Drucken
+        <Icon name="print" /> Drucken (PDF)
     </button>
     &nbsp;
     <button on:click={downloadCsv} class="secondary">
-        <Icon name="output" /> Exportieren (CSV)
+        <Icon name="table_chart" /> Tabelle exportieren (CSV)
     </button>
 </div>
 
