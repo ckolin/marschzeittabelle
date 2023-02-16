@@ -74,7 +74,7 @@
 
     video {
         flex: 0 1 25rem;
-        width: 100%;
+        width: 0;
         height: fit-content;
         border-radius: 1rem;
         box-shadow: 1rem 1rem 2rem var(--shadow-color);
