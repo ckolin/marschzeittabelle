@@ -16,10 +16,9 @@
         <h2>3. Hochladen <Icon name="upload_file" big /></h2>
         <p>Jetzt noch Geschwindigkeit, Abreisezeit, Kommentare und Pausen anpassen.</p>
     </div>
-    <div class="example">
-        <img class="map" src="map.jpg" alt="Beispiel-Karte" />
-        <img class="output" src="output.jpg" alt="Beispiel-Ausgabe" />
-    </div>
+    <video autoplay controls loop muted>
+        <source src="recording.webm" />
+    </video>
 </div>
 
 <style>
@@ -73,29 +72,12 @@
         margin-top: 0;
     }
 
-    .example {
+    video {
         flex: 0 1 25rem;
-        display: grid;
-        grid-template-columns: 1fr 2fr 1fr;
-        justify-items: end;
-        align-items: center;
-    }
-
-    .example img {
-        grid-row-start: 1;
+        width: 100%;
+        height: fit-content;
         border-radius: 1rem;
         box-shadow: 1rem 1rem 2rem var(--shadow-color);
-    }
-    
-    .map {
-        grid-column: 1 / span 2;
-        width: 100%;
-    }
-    
-    .output {
-        grid-column: 2 / span 2;
-        width: 70%;
-        transform: rotate(4deg);
         border: 2px solid var(--shadow-color);
     }
 </style>
