@@ -144,6 +144,13 @@ function convertCoordinates(lat, long) {
 }
 
 async function buildRoute(lines, markers, fileName) {
+    // Show coordinates for unnamed markers
+    for (let marker of markers) {
+        if (!marker.name) {
+            marker.name = `${Math.round(marker.point.x)}/${Math.round(marker.point.y)}`;
+        }
+    }
+
     // Check if route contains line and markers
     if (lines.length === 0) {
         throw {
