@@ -1,10 +1,9 @@
 <script>
     import { calculateData } from "../modules/table.js";
-    import { formatDuration, formatTime } from "../modules/formatting.js";
+    import { formatCoordinates, formatDuration, formatTime } from "../modules/formatting.js";
     import { recalculate } from "../modules/route.js";
     import Icon from "./Icon.svelte";
     import MarkerDialog from "./MarkerDialog.svelte";
-
 
     export let route;
 
@@ -48,19 +47,22 @@
                 </button>
             </td>
         </tr>
-        {#if row.comment || row.diff}
-            <tr class="alt">
-                <td class="comment">{row.comment ?? ""}</td>
-                {#if row.diff}
-                    <td class="number">{Math.round(row.diff.height)} m</td>
-                    <td class="number">{row.diff.distance.toFixed(1)} km</td>
-                    <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
-                    <td class="number">{formatDuration(row.diff.duration)} h</td>
-                {/if}
-                {#if row.break > 0}
-                    <td class="number">+{formatDuration(row.break / 60)}</td>
-                {/if}
-                <td />
+        <tr class="alt">
+            <td class="coordinates">{formatCoordinates(row.coordinates)}</td>
+            {#if row.diff}
+                <td class="number">{Math.round(row.diff.height)} m</td>
+                <td class="number">{row.diff.distance.toFixed(1)} km</td>
+                <td class="number">{row.diff.effort.toFixed(1)} Lkm</td>
+                <td class="number">{formatDuration(row.diff.duration)} h</td>
+            {/if}
+            {#if row.break > 0}
+                <td class="number">+{formatDuration(row.break / 60)}</td>
+            {/if}
+            <td />
+        </tr>
+        {#if row.comment}
+            <tr class="alt comment">
+                <td class="comment" colspan="100">{row.comment}</td>
             </tr>
         {/if}
     {/each}
@@ -72,8 +74,12 @@
         border-spacing: 1px;
     }
 
-    th, td {
+    th {
         text-align: left;
+    }
+
+    td {
+        vertical-align: top;
     }
 
     th:not(:last-child), td:not(:last-child) {
@@ -97,9 +103,12 @@
         print-color-adjust: exact;
     }
 
+    .coordinates, .number {
+        font-family: "Roboto Mono", monospace;
+    }
+
     .number {
         text-align: right;
-        font-family: "Roboto Mono", monospace;
     }
 
     .alt .number {
@@ -107,7 +116,7 @@
     }
 
     .comment {
-        max-width: 20rem;
+        max-width: 100%;
         white-space: normal;
     }
 </style>

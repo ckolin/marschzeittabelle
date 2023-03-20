@@ -1,3 +1,8 @@
+export function formatCoordinates(point) {
+    const fmt = (n) => Math.round(n);//.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return `${fmt(point.x)}/${fmt(point.y)}`;
+}
+
 export function formatRelative(timestamp) {
     const diff = Date.now() - timestamp;
     const minutes = diff / 1000 / 60;

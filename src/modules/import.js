@@ -1,3 +1,4 @@
+import { formatCoordinates } from "./formatting.js";
 import { loadData } from "./route.js";
 import { Swisstopo } from "./swisstopo.js";
 import * as vec from "./vec.js";
@@ -144,13 +145,6 @@ function convertCoordinates(lat, long) {
 }
 
 async function buildRoute(lines, markers, fileName) {
-    // Show coordinates for unnamed markers
-    for (let marker of markers) {
-        if (!marker.name) {
-            marker.name = `${Math.round(marker.point.x)}/${Math.round(marker.point.y)}`;
-        }
-    }
-
     // Check if route contains line and markers
     if (lines.length === 0) {
         throw {
@@ -227,7 +221,7 @@ async function buildRoute(lines, markers, fileName) {
         .filter(m => m.index == null);
     if (unassigned.length > 0) {
         const list = unassigned
-            .map(m => `"${m.name}"`)
+            .map(m => m.name ? `"${m.name}"` : formatCoordinates(m.point))
             .join(", ");
         throw {
             id: "marker-not-on-line",

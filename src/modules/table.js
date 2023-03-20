@@ -1,4 +1,4 @@
-import { formatTime } from "./formatting.js";
+import { formatCoordinates, formatTime } from "./formatting.js";
 
 export function calculateData(route) {
     const res = [];
@@ -9,6 +9,7 @@ export function calculateData(route) {
             index: i,
             name: route.markers[i].name,
             comment: route.markers[i].comment,
+            coordinates: route.markers[i].point,
             height: route.markerProfile[i].height,
             distance: route.distanceSum[route.markers[i].index] / 1000,
             effort: route.effortSum[i],
@@ -35,6 +36,7 @@ export function getCsv(data) {
     const header = [
         "Nr.",
         "Wegpunkt",
+        "Koordinaten",
         "Kommentar",
         "Höhe / m",
         "Differenz Höhe / m",
@@ -51,6 +53,7 @@ export function getCsv(data) {
     const rows = data.map((row) => [
         row.index + 1,
         row.name,
+        formatCoordinates(row.coordinates),
         row.comment ?? "",
         row.height,
         row.diff?.height ?? 0,
