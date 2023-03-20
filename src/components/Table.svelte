@@ -78,10 +78,6 @@
         text-align: left;
     }
 
-    td {
-        vertical-align: top;
-    }
-
     th:not(:last-child), td:not(:last-child) {
         padding-right: 1rem;
     }
@@ -116,7 +112,7 @@
     }
 
     .comment {
-        max-width: 100%;
+        max-width: min-content;
         white-space: normal;
     }
 </style>
