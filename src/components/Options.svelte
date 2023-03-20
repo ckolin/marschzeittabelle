@@ -61,7 +61,7 @@
         const csv = getCsv(calculateData(route));
         const a = document.createElement("a");
         a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-        a.download = `${route.title}.csv`;
+        a.download = `${route.title || "marschzeittabelle"}.csv`;
         a.click();
     }
 </script>
