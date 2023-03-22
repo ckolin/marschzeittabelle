@@ -70,7 +70,7 @@
 
 <style>
     table {
-        white-space: nowrap;
+        max-width: 100%;
         border-spacing: 1px;
     }
 
@@ -87,6 +87,10 @@
     }
     
     .name {
+        max-width: 30ch;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-weight: bold;
         color: var(--darker-accent-color);
     }
@@ -101,6 +105,7 @@
 
     .coordinates, .number {
         font-family: "Roboto Mono", monospace;
+        white-space: nowrap;
     }
 
     .number {
@@ -110,9 +115,9 @@
     .alt .number {
         font-style: italic;
     }
-
+    
     .comment {
-        max-width: min-content;
-        white-space: normal;
+        width: min-content;
+        word-break: break-all;
     }
 </style>

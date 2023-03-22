@@ -64,10 +64,4 @@
     h2 + button {
         vertical-align: 0.2em;
     }
-
-    @media not print {
-        .table, .profile {
-            overflow-x: auto;
-        }
-    }
 </style>
