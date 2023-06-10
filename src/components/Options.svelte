@@ -106,7 +106,7 @@
         </button>
         <br />
         <span>Ankunft: </span><b>{formatTime(route.start + total.duration)}</b><br />
-        <span>Gehzeit: </span><b>{formatDuration(total.duration)} h</b><br />
+        <span>Gehzeit: </span><b>{formatDuration(total.walkingDuration)} h</b><br />
         <span>Pausen: </span><b>{formatDuration(total.breakDuration)} h</b>
     </div>
 </div>
