@@ -60,9 +60,10 @@ async function readKml(xml) {
     const placemarks = xml.querySelectorAll("Placemark");
     for (let placemark of placemarks) {
         // Find lines and polygons
-        if (placemark.querySelector("LineString, LinearRing")) {
-            const points = placemark
-                .querySelector(":is(LineString, LinearRing) coordinates")
+        const lineCoordinates = placemark
+            .querySelector(":is(LineString, LinearRing) coordinates");
+        if (lineCoordinates) {
+            const points = lineCoordinates
                 .innerHTML
                 .trim()
                 .split(" ")
@@ -70,20 +71,22 @@ async function readKml(xml) {
             lines.push(points);
         }
 
-        // Find markers
-        if (placemark.querySelector("Point")) {
+        // Find named markers
+        const pointCoordinates = placemark
+            .querySelector("Point coordinates");
+        if (pointCoordinates) {
             const name = placemark
                 .querySelector("name")
-                .innerHTML
-                .trim();
+                ?.innerHTML
+                ?.trim();
             const comment = placemark
                 .querySelector("description")
                 ?.innerHTML
                 ?.trim();
-            const point = coords(placemark
-                .querySelector("Point coordinates")
-                .innerHTML);
-            markers.push({ name, comment, point });
+            const point = coords(pointCoordinates.innerHTML);
+            if (name != null) {
+                markers.push({ name, comment, point });
+            }
         }
     }
 
@@ -105,33 +108,37 @@ async function readGpx(xml) {
         lines.push(points);
     }
 
-    // Find markers stored as track points
+    // Find named markers stored as track points
     // Used by outdooractive.com
-    const nameElements = xml.querySelectorAll("trkpt > name");
-    for (let nameElement of nameElements) {
-        const parent = nameElement.parentElement;
-        const name = nameElement
-            .innerHTML
-            .trim();
-        const comment = parent
+    const trackpoints = xml.querySelectorAll("trkpt");
+    for (let trackpoint of trackpoints) {
+        const name = trackpoint
+            .querySelector("name")
+            ?.innerHTML
+            ?.trim();
+        const comment = trackpoint
             .querySelector("desc")
             ?.innerHTML
             ?.trim();
-        const point = coords(parent);
-        markers.push({ name, comment, point });
+        const point = coords(trackpoint);
+        if (name != null) {
+            markers.push({ name, comment, point });
+        }
     }
 
-    // Find markers stored as waypoints
+    // Find named markers stored as waypoints
     // Used by swisstopo app
     if (markers.length === 0) {
         const waypoints = xml.querySelectorAll("wpt");
         for (let waypoint of waypoints) {
             const name = waypoint
                 .querySelector("name")
-                .innerHTML
-                .trim();
+                ?.innerHTML
+                ?.trim();
             const point = coords(waypoint);
-            markers.push({ name, point });
+            if (name != null) {
+                markers.push({ name, point });
+            }
         }
     }
 
