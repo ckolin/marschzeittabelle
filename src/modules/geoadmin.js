@@ -70,7 +70,7 @@ async function handleResponse(response, message) {
             message
         };
     }
-    
+
     try {
         return await response.json();
     } catch {

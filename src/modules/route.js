@@ -30,7 +30,7 @@ function calculateHeightDifference(route) {
             descent -= diff;
         }
     }
-    
+
     return { ascent, descent };
 }
 
