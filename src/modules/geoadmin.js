@@ -42,11 +42,8 @@ export function fetchMaps(line, mapScale) {
     const geometry = {
         paths: [line.map(p => [Math.round(p.x), Math.round(p.y)])]
     };
-    return fetch(`${baseUrl}/all/MapServer/identify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `geometry=${JSON.stringify(geometry)}&geometryType=esriGeometryPolyline&layers=all:ch.swisstopo.pixelkarte-pk${mapScale}.metadata&tolerance=0&returnGeometry=false`
-    })
+    const query = `geometry=${JSON.stringify(geometry)}&geometryType=esriGeometryPolyline&layers=all:ch.swisstopo.pixelkarte-pk${mapScale}.metadata&tolerance=0&returnGeometry=false`;
+    return fetch(`${baseUrl}/all/MapServer/identify?${query}`)
         .catch(handleConnectionError)
         .then((res) => handleResponse(res, "Die Landeskarten konnten nicht geladen werden."))
         .then((data) => new Promise((resolve) => {
