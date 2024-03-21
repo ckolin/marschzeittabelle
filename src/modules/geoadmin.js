@@ -2,6 +2,7 @@ import * as vec from "./vec.js";
 
 const baseUrl = "https://api3.geo.admin.ch/rest/services";
 const epsilon = 2;
+const maxPoints = 100;
 
 export function fetchProfile(line, ensureInputPoints, resolution) {
     const geometry = {
@@ -39,8 +40,19 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
 }
 
 export function fetchMaps(line, mapScale) {
+    let path = [];
+    const rounded = line.map(p => [Math.round(p.x), Math.round(p.y)]);
+    // Make sure that query is not too long
+    if (rounded.length > maxPoints) {
+        for (let i = 0; i < maxPoints; i++) {
+            const p = rounded[Math.floor(i / maxPoints * rounded.length)];
+            path.push(p);
+        }
+    } else {
+        path = rounded;
+    }
     const geometry = {
-        paths: [line.map(p => [Math.round(p.x), Math.round(p.y)])]
+        paths: [path]
     };
     const query = `geometry=${JSON.stringify(geometry)}&geometryType=esriGeometryPolyline&layers=all:ch.swisstopo.pixelkarte-pk${mapScale}.metadata&tolerance=0&returnGeometry=false`;
     return fetch(`${baseUrl}/all/MapServer/identify?${query}`)
