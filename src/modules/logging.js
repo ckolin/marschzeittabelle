@@ -11,5 +11,6 @@ export function logEvent(event) {
 }
 
 export function logError(error) {
+    console.log(error);
     logEvent(`error-${error}`);
 }
