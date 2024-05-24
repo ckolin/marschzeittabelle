@@ -59,9 +59,11 @@ export function fetchMaps(line, mapScale) {
         .catch(handleConnectionError)
         .then((res) => handleResponse(res, "Die Landeskarten konnten nicht geladen werden."))
         .then((data) => new Promise((resolve) => {
-            const maps = data.results
-                .map((r) => ({ id: r.attributes.tileid, name: r.attributes.lk_name }));
-            resolve(maps);
+            const all = data.results
+                .map((r) => ([r.attributes.tileid, r.attributes.lk_name]));
+            const unique = [...new Map(all).entries()]
+                .map(([id, label]) => ({ id, label }));
+            resolve(unique);
         }));
 }
 

@@ -83,7 +83,7 @@
             <br />
         {:else}
             {#each route.maps as map}
-                <b>{map.name} ({map.id})</b><br />
+                <b>{map.label} ({map.id})</b><br />
             {/each}
         {/if}
         <button class="pill noprint pad" on:click={reverse}>
