@@ -13,8 +13,8 @@
     export let route;
 
     $: total = calculateTotals(route);
-    
-    let showSpeedDialog = false;    
+
+    let showSpeedDialog = false;
     let showStartDialog = false;
     let showMapScaleDialog = false;
 
@@ -50,7 +50,7 @@
             window.print();
         } else {
             logError("print");
-            alert("Dein Browser unterstützt das Drucken nicht.")
+            alert("Dein Browser unterstützt das Drucken nicht.");
         }
     }
 
