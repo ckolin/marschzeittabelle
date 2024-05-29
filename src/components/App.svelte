@@ -4,12 +4,17 @@
     import Introduction from "./Introduction.svelte";
     import Import from "./Import.svelte";
 
+    import Profile from "./Profile.svelte";
+    import { testRoute } from "../modules/test";
+
     let route;
 </script>
 
 <svelte:head>
     <title>{route == null ? "" : `${route.title} - `}Marschzeittabelle</title>
 </svelte:head>
+<Profile route={testRoute} />
+<!--
 {#if route == null}
     <main>
         <Introduction />
@@ -29,7 +34,7 @@
         | <a href="help" target="_blank">hilfe</a>
         | <a href="https://github.com/ckolin/marschzeittabelle" target="_blank">quellcode</a>
     </span>
-</footer>
+</footer>-->
 
 <style>
     footer {
