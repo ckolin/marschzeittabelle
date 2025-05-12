@@ -1,0 +1,234 @@
+<script lang="ts">
+    import "maplibre-gl/dist/maplibre-gl.css";
+    import { GeoJSONSource, Map, Marker } from "maplibre-gl";
+    import {
+        Router,
+        type RoutePoint,
+        RouteMode,
+        type RouteSegment,
+        type Point,
+    } from "./routing";
+    import type { Feature, FeatureCollection, LineString } from "geojson";
+    import { LV95toWGS, WGStoLV95 } from "swiss-projection";
+
+    let container: HTMLElement;
+    let map: Map;
+    let markers: Marker[] = [];
+    let floatingMarker: Marker;
+    let floatingFixed: boolean = false;
+    let floatingIndex: number;
+    let router = new Router();
+    let points: RoutePoint[] = [];
+    let mode: RouteMode = RouteMode.PreferRoads;
+    let route: RouteSegment[];
+
+    function setMode(mode: RouteMode) {
+        mode = mode;
+        recalculate();
+    }
+
+    function recalculate() {
+        updateMarkers();
+        router.route(points, mode).then((route) => {
+            route = route;
+            updateFeatures();
+        });
+    }
+
+    function initializeMap(container: HTMLElement) {
+        map = new Map({
+            container,
+            style: {
+                version: 8,
+                sources: {
+                    pixelkarte: {
+                        type: "raster",
+                        tiles: [
+                            "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
+                        ],
+                        tileSize: 256,
+                        attribution: "© swisstopo",
+                        bounds: [5.02, 45.25, 11.5, 48.27],
+                        maxzoom: 18,
+                    },
+                    wanderwege: {
+                        type: "raster",
+                        tiles: [
+                            "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swisstlm3d-wanderwege/default/current/3857/{z}/{x}/{y}.png",
+                        ],
+                        tileSize: 256,
+                        bounds: [5.02, 45.25, 11.5, 48.27],
+                        maxzoom: 18,
+                    },
+                },
+                layers: [
+                    {
+                        id: "pixelkarte",
+                        type: "raster",
+                        source: "pixelkarte",
+                        paint: {
+                            "raster-saturation": -0.1,
+                        },
+                    },
+                    {
+                        id: "wanderwege",
+                        type: "raster",
+                        source: "wanderwege",
+                        paint: {
+                            "raster-opacity": 0.7,
+                        },
+                    },
+                ],
+            },
+            center: [8.23, 46.8],
+            zoom: 8,
+        });
+        map.dragRotate.disable();
+        map.keyboard.disableRotation();
+        map.touchZoomRotate.disableRotation();
+        map.on("contextmenu", () => {
+            points.pop();
+            recalculate();
+        });
+        map.on("mousemove", "route", (e) => {
+            if (!floatingFixed) {
+                floatingIndex = e.features![0].properties.i;
+                floatingMarker!.setLngLat(e.lngLat).addTo(map);
+            }
+        });
+        map.on("click", (e) => {
+            if (!e.defaultPrevented) {
+                const pt: Point = WGStoLV95([e.lngLat.lng, e.lngLat.lat]);
+                router.snap(pt).then((rp) => {
+                    points.push(rp);
+                    recalculate();
+                });
+            }
+        });
+    }
+
+    function updateFeatures() {
+        const features: Feature<LineString>[] = [];
+        for (const [i, seg] of route!.entries()) {
+            features.push({
+                type: "Feature",
+                properties: { i, onRoads: seg.onRoads },
+                geometry: {
+                    type: "LineString",
+                    coordinates: LV95toWGS(seg.path),
+                },
+            });
+        }
+        const collection: FeatureCollection<LineString> = {
+            type: "FeatureCollection",
+            features,
+        };
+        const source: GeoJSONSource = map.getSource("route")!;
+        if (source == null) {
+            map.addSource("route", { type: "geojson", data: collection });
+            map.addLayer({
+                id: "route",
+                type: "line",
+                source: "route",
+                layout: {
+                    "line-cap": "round",
+                    "line-join": "round",
+                },
+                paint: {
+                    "line-color": "#c12",
+                    "line-opacity": 0.8,
+                    "line-width": 8,
+                },
+            });
+        } else {
+            source.setData(collection);
+        }
+    }
+
+    function initializeFloatingMarker() {
+        const el = document.createElement("div");
+        el.classList.add("marker", "floating");
+        floatingMarker = new Marker({
+            draggable: true,
+            element: el,
+        });
+        el.addEventListener("mousedown", (e) => {
+            if (e.button === 0) {
+                floatingFixed = true;
+            }
+        });
+        el.addEventListener("mouseleave", () => {
+            if (!floatingFixed) {
+                floatingMarker.remove();
+            }
+        });
+        const insert = () => {
+            const lnglat = floatingMarker.getLngLat();
+            const pt: Point = WGStoLV95([lnglat.lng, lnglat.lat]);
+            router.snap(pt).then((rp) => {
+                points.splice(floatingIndex + 1, 0, rp);
+                recalculate();
+            });
+            floatingMarker.remove();
+            floatingFixed = false;
+        };
+        el.addEventListener("click", (e) => {
+            e.stopPropagation();
+            insert();
+        });
+        floatingMarker.on("dragend", insert);
+    }
+
+    function updateMarkers() {
+        for (let i = markers.length - 1; i >= points.length; i--) {
+            const marker = markers.pop()!;
+            marker.remove();
+        }
+        for (let i = markers.length; i < points.length; i++) {
+            const el = document.createElement("div");
+            el.classList.add("marker");
+            el.addEventListener("mouseenter", () => {
+                if (!floatingFixed) {
+                    floatingMarker.remove();
+                }
+            });
+            el.addEventListener("mousemove", (e) => e.stopPropagation());
+            el.addEventListener("click", (e) => e.stopPropagation());
+            el.addEventListener("contextmenu", () => {
+                floatingMarker.remove();
+                points.splice(i, 1);
+                recalculate();
+            });
+            const marker = new Marker({
+                draggable: true,
+                element: el,
+            });
+            marker.on("dragend", () => {
+                const lngLat = marker.getLngLat();
+                const pt: Point = WGStoLV95([lngLat.lng, lngLat.lat]);
+                router.snap(pt).then((pt) => {
+                    points[i] = pt;
+                    recalculate();
+                });
+            });
+            markers.push(marker);
+        }
+        for (let i = 0; i < points.length; i++) {
+            markers[i].setLngLat(LV95toWGS(points[i].point)).addTo(map);
+        }
+    }
+
+    $effect(() => {
+        initializeMap(container);
+        initializeFloatingMarker();
+    });
+</script>
+
+<div bind:this={container}></div>
+
+<style>
+    div {
+        width: 95vw;
+        height: 95vh;
+    }
+</style>
