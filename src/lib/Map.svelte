@@ -1,6 +1,12 @@
 <script lang="ts">
     import "maplibre-gl/dist/maplibre-gl.css";
-    import { GeoJSONSource, Map, Marker } from "maplibre-gl";
+    import {
+        GeoJSONSource,
+        Map,
+        Marker,
+        type SourceSpecification,
+        type StyleSpecification,
+    } from "maplibre-gl";
     import {
         Router,
         type RoutePoint,
@@ -12,20 +18,26 @@
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
 
     let container: HTMLElement;
+
     let map: Map;
     let markers: Marker[] = [];
+
     let floatingMarker: Marker;
     let floatingFixed: boolean = false;
     let floatingIndex: number;
+
     let router = new Router();
     let points: RoutePoint[] = [];
     let mode: RouteMode = RouteMode.PreferRoads;
     let route: RouteSegment[];
 
-    function setMode(mode: RouteMode) {
-        mode = mode;
-        recalculate();
-    }
+    const BASE_MAPS = ["pixelkarte", "base", "imagerybase"] as const;
+    type BaseMap = (typeof BASE_MAPS)[number];
+    let baseMap: BaseMap = "pixelkarte";
+
+    const OVERLAYS = ["wanderwege", "veloland"] as const;
+    type Overlay = (typeof OVERLAYS)[number];
+    let overlays: Set<Overlay> = new Set();
 
     function recalculate() {
         updateMarkers();
@@ -35,54 +47,14 @@
         });
     }
 
-    function initializeMap(container: HTMLElement) {
+    function initializeMap() {
         map = new Map({
             container,
-            style: {
-                version: 8,
-                sources: {
-                    pixelkarte: {
-                        type: "raster",
-                        tiles: [
-                            "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
-                        ],
-                        tileSize: 256,
-                        attribution: "© swisstopo",
-                        bounds: [5.02, 45.25, 11.5, 48.27],
-                        maxzoom: 18,
-                    },
-                    wanderwege: {
-                        type: "raster",
-                        tiles: [
-                            "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swisstlm3d-wanderwege/default/current/3857/{z}/{x}/{y}.png",
-                        ],
-                        tileSize: 256,
-                        bounds: [5.02, 45.25, 11.5, 48.27],
-                        maxzoom: 18,
-                    },
-                },
-                layers: [
-                    {
-                        id: "pixelkarte",
-                        type: "raster",
-                        source: "pixelkarte",
-                        paint: {
-                            "raster-saturation": -0.1,
-                        },
-                    },
-                    {
-                        id: "wanderwege",
-                        type: "raster",
-                        source: "wanderwege",
-                        paint: {
-                            "raster-opacity": 0.7,
-                        },
-                    },
-                ],
-            },
+            style: getStyle(),
             center: [8.23, 46.8],
             zoom: 8,
         });
+        map.on("load", initializeOverlays);
         map.dragRotate.disable();
         map.keyboard.disableRotation();
         map.touchZoomRotate.disableRotation();
@@ -105,6 +77,90 @@
                 });
             }
         });
+    }
+
+    function getStyle(): string | StyleSpecification {
+        if (baseMap === "base") {
+            return "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap_world.vt/style.json?key=elL5I2rTshJ5j6y7kifu";
+        } else if (baseMap === "imagerybase") {
+            return "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.imagerybasemap_world.vt/style.json?key=elL5I2rTshJ5j6y7kifu";
+        } else {
+            return {
+                version: 8,
+                sources: {
+                    pixelkarte: makeRasterSource(
+                        "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
+                    ),
+                },
+                layers: [
+                    {
+                        id: "pixelkarte",
+                        type: "raster",
+                        source: "pixelkarte",
+                        paint: {
+                            "raster-saturation": -0.1,
+                        },
+                    },
+                ],
+            };
+        }
+    }
+
+    function initializeOverlays() {
+        map.addSource(
+            "wanderwege",
+            makeRasterSource(
+                "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swisstlm3d-wanderwege/default/current/3857/{z}/{x}/{y}.png",
+            ),
+        );
+        map.addLayer({
+            id: "wanderwege",
+            type: "raster",
+            source: "wanderwege",
+            paint: {
+                "raster-opacity": 0.7,
+            },
+        });
+        map.addSource(
+            "veloland",
+            makeRasterSource(
+                "https://wmts.geo.admin.ch/1.0.0/ch.astra.veloland/default/current/3857/{z}/{x}/{y}.png",
+                "© ASTRA",
+            ),
+        );
+        map.addLayer({
+            id: "veloland",
+            type: "raster",
+            source: "veloland",
+            paint: {
+                "raster-opacity": 0.7,
+            },
+        });
+        updateOverlays();
+    }
+
+    function makeRasterSource(
+        url: string,
+        attribution: string = "© swisstopo",
+    ): SourceSpecification {
+        return {
+            type: "raster",
+            tiles: [url],
+            tileSize: 256,
+            attribution,
+            bounds: [5.02, 45.25, 11.5, 48.27],
+            maxzoom: 18,
+        };
+    }
+
+    function updateOverlays() {
+        for (const o of OVERLAYS) {
+            map.setLayoutProperty(
+                o,
+                "visibility",
+                overlays.has(o) ? "visible" : "none",
+            );
+        }
     }
 
     function updateFeatures() {
@@ -221,7 +277,7 @@
     }
 
     $effect(() => {
-        initializeMap(container);
+        initializeMap();
         initializeFloatingMarker();
     });
 </script>
