@@ -2,8 +2,11 @@
     import "maplibre-gl/dist/maplibre-gl.css";
     import {
         GeoJSONSource,
+        LngLat,
         Map,
+        MapMouseEvent,
         Marker,
+        type MapGeoJSONFeature,
         type SourceSpecification,
         type StyleSpecification,
     } from "maplibre-gl";
@@ -30,6 +33,7 @@
     let points: RoutePoint[] = [];
     let mode: RouteMode = RouteMode.PreferRoads;
     let route: RouteSegment[];
+    let promise: Promise<void> | undefined = $state(undefined);
 
     const BASE_MAPS = ["pixelkarte", "base", "imagerybase"] as const;
     type BaseMap = (typeof BASE_MAPS)[number];
@@ -39,9 +43,17 @@
     type Overlay = (typeof OVERLAYS)[number];
     let overlays: Set<Overlay> = new Set(["wanderwege"]);
 
+    function insertPoint(lngLat: LngLat, i = points.length) {
+        const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
+        promise = router.snap(pt).then((rp) => {
+            points.splice(i, 0, rp);
+            recalculate();
+        });
+    }
+
     function recalculate() {
         updateMarkers();
-        router.route(points, mode).then((r) => {
+        promise = router.route(points, mode).then((r) => {
             route = r;
             updateFeatures();
         });
@@ -62,19 +74,19 @@
             points.pop();
             recalculate();
         });
-        map.on("mousemove", "route", (e) => {
+        const mouseMove = (
+            e: MapMouseEvent & { features?: MapGeoJSONFeature[] },
+        ) => {
             if (!floatingFixed) {
                 floatingIndex = e.features![0].properties.i;
                 floatingMarker!.setLngLat(e.lngLat).addTo(map);
             }
-        });
+        };
+        map.on("mousemove", "routeOnRoad", mouseMove);
+        map.on("mousemove", "routeOffRoad", mouseMove);
         map.on("click", (e) => {
             if (!e.defaultPrevented) {
-                const pt: Point = WGStoLV95([e.lngLat.lng, e.lngLat.lat]);
-                router.snap(pt).then((rp) => {
-                    points.push(rp);
-                    recalculate();
-                });
+                insertPoint(e.lngLat);
             }
         });
     }
@@ -248,11 +260,7 @@
         });
         const insert = () => {
             const lnglat = floatingMarker.getLngLat();
-            const pt: Point = WGStoLV95([lnglat.lng, lnglat.lat]);
-            router.snap(pt).then((rp) => {
-                points.splice(floatingIndex + 1, 0, rp);
-                recalculate();
-            });
+            insertPoint(lnglat, floatingIndex + 1);
             floatingMarker.remove();
             floatingFixed = false;
         };
@@ -311,6 +319,11 @@
 </script>
 
 <div id="container" bind:this={container}></div>
+{#await promise}
+    <p>loading...</p>
+{:then}
+    <p>done</p>
+{/await}
 
 <style>
     #container {
