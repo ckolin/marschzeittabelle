@@ -19,7 +19,7 @@
         RouteMode,
         type RouteSegment,
         type Point,
-    } from "./routing";
+    } from "../lib/routing";
     import type { Feature, FeatureCollection, LineString } from "geojson";
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
 
