@@ -288,7 +288,9 @@ export class Router {
     }
 
     private static async loadTile(id: string): Promise<FwdEdge[]> {
-        const res = await fetch(`/tiles/${id}.msgpack`);
+        const res = await fetch(
+            `${import.meta.env.VITE_TILE_URL}/${id}.msgpack`,
+        );
         const buf = await res.arrayBuffer();
         const arrs = unpack(buf);
         // @ts-ignore
