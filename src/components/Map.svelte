@@ -22,6 +22,7 @@
     } from "../lib/routing";
     import type { Feature, FeatureCollection, LineString } from "geojson";
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
+    import { onMount } from "svelte";
 
     let mapElement: HTMLElement;
 
@@ -39,18 +40,28 @@
     let loaded = $state(0);
     let total = $state(0);
     let points: RoutePoint[] = [];
-    let mode: RouteMode = $state(RouteMode.PreferRoads);
     let route: RouteSegment[];
 
-    const BASE_MAPS = ["pixelkarte", "base", "imagerybase"] as const;
-    type BaseMap = (typeof BASE_MAPS)[number];
-    let baseMap: BaseMap = "pixelkarte";
-
-    const overlays = [
-        { id: "wanderwege", label: "Wanderwege", enabled: true },
-        { id: "veloland", label: "Veloland Schweiz", enabled: false },
-        { id: "haltestellen", label: "ÖV-Haltestellen", enabled: false },
+    const modes = [
+        { value: RouteMode.OffRoad, label: "Luftlinie" },
+        { value: RouteMode.PreferRoads, label: "Alle Wege" },
+        { value: RouteMode.PreferPaved, label: "Hartbelag" },
+        { value: RouteMode.PreferHikingTrails, label: "Wanderwege" },
     ];
+    let mode: RouteMode = $state(RouteMode.PreferRoads);
+
+    const baseMaps = [
+        { id: "pixelkarte", label: "Pixelkarte" },
+        { id: "base", label: "Base Map" },
+        { id: "imagerybase", label: "Imagery Base Map" },
+    ];
+    let baseMap = $state(baseMaps[0].id);
+
+    const overlays = $state([
+        { id: "+wanderwege", label: "Wanderwege", enabled: true },
+        { id: "+veloland", label: "Veloland Schweiz", enabled: false },
+        { id: "+haltestellen", label: "ÖV-Haltestellen", enabled: false },
+    ]);
 
     function insertPoint(lngLat: LngLat, i = points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
@@ -58,11 +69,6 @@
             points.splice(i, 0, rp);
             recalculate();
         });
-    }
-
-    function setMode(m: RouteMode) {
-        mode = m;
-        recalculate();
     }
 
     function recalculate() {
@@ -107,12 +113,32 @@
                 floatingMarker!.setLngLat(e.lngLat).addTo(map);
             }
         };
-        map.on("mousemove", "routeOnRoad", mouseMove);
-        map.on("mousemove", "routeOffRoad", mouseMove);
+        map.on("mousemove", "+routeOnRoad", mouseMove);
+        map.on("mousemove", "+routeOffRoad", mouseMove);
         map.on("click", (e) => {
             if (!e.defaultPrevented) {
                 insertPoint(e.lngLat);
             }
+        });
+    }
+
+    function updateStyle() {
+        map.setStyle(getStyle(), {
+            transformStyle: (prev, next) => {
+                const sources = next.sources;
+                for (const id of Object.keys(prev!.sources)) {
+                    if (id.startsWith("+")) {
+                        sources[id] = prev!.sources[id];
+                    }
+                }
+                const layers = next.layers;
+                for (const layer of prev!.layers) {
+                    if (layer.id.startsWith("+")) {
+                        layers.push(layer);
+                    }
+                }
+                return { ...next, sources, layers };
+            },
         });
     }
 
@@ -145,46 +171,56 @@
 
     function initializeOverlays() {
         map.addSource(
-            "wanderwege",
+            "+wanderwege",
             makeRasterSource(
                 "https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.swisstlm3d-wanderwege/default/current/3857/{z}/{x}/{y}.png",
             ),
         );
         map.addLayer({
-            id: "wanderwege",
+            id: "+wanderwege",
             type: "raster",
-            source: "wanderwege",
+            source: "+wanderwege",
             paint: {
                 "raster-opacity": 0.7,
             },
         });
         map.addSource(
-            "veloland",
+            "+veloland",
             makeRasterSource(
                 "https://wmts.geo.admin.ch/1.0.0/ch.astra.veloland/default/current/3857/{z}/{x}/{y}.png",
                 "© ASTRA",
             ),
         );
         map.addLayer({
-            id: "veloland",
+            id: "+veloland",
             type: "raster",
-            source: "veloland",
+            source: "+veloland",
             paint: {
                 "raster-opacity": 0.7,
             },
         });
         map.addSource(
-            "haltestellen",
+            "+haltestellen",
             makeRasterSource(
                 "https://wmts.geo.admin.ch/1.0.0/ch.bav.haltestellen-oev/default/current/3857/{z}/{x}/{y}.png",
             ),
         );
         map.addLayer({
-            id: "haltestellen",
+            id: "+haltestellen",
             type: "raster",
-            source: "haltestellen",
+            source: "+haltestellen",
         });
         updateOverlays();
+    }
+
+    function updateOverlays() {
+        for (const overlay of overlays) {
+            map.setLayoutProperty(
+                overlay.id,
+                "visibility",
+                overlay.enabled ? "visible" : "none",
+            );
+        }
     }
 
     function makeRasterSource(
@@ -199,16 +235,6 @@
             bounds: [5.02, 45.25, 11.5, 48.27],
             maxzoom: 18,
         };
-    }
-
-    function updateOverlays() {
-        for (const overlay of overlays) {
-            map.setLayoutProperty(
-                overlay.id,
-                "visibility",
-                overlay.enabled ? "visible" : "none",
-            );
-        }
     }
 
     function updateFeatures() {
@@ -227,13 +253,13 @@
             type: "FeatureCollection",
             features,
         };
-        const source: GeoJSONSource | undefined = map.getSource("route");
+        const source: GeoJSONSource | undefined = map.getSource("+route");
         if (source == null) {
-            map.addSource("route", { type: "geojson", data: collection });
+            map.addSource("+route", { type: "geojson", data: collection });
             map.addLayer({
-                id: "routeOnRoad",
+                id: "+routeOnRoad",
                 type: "line",
-                source: "route",
+                source: "+route",
                 filter: ["==", "onRoad", true],
                 layout: {
                     "line-cap": "butt",
@@ -246,9 +272,9 @@
                 },
             });
             map.addLayer({
-                id: "routeOffRoad",
+                id: "+routeOffRoad",
                 type: "line",
-                source: "route",
+                source: "+route",
                 filter: ["==", "onRoad", false],
                 layout: {
                     "line-cap": "butt",
@@ -337,7 +363,7 @@
         }
     }
 
-    $effect(() => {
+    onMount(() => {
         initializeMap();
         initializeFloatingMarker();
     });
@@ -347,41 +373,39 @@
     <div class="map" bind:this={mapElement}></div>
     <div class="overlay">
         <span>Wegfindung</span>
-        <button
-            class={mode == RouteMode.OffRoad ? "" : "secondary"}
-            onclick={() => setMode(RouteMode.OffRoad)}
-        >
-            Luftlinie
-        </button>
-        <button
-            class={mode == RouteMode.PreferRoads ? "" : "secondary"}
-            onclick={() => setMode(RouteMode.PreferRoads)}
-        >
-            Alle Wege
-        </button>
-        <button
-            class={mode == RouteMode.PreferPaved ? "" : "secondary"}
-            onclick={() => setMode(RouteMode.PreferPaved)}
-        >
-            Hartbelag
-        </button>
-        <button
-            class={mode == RouteMode.PreferHikingTrails ? "" : "secondary"}
-            onclick={() => setMode(RouteMode.PreferHikingTrails)}
-        >
-            Wanderwege
-        </button>
-        <span>Ebenen</span>
-        {#each overlays as { id, label }, i}
-            <div>
+        {#each modes as { value, label }}
+            <label>
                 <input
-                    {id}
+                    type="radio"
+                    {value}
+                    bind:group={mode}
+                    onchange={recalculate}
+                />
+                {label}
+            </label>
+        {/each}
+        <span>Ebenen</span>
+        {#each overlays as { label }, i}
+            <label>
+                <input
                     type="checkbox"
                     bind:checked={overlays[i].enabled}
                     onchange={updateOverlays}
                 />
-                <label for={id}>{label}</label>
-            </div>
+                {label}
+            </label>
+        {/each}
+        <span>Karte</span>
+        {#each baseMaps as { id, label }}
+            <label>
+                <input
+                    type="radio"
+                    value={id}
+                    bind:group={baseMap}
+                    onchange={updateStyle}
+                />
+                {label}
+            </label>
         {/each}
         {#if loaded < total}
             <progress max={total} value={loaded}></progress>
@@ -436,5 +460,6 @@
         background: #fff;
         border-radius: 0.5rem;
         box-shadow: 0 0 1rem #0001;
+        z-index: 10;
     }
 </style>
