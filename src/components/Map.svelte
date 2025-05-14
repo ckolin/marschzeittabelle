@@ -46,9 +46,11 @@
     type BaseMap = (typeof BASE_MAPS)[number];
     let baseMap: BaseMap = "pixelkarte";
 
-    const OVERLAYS = ["wanderwege", "veloland", "haltestellen"] as const;
-    type Overlay = (typeof OVERLAYS)[number];
-    let overlays: Set<Overlay> = new Set(["wanderwege"]);
+    const overlays = [
+        { id: "wanderwege", label: "Wanderwege", enabled: true },
+        { id: "veloland", label: "Veloland Schweiz", enabled: false },
+        { id: "haltestellen", label: "ÖV-Haltestellen", enabled: false },
+    ];
 
     function insertPoint(lngLat: LngLat, i = points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
@@ -200,11 +202,11 @@
     }
 
     function updateOverlays() {
-        for (const o of OVERLAYS) {
+        for (const overlay of overlays) {
             map.setLayoutProperty(
-                o,
+                overlay.id,
                 "visibility",
-                overlays.has(o) ? "visible" : "none",
+                overlay.enabled ? "visible" : "none",
             );
         }
     }
@@ -344,11 +346,12 @@
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
     <div class="overlay">
+        <span>Wegfindung</span>
         <button
             class={mode == RouteMode.OffRoad ? "" : "secondary"}
             onclick={() => setMode(RouteMode.OffRoad)}
         >
-            Querfeldein
+            Luftlinie
         </button>
         <button
             class={mode == RouteMode.PreferRoads ? "" : "secondary"}
@@ -368,6 +371,18 @@
         >
             Wanderwege
         </button>
+        <span>Ebenen</span>
+        {#each overlays as { id, label }, i}
+            <div>
+                <input
+                    {id}
+                    type="checkbox"
+                    bind:checked={overlays[i].enabled}
+                    onchange={updateOverlays}
+                />
+                <label for={id}>{label}</label>
+            </div>
+        {/each}
         {#if loaded < total}
             <progress max={total} value={loaded}></progress>
         {/if}
