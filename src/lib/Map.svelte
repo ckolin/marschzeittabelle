@@ -29,8 +29,8 @@
 
     function recalculate() {
         updateMarkers();
-        router.route(points, mode).then((route) => {
-            route = route;
+        router.route(points, mode).then((r) => {
+            route = r;
             updateFeatures();
         });
     }
@@ -123,7 +123,7 @@
             type: "FeatureCollection",
             features,
         };
-        const source: GeoJSONSource = map.getSource("route")!;
+        const source: GeoJSONSource | undefined = map.getSource("route");
         if (source == null) {
             map.addSource("route", { type: "geojson", data: collection });
             map.addLayer({
@@ -180,10 +180,12 @@
     }
 
     function updateMarkers() {
+        // Remove surplus markers
         for (let i = markers.length - 1; i >= points.length; i--) {
             const marker = markers.pop()!;
             marker.remove();
         }
+        // Add markers as needed
         for (let i = markers.length; i < points.length; i++) {
             const el = document.createElement("div");
             el.classList.add("marker");
@@ -224,11 +226,29 @@
     });
 </script>
 
-<div bind:this={container}></div>
+<div id="container" bind:this={container}></div>
 
 <style>
-    div {
-        width: 95vw;
-        height: 95vh;
+    #container {
+        height: 60rem;
+    }
+
+    #container :global {
+        .marker {
+            z-index: 2;
+            width: 20px;
+            height: 20px;
+            background: #c12;
+            border-radius: 50%;
+            cursor: move;
+        }
+
+        .marker:hover {
+            filter: brightness(125%);
+        }
+
+        .marker.floating {
+            z-index: 1;
+        }
     }
 </style>
