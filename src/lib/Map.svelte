@@ -35,9 +35,9 @@
     type BaseMap = (typeof BASE_MAPS)[number];
     let baseMap: BaseMap = "pixelkarte";
 
-    const OVERLAYS = ["wanderwege", "veloland"] as const;
+    const OVERLAYS = ["wanderwege", "veloland", "haltestellen"] as const;
     type Overlay = (typeof OVERLAYS)[number];
-    let overlays: Set<Overlay> = new Set();
+    let overlays: Set<Overlay> = new Set(["wanderwege"]);
 
     function recalculate() {
         updateMarkers();
@@ -135,6 +135,17 @@
             paint: {
                 "raster-opacity": 0.7,
             },
+        });
+        map.addSource(
+            "haltestellen",
+            makeRasterSource(
+                "https://wmts.geo.admin.ch/1.0.0/ch.bav.haltestellen-oev/default/current/3857/{z}/{x}/{y}.png",
+            ),
+        );
+        map.addLayer({
+            id: "haltestellen",
+            type: "raster",
+            source: "haltestellen",
         });
         updateOverlays();
     }
