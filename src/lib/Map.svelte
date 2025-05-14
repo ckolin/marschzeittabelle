@@ -29,11 +29,11 @@
     let floatingFixed: boolean = false;
     let floatingIndex: number;
 
-    let router = new Router();
+    let router = new Router((l) => (loading = l));
+    let loading = $state(0);
     let points: RoutePoint[] = [];
     let mode: RouteMode = RouteMode.PreferRoads;
     let route: RouteSegment[];
-    let promise: Promise<void> | undefined = $state(undefined);
 
     const BASE_MAPS = ["pixelkarte", "base", "imagerybase"] as const;
     type BaseMap = (typeof BASE_MAPS)[number];
@@ -45,7 +45,7 @@
 
     function insertPoint(lngLat: LngLat, i = points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
-        promise = router.snap(pt).then((rp) => {
+        router.snap(pt).then((rp) => {
             points.splice(i, 0, rp);
             recalculate();
         });
@@ -53,7 +53,7 @@
 
     function recalculate() {
         updateMarkers();
-        promise = router.route(points, mode).then((r) => {
+        router.route(points, mode).then((r) => {
             route = r;
             updateFeatures();
         });
@@ -319,11 +319,7 @@
 </script>
 
 <div id="container" bind:this={container}></div>
-{#await promise}
-    <p>loading...</p>
-{:then}
-    <p>done</p>
-{/await}
+<p>{loading} loading...</p>
 
 <style>
     #container {

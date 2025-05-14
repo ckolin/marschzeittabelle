@@ -3,8 +3,9 @@ import TinyQueue from "tinyqueue";
 import RBush, { type BBox } from "rbush";
 import knn from "rbush-knn";
 
-const TILE_SIZE = 10_000;
-const LOAD_MARGIN = 2_000;
+const TILE_SIZE = 10000;
+const LOAD_MARGIN = 2000;
+const LOAD_DENSITY = 2000;
 const SNAP_RADIUS = 50;
 
 export type Line = Point[];
@@ -203,8 +204,10 @@ export interface RouteSegment {
 
 export class Router {
     constructor(
+        public loadingHandler: (l: number) => void,
         public graph: Graph = new Graph([]),
         public tree: Tree = new Tree([]),
+        public loading: Map<string, Promise<void>> = new Map(),
         public tiles: Map<string, FwdEdge[]> = new Map(),
         public aStarMemo: Map<
             [Vertex, Vertex, RouteMode],
@@ -247,20 +250,32 @@ export class Router {
         for (const loaded of this.tiles.keys()) {
             toLoad.delete(loaded);
         }
-        if (toLoad.size > 0) {
-            const loads: Promise<any>[] = [];
-            for (const id of toLoad) {
-                loads.push(
-                    Router.loadTile(id).then((edges) =>
-                        this.tiles.set(id, edges),
-                    ),
+        if (toLoad.size === 0) {
+            return;
+        }
+        const loads: Promise<any>[] = [];
+        for (const id of toLoad) {
+            if (!this.loading.has(id)) {
+                this.loading.set(
+                    id,
+                    this.loadTile(id).then((edges) => {
+                        this.loading.delete(id);
+                        this.tiles.set(id, edges);
+                        this.loadingHandler(this.loading.size);
+                    }),
                 );
             }
-            await Promise.all(loads);
-            const edges = [...this.tiles.values()].flat();
-            this.graph = new Graph(edges);
-            this.tree = new Tree(edges);
+            loads.push(this.loading.get(id)!);
+            this.loadingHandler(this.loading.size);
         }
+        await Promise.all(loads);
+        this.rebuild();
+    }
+
+    private rebuild() {
+        const edges = [...this.tiles.values()].flat();
+        this.graph = new Graph(edges);
+        this.tree = new Tree(edges);
     }
 
     private static densify([p, ...[q, ...qs]]: Point[]): Point[] {
@@ -268,7 +283,7 @@ export class Router {
             return [];
         } else if (q == null) {
             return [p];
-        } else if (distance(p, q) > TILE_SIZE) {
+        } else if (distance(p, q) > LOAD_DENSITY) {
             const [px, py] = p;
             const [qx, qy] = q;
             const m: Point = [(px + qx) / 2, (py + qy) / 2];
@@ -287,10 +302,14 @@ export class Router {
         return `${minX}_${minY}`;
     }
 
-    private static async loadTile(id: string): Promise<FwdEdge[]> {
+    private async loadTile(id: string): Promise<FwdEdge[]> {
         const res = await fetch(
             `${import.meta.env.VITE_TILE_URL}/${id}.msgpack`,
         );
+        if (!res.ok) {
+            // TODO: Could be nonexistent tile, could be something else
+            return [];
+        }
         const buf = await res.arrayBuffer();
         const arrs = unpack(buf);
         // @ts-ignore
