@@ -198,7 +198,7 @@ export interface RoutePoint {
 
 export interface RouteSegment {
     path: Line;
-    onRoads: boolean;
+    onRoad: boolean;
 }
 
 export class Router {
@@ -229,8 +229,8 @@ export class Router {
         for (let i = 0; i < points.length - 1; i++) {
             const from = points[i];
             const to = points[i + 1];
-            const [path, onRoads] = this.shortestPath(from, to, mode);
-            route.push({ path, onRoads });
+            const [path, onRoad] = this.shortestPath(from, to, mode);
+            route.push({ path, onRoad });
         }
         return route;
     }

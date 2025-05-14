@@ -179,7 +179,7 @@
         for (const [i, seg] of route!.entries()) {
             features.push({
                 type: "Feature",
-                properties: { i, onRoads: seg.onRoads },
+                properties: { i, onRoad: seg.onRoad },
                 geometry: {
                     type: "LineString",
                     coordinates: LV95toWGS(seg.path),
@@ -194,17 +194,34 @@
         if (source == null) {
             map.addSource("route", { type: "geojson", data: collection });
             map.addLayer({
-                id: "route",
+                id: "routeOnRoad",
                 type: "line",
                 source: "route",
+                filter: ["==", "onRoad", true],
                 layout: {
-                    "line-cap": "round",
-                    "line-join": "round",
+                    "line-cap": "butt",
+                    "line-join": "bevel",
                 },
                 paint: {
                     "line-color": "#c12",
                     "line-opacity": 0.8,
                     "line-width": 8,
+                },
+            });
+            map.addLayer({
+                id: "routeOffRoad",
+                type: "line",
+                source: "route",
+                filter: ["==", "onRoad", false],
+                layout: {
+                    "line-cap": "butt",
+                    "line-join": "bevel",
+                },
+                paint: {
+                    "line-color": "#c12",
+                    "line-opacity": 0.8,
+                    "line-width": 8,
+                    "line-dasharray": [2, 1],
                 },
             });
         } else {
@@ -308,6 +325,7 @@
             background: #c12;
             border-radius: 50%;
             cursor: move;
+            box-shadow: 0 0 3px #0003;
         }
 
         .marker:hover {
