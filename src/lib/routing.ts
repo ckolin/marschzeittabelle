@@ -204,7 +204,7 @@ export interface RouteSegment {
 
 export class Router {
     constructor(
-        public loadingHandler: (l: number) => void,
+        public loadingHandler: (loaded: number, total: number) => void,
         public graph: Graph = new Graph([]),
         public tree: Tree = new Tree([]),
         public loading: Map<string, Promise<void>> = new Map(),
@@ -261,12 +261,15 @@ export class Router {
                     this.loadTile(id).then((edges) => {
                         this.loading.delete(id);
                         this.tiles.set(id, edges);
-                        this.loadingHandler(this.loading.size);
+                        this.loadingHandler(
+                            toLoad.size - this.loading.size,
+                            toLoad.size,
+                        );
                     }),
                 );
             }
             loads.push(this.loading.get(id)!);
-            this.loadingHandler(this.loading.size);
+            this.loadingHandler(0, toLoad.size);
         }
         await Promise.all(loads);
         this.rebuild();

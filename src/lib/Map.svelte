@@ -1,11 +1,14 @@
 <script lang="ts">
     import "maplibre-gl/dist/maplibre-gl.css";
     import {
+        AttributionControl,
         GeoJSONSource,
         LngLat,
         Map,
         MapMouseEvent,
         Marker,
+        NavigationControl,
+        ScaleControl,
         type MapGeoJSONFeature,
         type SourceSpecification,
         type StyleSpecification,
@@ -20,7 +23,7 @@
     import type { Feature, FeatureCollection, LineString } from "geojson";
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
 
-    let container: HTMLElement;
+    let mapElement: HTMLElement;
 
     let map: Map;
     let markers: Marker[] = [];
@@ -29,10 +32,14 @@
     let floatingFixed: boolean = false;
     let floatingIndex: number;
 
-    let router = new Router((l) => (loading = l));
-    let loading = $state(0);
+    let router = new Router((l, t) => {
+        loaded = l;
+        total = t;
+    });
+    let loaded = $state(0);
+    let total = $state(0);
     let points: RoutePoint[] = [];
-    let mode: RouteMode = RouteMode.PreferRoads;
+    let mode: RouteMode = $state(RouteMode.PreferRoads);
     let route: RouteSegment[];
 
     const BASE_MAPS = ["pixelkarte", "base", "imagerybase"] as const;
@@ -51,6 +58,11 @@
         });
     }
 
+    function setMode(m: RouteMode) {
+        mode = m;
+        recalculate();
+    }
+
     function recalculate() {
         updateMarkers();
         router.route(points, mode).then((r) => {
@@ -61,11 +73,22 @@
 
     function initializeMap() {
         map = new Map({
-            container,
+            container: mapElement,
             style: getStyle(),
             center: [8.23, 46.8],
             zoom: 8,
+            minZoom: 7,
+            attributionControl: false,
         });
+        map.addControl(new ScaleControl({ unit: "metric" }), "bottom-right");
+        map.addControl(new AttributionControl(), "bottom-right");
+        map.addControl(
+            new NavigationControl({
+                showZoom: true,
+                showCompass: false,
+            }),
+            "bottom-right",
+        );
         map.on("load", initializeOverlays);
         map.dragRotate.disable();
         map.keyboard.disableRotation();
@@ -318,15 +341,55 @@
     });
 </script>
 
-<div id="container" bind:this={container}></div>
-<p>{loading} loading...</p>
+<div class="container">
+    <div class="map" bind:this={mapElement}></div>
+    <div class="overlay">
+        <button
+            class={mode == RouteMode.OffRoad ? "" : "secondary"}
+            onclick={() => setMode(RouteMode.OffRoad)}
+        >
+            Querfeldein
+        </button>
+        <button
+            class={mode == RouteMode.PreferRoads ? "" : "secondary"}
+            onclick={() => setMode(RouteMode.PreferRoads)}
+        >
+            Alle Wege
+        </button>
+        <button
+            class={mode == RouteMode.PreferPaved ? "" : "secondary"}
+            onclick={() => setMode(RouteMode.PreferPaved)}
+        >
+            Hartbelag
+        </button>
+        <button
+            class={mode == RouteMode.PreferHikingTrails ? "" : "secondary"}
+            onclick={() => setMode(RouteMode.PreferHikingTrails)}
+        >
+            Wanderwege
+        </button>
+        {#if loaded < total}
+            <progress max={total} value={loaded}></progress>
+        {/if}
+    </div>
+</div>
 
 <style>
-    #container {
+    .container {
+        position: relative;
+        background: #aaa;
+    }
+
+    .map {
         height: 60rem;
     }
 
-    #container :global {
+    .container,
+    .map {
+        border-radius: 1rem;
+    }
+
+    .map :global {
         .marker {
             z-index: 2;
             width: 20px;
@@ -344,5 +407,19 @@
         .marker.floating {
             z-index: 1;
         }
+    }
+
+    .overlay {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 1rem;
+        margin: 0.5rem;
+        background: #fff;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 1rem #0001;
     }
 </style>

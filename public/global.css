@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Icons+Round&display=swap");
+
+:root {
+    --background-color: #fff;
+    --text-color: #222;
+    --darker-accent-color: #224c00;
+    --accent-color: #3e7213;
+    --lighter-accent-color: #bae397;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+html {
+    margin: 0 auto;
+    max-width: 820px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 10px;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    font-family: "Inter", sans-serif;
+}
+
+a,
+label {
+    color: var(--accent-color);
+}
+
+input,
+button,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    padding: 0.4rem;
+    border: 2px solid var(--accent-color);
+}
+
+input,
+button,
+select,
+textarea,
+*[contenteditable="true"] {
+    border-radius: 4px;
+}
+
+input,
+button,
+select,
+textarea,
+a,
+*[contenteditable="true"] {
+    outline: 0 solid var(--lighter-accent-color);
+    transition:
+        color 50ms,
+        background-color 50ms,
+        border-color 50ms,
+        outline-width 100ms;
+}
+
+:is(input, button, select, textarea, a, *[contenteditable="true"]):focus {
+    outline-width: 2px;
+}
+
+input:invalid {
+    outline: 3px solid red;
+}
+
+:is(input, button):disabled {
+    opacity: 0.5;
+}
+
+form > :is(label, input, textarea) {
+    display: block;
+}
+
+form > :is(input, textarea) {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+button {
+    font-weight: bold;
+    color: var(--background-color);
+    background-color: var(--accent-color);
+    cursor: pointer;
+}
+
+button:not(:disabled):active {
+    background-color: var(--darker-accent-color);
+    border-color: var(--darker-accent-color);
+    outline-width: 3px;
+}
+
+button.secondary {
+    color: var(--accent-color);
+    background-color: var(--background-color);
+}
+
+button.secondary:not(:disabled):active {
+    color: var(--darker-accent-color);
+    background-color: var(--background-color);
+    border-color: var(--darker-accent-color);
+}
+
+.pill {
+    display: inline-block;
+    text-align: center;
+    padding: 0 0.35em;
+    border-radius: 1em;
+    min-width: 1.3em;
+}
+
+button.pill {
+    border: none;
+    color: var(--text-color);
+    background: var(--lighter-accent-color);
+}
+
+button.pill:not(:disabled):active {
+    color: var(--text-color);
+    background: var(--lighter-accent-color);
+}
+
+@media print {
+    :root {
+        --text-color: #000;
+    }
+
+    body {
+        margin: 0;
+    }
+
+    .noprint {
+        display: none !important;
+    }
+}
