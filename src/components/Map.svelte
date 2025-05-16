@@ -23,6 +23,7 @@
     import type { Feature, FeatureCollection, LineString } from "geojson";
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
     import { onMount } from "svelte";
+    import { theme } from "../lib/theme";
 
     let mapElement: HTMLElement;
 
@@ -266,7 +267,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": "#c12",
+                    "line-color": theme("lineColor"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                 },
@@ -281,7 +282,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": "#c12",
+                    "line-color": theme("lineColor"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                     "line-dasharray": [2, 1],
@@ -433,10 +434,10 @@
             z-index: 2;
             width: 20px;
             height: 20px;
-            background: #c12;
+            background: var(--line-color);
             border-radius: 50%;
             cursor: move;
-            box-shadow: 0 0 3px #0003;
+            box-shadow: 0 0 3px var(--shadow-color);
         }
 
         .marker:hover {
@@ -457,9 +458,9 @@
         left: 0;
         padding: 1rem;
         margin: 0.5rem;
-        background: #fff;
+        background: var(--background-color);
         border-radius: 0.5rem;
-        box-shadow: 0 0 1rem #0001;
+        box-shadow: 0 0 1rem var(--shadow-color);
         z-index: 10;
     }
 </style>
