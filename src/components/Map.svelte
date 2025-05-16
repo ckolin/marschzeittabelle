@@ -24,7 +24,7 @@
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
     import { onMount } from "svelte";
     import { theme } from "../lib/theme";
-    import { search } from "../lib/geoadmin";
+    import Search from "./Search.svelte";
 
     let mapElement: HTMLElement;
 
@@ -43,9 +43,6 @@
     let total = $state(0);
     let points: RoutePoint[] = [];
     let route: RouteSegment[];
-
-    let searchQuery = $state("");
-    let searchPromise = $derived(search(searchQuery));
 
     const modes = [
         { value: RouteMode.OffRoad, label: "Luftlinie" },
@@ -376,22 +373,10 @@
 
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
-    <div class="overlay">
-        <span>Suche</span>
-        <input
-            bind:value={searchQuery}
-            type="text"
-            placeholder="Ort, Strasse, Berg, ..."
-        />
-        {#await searchPromise then results}
-            {#each results as res}
-                <button
-                    onclick={() => map.flyTo({ center: res.lngLat, zoom: 12 })}
-                >
-                    {@html res.label}
-                </button>
-            {/each}
-        {/await}
+    <div class="overlay" style="top: 0; right: 0; width: 20rem">
+        <Search onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })} />
+    </div>
+    <div class="overlay" style="top: 0; left: 0">
         <span>Wegfindung</span>
         {#each modes as { value, label }}
             <label>
@@ -473,8 +458,6 @@
         flex-direction: column;
         gap: 0.25rem;
         position: absolute;
-        top: 0;
-        left: 0;
         padding: 1rem;
         margin: 0.5rem;
         background: var(--background-color);

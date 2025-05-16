@@ -4,6 +4,9 @@ export interface SearchResult {
 }
 
 export async function search(query: string): Promise<SearchResult[]> {
+    if (query.length === 0) {
+        return [];
+    }
     const res = await fetch(
         `https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=${query}&type=locations&lang=de&limit=5`,
     );
