@@ -24,6 +24,7 @@
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
     import { onMount } from "svelte";
     import { theme } from "../lib/theme";
+    import { search } from "../lib/geoadmin";
 
     let mapElement: HTMLElement;
 
@@ -43,13 +44,16 @@
     let points: RoutePoint[] = [];
     let route: RouteSegment[];
 
+    let searchQuery = $state("");
+    let searchPromise = $derived(search(searchQuery));
+
     const modes = [
         { value: RouteMode.OffRoad, label: "Luftlinie" },
         { value: RouteMode.PreferRoads, label: "Alle Wege" },
         { value: RouteMode.PreferPaved, label: "Hartbelag" },
         { value: RouteMode.PreferHikingTrails, label: "Wanderwege" },
     ];
-    let mode: RouteMode = $state(RouteMode.PreferRoads);
+    let mode = $state(RouteMode.PreferRoads);
 
     const baseMaps = [
         { id: "pixelkarte", label: "Pixelkarte" },
@@ -373,6 +377,21 @@
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
     <div class="overlay">
+        <span>Suche</span>
+        <input
+            bind:value={searchQuery}
+            type="text"
+            placeholder="Ort, Strasse, Berg, ..."
+        />
+        {#await searchPromise then results}
+            {#each results as res}
+                <button
+                    onclick={() => map.flyTo({ center: res.lngLat, zoom: 12 })}
+                >
+                    {@html res.label}
+                </button>
+            {/each}
+        {/await}
         <span>Wegfindung</span>
         {#each modes as { value, label }}
             <label>
