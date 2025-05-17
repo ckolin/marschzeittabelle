@@ -25,6 +25,7 @@
     import { onMount } from "svelte";
     import { theme } from "../lib/theme";
     import Search from "./Search.svelte";
+    import BaseMapSelector from "./BaseMapSelector.svelte";
 
     let mapElement: HTMLElement;
 
@@ -52,15 +53,10 @@
     ];
     let mode = $state(RouteMode.PreferRoads);
 
-    const baseMaps = [
-        { id: "pixelkarte", label: "Pixelkarte" },
-        { id: "base", label: "Base Map" },
-        { id: "imagerybase", label: "Imagery Base Map" },
-    ];
-    let baseMap = $state(baseMaps[0].id);
+    let baseMap = $state("pixelkarte");
 
     const overlays = $state([
-        { id: "+wanderwege", label: "Wanderwege", enabled: true },
+        { id: "+wanderwege", label: "Wanderwege", enabled: false },
         { id: "+veloland", label: "Veloland Schweiz", enabled: false },
         { id: "+haltestellen", label: "ÖV-Haltestellen", enabled: false },
     ]);
@@ -376,19 +372,7 @@
     <div class="overlay" style="top: 0; right: 0; width: 20rem">
         <Search onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })} />
     </div>
-    <div class="overlay" style="top: 0; left: 0">
-        <span>Wegfindung</span>
-        {#each modes as { value, label }}
-            <label>
-                <input
-                    type="radio"
-                    {value}
-                    bind:group={mode}
-                    onchange={recalculate}
-                />
-                {label}
-            </label>
-        {/each}
+    <div class="overlay" style="bottom: 0; left: 0;">
         <span>Ebenen</span>
         {#each overlays as { label }, i}
             <label>
@@ -401,13 +385,17 @@
             </label>
         {/each}
         <span>Karte</span>
-        {#each baseMaps as { id, label }}
+        <BaseMapSelector bind:baseMap onchange={updateStyle} />
+    </div>
+    <div class="overlay" style="top: 0; left: 0">
+        <span>Wegfindung</span>
+        {#each modes as { value, label }}
             <label>
                 <input
                     type="radio"
-                    value={id}
-                    bind:group={baseMap}
-                    onchange={updateStyle}
+                    {value}
+                    bind:group={mode}
+                    onchange={recalculate}
                 />
                 {label}
             </label>
