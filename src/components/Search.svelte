@@ -41,12 +41,15 @@
 
 <style>
     div {
+        width: 25rem;
         display: flex;
         flex-direction: column;
         gap: 0.2rem;
     }
 
     button {
+        overflow: hidden;
+        text-overflow: ellipsis;
         text-align: inherit;
         color: inherit;
         background: none;

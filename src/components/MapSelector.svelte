@@ -33,12 +33,9 @@
 
     img {
         display: block;
-        width: 3rem;
-        height: 5rem;
+        width: 4rem;
         object-fit: cover;
-        transition:
-            width 100ms,
-            border-width 100ms;
+        transition: border-width 100ms;
     }
 
     label:first-child img {
@@ -50,7 +47,6 @@
     }
 
     input:checked + img {
-        width: 5rem;
         border: 4px solid var(--secondary);
     }
 </style>

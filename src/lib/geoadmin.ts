@@ -19,5 +19,6 @@ export async function search(query: string): Promise<SearchResult[]> {
                     label: a.label,
                     lngLat: [a.lon, a.lat],
                 }) as SearchResult,
-        );
+        )
+        .filter((r: SearchResult) => r.label.length < 255);
 }

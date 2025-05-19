@@ -8,7 +8,6 @@
         MapMouseEvent,
         Marker,
         NavigationControl,
-        ScaleControl,
         type MapGeoJSONFeature,
         type SourceSpecification,
         type StyleSpecification,
@@ -27,6 +26,7 @@
     import Search from "./Search.svelte";
     import BaseMapSelector from "./MapSelector.svelte";
     import Spinner from "./Spinner.svelte";
+    import { fade } from "svelte/transition";
 
     let mapElement: HTMLElement;
 
@@ -369,7 +369,7 @@
 
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
-    <div class="overlay" style="top: 0; right: 0; width: 20rem">
+    <div class="overlay" style="top: 0; right: 0">
         <Search onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })} />
     </div>
     <div class="overlay" style="bottom: 0; left: 0;">
@@ -401,7 +401,9 @@
             </label>
         {/each}
         {#if loaded < total}
-            <span><Spinner small /> Route wird berechnet</span>
+            <div out:fade>
+                <Spinner small />
+            </div>
         {/if}
     </div>
 </div>

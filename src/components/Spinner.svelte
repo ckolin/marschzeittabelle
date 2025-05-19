@@ -6,7 +6,6 @@
 
 <style>
     div {
-        display: inline-block;
         width: 2rem;
         height: 2rem;
         border: 3px solid var(--secondary-light);
