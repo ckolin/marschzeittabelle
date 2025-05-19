@@ -58,7 +58,7 @@
         border-bottom: 1px solid var(--shadow-color);
     }
 
-    button:last-of-type {
+    button:last-child {
         border-bottom: none;
     }
 </style>

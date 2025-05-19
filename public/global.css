@@ -5,10 +5,12 @@
 :root {
     --background-color: #fff;
     --text-color: #222;
-    --darker-accent-color: #224c00;
-    --accent-color: #3e7213;
-    --lighter-accent-color: #bae397;
-    --line-color: #c12;
+    --primary-light: #82ad6e;
+    --primary: #487033;
+    --primary-dark: #22331a;
+    --secondary-light: #ed756c;
+    --secondary: #bb081a;
+    --secondary-dark: #551110;
     --shadow-color: rgba(0, 0, 0, 0.1);
 }
 

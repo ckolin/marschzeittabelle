@@ -1,10 +1,12 @@
 type Key =
     | "backgroundColor"
     | "textColor"
-    | "darkerAccentColor"
-    | "accentColor"
-    | "lighterAccentColor"
-    | "lineColor"
+    | "primaryLight"
+    | "primary"
+    | "primaryDark"
+    | "secondaryLight"
+    | "secondary"
+    | "secondaryDark"
     | "shadowColor";
 
 export function theme(key: Key): string {

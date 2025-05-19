@@ -25,7 +25,8 @@
     import { onMount } from "svelte";
     import { theme } from "../lib/theme";
     import Search from "./Search.svelte";
-    import BaseMapSelector from "./BaseMapSelector.svelte";
+    import BaseMapSelector from "./MapSelector.svelte";
+    import Spinner from "./Spinner.svelte";
 
     let mapElement: HTMLElement;
 
@@ -86,7 +87,6 @@
             minZoom: 7,
             attributionControl: false,
         });
-        map.addControl(new ScaleControl({ unit: "metric" }), "bottom-right");
         map.addControl(new AttributionControl(), "bottom-right");
         map.addControl(
             new NavigationControl({
@@ -264,7 +264,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": theme("lineColor"),
+                    "line-color": theme("secondary"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                 },
@@ -279,7 +279,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": theme("lineColor"),
+                    "line-color": theme("secondary"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                     "line-dasharray": [2, 1],
@@ -401,7 +401,7 @@
             </label>
         {/each}
         {#if loaded < total}
-            <progress max={total} value={loaded}></progress>
+            <span><Spinner small /> Route wird berechnet</span>
         {/if}
     </div>
 </div>
@@ -426,14 +426,15 @@
             z-index: 2;
             width: 20px;
             height: 20px;
-            background: var(--line-color);
+            background: var(--secondary);
+            border: 3px solid var(--secondary-dark);
             border-radius: 50%;
             cursor: move;
             box-shadow: 0 0 3px var(--shadow-color);
         }
 
         .marker:hover {
-            filter: brightness(125%);
+            background: var(--secondary-light);
         }
 
         .marker.floating {
@@ -447,9 +448,11 @@
         gap: 0.25rem;
         position: absolute;
         padding: 1rem;
-        margin: 0.5rem;
-        background: var(--background-color);
+        margin: 0.75rem;
+        border: 1px solid var(--shadow-color);
         border-radius: 0.5rem;
+        background: #fff8;
+        backdrop-filter: blur(12px);
         box-shadow: 0 0 1rem var(--shadow-color);
         z-index: 10;
     }

@@ -7,7 +7,7 @@
         { id: "pixelkarte", label: "Pixelkarte", icon: pixelkarteIcon },
         { id: "base", label: "Base Map", icon: baseIcon },
         { id: "imagerybase", label: "Imagery Base Map", icon: imageryBaseIcon },
-    ];
+    ] as const;
 
     let { baseMap = $bindable(), onchange } = $props();
 </script>
@@ -24,7 +24,6 @@
 <style>
     div {
         display: flex;
-        gap: 0.5rem;
     }
 
     input {
@@ -34,14 +33,24 @@
 
     img {
         display: block;
-        width: 5rem;
+        width: 3rem;
+        height: 5rem;
         object-fit: cover;
-        border-radius: 0.5rem;
-        border-width: 0;
-        transition: border-width 100ms;
+        transition:
+            width 100ms,
+            border-width 100ms;
     }
-    
+
+    label:first-child img {
+        border-radius: 0.5rem 0 0 0.5rem;
+    }
+
+    label:last-child img {
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+
     input:checked + img {
-        border: 4px solid var(--accent-color);
+        width: 5rem;
+        border: 4px solid var(--secondary);
     }
 </style>
