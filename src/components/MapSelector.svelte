@@ -1,19 +1,29 @@
+<script module lang="ts">
+    const baseMaps = [
+        { id: "pixelkarte", icon: pixelkarteIcon, label: "Pixelkarte" },
+        { id: "base", icon: baseIcon, label: "Base Map" },
+        { id: "imagerybase", icon: imageryBaseIcon, label: "Imagery Base Map" },
+    ] as const;
+
+    export type BaseMap = (typeof baseMaps)[number]["id"];
+</script>
+
 <script lang="ts">
     import pixelkarteIcon from "../assets/pixelkarte.jpg";
     import baseIcon from "../assets/base.jpg";
     import imageryBaseIcon from "../assets/imagerybase.jpg";
 
-    const baseMaps = [
-        { id: "pixelkarte", label: "Pixelkarte", icon: pixelkarteIcon },
-        { id: "base", label: "Base Map", icon: baseIcon },
-        { id: "imagerybase", label: "Imagery Base Map", icon: imageryBaseIcon },
-    ] as const;
-
-    let { baseMap = $bindable(), onchange } = $props();
+    let {
+        baseMap = $bindable(),
+        onchange,
+    }: {
+        baseMap: BaseMap;
+        onchange: () => void;
+    } = $props();
 </script>
 
 <div>
-    {#each baseMaps as { id, label, icon }}
+    {#each baseMaps as { id, icon, label }}
         <label>
             <input type="radio" value={id} bind:group={baseMap} {onchange} />
             <img src={icon} alt={label} />

@@ -24,9 +24,10 @@
     import { onMount } from "svelte";
     import { theme } from "../lib/theme";
     import Search from "./Search.svelte";
-    import BaseMapSelector from "./MapSelector.svelte";
+    import BaseMapSelector, { type BaseMap } from "./MapSelector.svelte";
     import Spinner from "./Spinner.svelte";
     import { fade } from "svelte/transition";
+    import Icon from "./Icon.svelte";
 
     let mapElement: HTMLElement;
 
@@ -47,20 +48,37 @@
     let route: RouteSegment[];
 
     const modes = [
-        { value: RouteMode.OffRoad, label: "Luftlinie" },
-        { value: RouteMode.PreferRoads, label: "Alle Wege" },
-        { value: RouteMode.PreferPaved, label: "Hartbelag" },
-        { value: RouteMode.PreferHikingTrails, label: "Wanderwege" },
-    ];
+        {
+            value: RouteMode.OffRoad,
+            icon: "diagonal_line",
+            label: "Luftlinie",
+        },
+        {
+            value: RouteMode.PreferRoads,
+            icon: "route",
+            label: "Alle Wege",
+        },
+        {
+            value: RouteMode.PreferPaved,
+            icon: "road",
+            label: "Hartbelag",
+        },
+        {
+            value: RouteMode.PreferHikingTrails,
+            icon: "hiking",
+            label: "Wanderwege",
+        },
+    ] as const;
     let mode = $state(RouteMode.PreferRoads);
 
-    let baseMap = $state("pixelkarte");
+    let baseMap: BaseMap = $state("pixelkarte");
 
-    const overlays = $state([
-        { id: "+wanderwege", label: "Wanderwege", enabled: false },
-        { id: "+veloland", label: "Veloland Schweiz", enabled: false },
-        { id: "+haltestellen", label: "ÖV-Haltestellen", enabled: false },
-    ]);
+    const overlays = [
+        { id: "+wanderwege", label: "Wanderwege" },
+        { id: "+veloland", label: "Veloland Schweiz" },
+        { id: "+haltestellen", label: "ÖV-Haltestellen" },
+    ] as const;
+    let activeOverlays: (typeof overlays)[number]["id"][] = $state([]);
 
     function insertPoint(lngLat: LngLat, i = points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
@@ -216,7 +234,7 @@
             map.setLayoutProperty(
                 overlay.id,
                 "visibility",
-                overlay.enabled ? "visible" : "none",
+                activeOverlays.includes(overlay.id) ? "visible" : "none",
             );
         }
     }
@@ -374,11 +392,12 @@
     </div>
     <div class="overlay" style="bottom: 0; left: 0;">
         <span>Ebenen</span>
-        {#each overlays as { label }, i}
+        {#each overlays as { id, label }}
             <label>
                 <input
                     type="checkbox"
-                    bind:checked={overlays[i].enabled}
+                    value={id}
+                    bind:group={activeOverlays}
                     onchange={updateOverlays}
                 />
                 {label}
@@ -389,7 +408,7 @@
     </div>
     <div class="overlay" style="top: 0; left: 0">
         <span>Wegfindung</span>
-        {#each modes as { value, label }}
+        {#each modes as { value, icon, label }}
             <label>
                 <input
                     type="radio"
@@ -397,6 +416,7 @@
                     bind:group={mode}
                     onchange={recalculate}
                 />
+                <Icon name={icon} />
                 {label}
             </label>
         {/each}
