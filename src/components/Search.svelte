@@ -41,7 +41,7 @@
 
 <style>
     div {
-        width: 25rem;
+        width: 20rem;
         display: flex;
         flex-direction: column;
         gap: 0.2rem;
