@@ -431,7 +431,7 @@
 <style>
     .container {
         position: relative;
-        background: #aaa;
+        background: #bbb;
     }
 
     .map {
