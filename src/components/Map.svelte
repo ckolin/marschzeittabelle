@@ -24,7 +24,7 @@
     import { onMount } from "svelte";
     import { theme } from "../lib/theme";
     import Search from "./Search.svelte";
-    import BaseMapSelector, { type BaseMap } from "./MapSelector.svelte";
+    import MapSelector, { type BaseMap } from "./MapSelector.svelte";
     import Spinner from "./Spinner.svelte";
     import { fade } from "svelte/transition";
     import Icon from "./Icon.svelte";
@@ -427,8 +427,8 @@
                     {label}
                 </label>
             {/each}
-            <span><Icon name="map" /> Karte</span>
-            <BaseMapSelector bind:baseMap onchange={updateStyle} />
+            <span><Icon name="map" /> Hintergrund</span>
+            <MapSelector bind:baseMap onchange={updateStyle} />
         </div>
         <div class="box">
             <span><Icon name="elevation" /> Höhenprofil</span>
@@ -444,12 +444,7 @@
     }
 
     .map {
-        height: 60rem;
-    }
-
-    .container,
-    .map {
-        border-radius: 1rem;
+        height: 100vh;
     }
 
     .map :global {

@@ -3,7 +3,7 @@
 
 :root {
     --background-color: #fff;
-    --text-color: #222;
+    --text-color: #000;
     --primary-light: #82ad6e;
     --primary: #487033;
     --primary-dark: #22331a;
@@ -18,7 +18,7 @@
 }
 
 body {
-    margin: 10px;
+    margin: 0;
     color: var(--text-color);
     background-color: var(--background-color);
     font-family: "Inter", sans-serif;
