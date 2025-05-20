@@ -28,6 +28,7 @@
     import Spinner from "./Spinner.svelte";
     import { fade } from "svelte/transition";
     import Icon from "./Icon.svelte";
+    import Profile from "./Profile.svelte";
 
     let mapElement: HTMLElement;
 
@@ -74,9 +75,9 @@
     let baseMap: BaseMap = $state("pixelkarte");
 
     const overlays = [
-        { id: "+wanderwege", label: "Wanderwege" },
-        { id: "+veloland", label: "Veloland Schweiz" },
-        { id: "+haltestellen", label: "ÖV-Haltestellen" },
+        { id: "+wanderwege", icon: "hiking", label: "Wanderwege" },
+        { id: "+veloland", icon: "directions_bike", label: "Veloland Schweiz" },
+        { id: "+haltestellen", icon: "bus_railway", label: "ÖV-Haltestellen" },
     ] as const;
     let activeOverlays: (typeof overlays)[number]["id"][] = $state([]);
 
@@ -387,27 +388,8 @@
 
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
-    <div class="overlay" style="top: 0; right: 0">
-        <Search onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })} />
-    </div>
-    <div class="overlay" style="bottom: 0; left: 0;">
-        <span>Ebenen</span>
-        {#each overlays as { id, label }}
-            <label>
-                <input
-                    type="checkbox"
-                    value={id}
-                    bind:group={activeOverlays}
-                    onchange={updateOverlays}
-                />
-                {label}
-            </label>
-        {/each}
-        <span>Karte</span>
-        <BaseMapSelector bind:baseMap onchange={updateStyle} />
-    </div>
-    <div class="overlay" style="top: 0; left: 0">
-        <span>Wegfindung</span>
+    <div class="overlay box" style="top: 0; left: 0">
+        <span><Icon name="directions" /> Wegfindung</span>
         {#each modes as { value, icon, label }}
             <label>
                 <input
@@ -425,6 +407,33 @@
                 <Spinner small />
             </div>
         {/if}
+    </div>
+    <div class="overlay box" style="top: 0; right: 0">
+        <span><Icon name="search" /> Suche</span>
+        <Search onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })} />
+    </div>
+    <div class="overlay" style="bottom: 0; left: 0;">
+        <div class="box">
+            <span><Icon name="layers" /> Ebenen</span>
+            {#each overlays as { id, icon, label }}
+                <label>
+                    <input
+                        type="checkbox"
+                        value={id}
+                        bind:group={activeOverlays}
+                        onchange={updateOverlays}
+                    />
+                    <Icon name={icon} />
+                    {label}
+                </label>
+            {/each}
+            <span><Icon name="map" /> Karte</span>
+            <BaseMapSelector bind:baseMap onchange={updateStyle} />
+        </div>
+        <div class="box">
+            <span><Icon name="elevation" /> Höhenprofil</span>
+            <Profile />
+        </div>
     </div>
 </div>
 
@@ -465,10 +474,15 @@
     }
 
     .overlay {
+        position: absolute;
+        z-index: 10;
+    }
+
+    .box {
+        width: fit-content;
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        position: absolute;
         padding: 1rem;
         margin: 0.75rem;
         border: 1px solid var(--shadow-color);
@@ -476,6 +490,5 @@
         background: #fff8;
         backdrop-filter: blur(12px);
         box-shadow: 0 0 1rem var(--shadow-color);
-        z-index: 10;
     }
 </style>
