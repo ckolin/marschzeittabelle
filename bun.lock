@@ -6,9 +6,10 @@
       "dependencies": {
         "d3": "^7.9.0",
         "maplibre-gl": "^5.5.0",
-        "msgpackr": "^1.11.3",
+        "msgpackr": "^1.11.4",
         "rbush": "^4.0.1",
         "rbush-knn": "^4.0.0",
+        "simplify-js": "^1.2.4",
         "swiss-projection": "^2.0.5",
         "tinyqueue": "^3.0.0",
       },
@@ -22,11 +23,11 @@
         "@types/rbush": "^4.0.0",
         "eslint": "^9.27.0",
         "eslint-config-prettier": "^10.1.5",
-        "eslint-plugin-svelte": "^3.8.0",
+        "eslint-plugin-svelte": "^3.8.2",
         "globals": "^16.1.0",
         "prettier": "^3.5.3",
         "prettier-plugin-svelte": "^3.4.0",
-        "svelte": "^5.30.2",
+        "svelte": "^5.32.1",
         "svelte-check": "^4.2.1",
         "typescript": "~5.8.3",
         "typescript-eslint": "^8.32.1",
@@ -640,6 +641,8 @@
     "shebang-command": ["shebang-command@2.0.0", "", { "dependencies": { "shebang-regex": "^3.0.0" } }, "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA=="],
 
     "shebang-regex": ["shebang-regex@3.0.0", "", {}, "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A=="],
+
+    "simplify-js": ["simplify-js@1.2.4", "", {}, "sha512-vITfSlwt7h/oyrU42R83mtzFpwYk3+mkH9bOHqq/Qw6n8rtR7aE3NZQ5fbcyCUVVmuMJR6ynsAhOfK2qoah8Jg=="],
 
     "source-map-js": ["source-map-js@1.2.1", "", {}, "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA=="],
 

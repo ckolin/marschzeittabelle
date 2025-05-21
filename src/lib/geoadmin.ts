@@ -1,5 +1,6 @@
 import type { LineString } from "geojson";
 import type { Line2, Line3 } from "./points";
+import simplify from "simplify-js";
 
 const BASE_URL = import.meta.env.VITE_GEOADMIN_URL;
 
@@ -35,9 +36,10 @@ export async function fetchProfile(
     if (line.length === 0) {
         return [];
     }
+    const simplified = simplifyTo(line, 1000);
     const geom: LineString = {
         type: "LineString",
-        coordinates: line.map(([x, y]) => [Math.round(x), Math.round(y)]),
+        coordinates: simplified,
     };
     const res = await fetch(`${BASE_URL}/profile.json`, {
         method: "POST",
@@ -47,4 +49,16 @@ export async function fetchProfile(
     const json = await res.json();
     const profile = json.map((p: any) => [p.easting, p.northing, p.alts.COMB]);
     return profile;
+}
+
+function simplifyTo(line: Line2, max: number, tol = 1): Line2 {
+    const simplified: Line2 = simplify(
+        line.map(([x, y]) => ({ x, y })),
+        tol,
+    ).map(({ x, y }) => [x, y]);
+    if (simplified.length > max) {
+        return simplifyTo(simplified, max, tol * 2);
+    } else {
+        return simplified;
+    }
 }

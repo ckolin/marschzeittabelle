@@ -37,6 +37,7 @@
         "msgpackr": "^1.11.4",
         "rbush": "^4.0.1",
         "rbush-knn": "^4.0.0",
+        "simplify-js": "^1.2.4",
         "swiss-projection": "^2.0.5",
         "tinyqueue": "^3.0.0"
     }

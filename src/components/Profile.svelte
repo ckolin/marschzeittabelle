@@ -33,9 +33,9 @@
         const height = 150;
         const margin = {
             top: 10,
-            right: 20,
-            bottom: 30,
-            left: 35,
+            right: 10,
+            bottom: 20,
+            left: 40,
         };
 
         const dz: [number, number][] = [];
