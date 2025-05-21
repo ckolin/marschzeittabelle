@@ -34,7 +34,7 @@
 
     $effect(() => {
         const width = 400;
-        const height = 150;
+        const height = 140;
         const margin = {
             top: 10,
             right: 20,
@@ -57,7 +57,7 @@
             .range([margin.left, width - margin.right]);
         const y = d3
             .scaleLinear()
-            .domain(d3.extent(dz, ([d, z]) => z) as [number, number])
+            .domain(d3.extent(dz, ([_, z]) => z) as [number, number])
             .nice()
             .range([height - margin.bottom, margin.top]);
 
@@ -72,25 +72,9 @@
             .x(([d, _]) => x(d))
             .y0(y.range()[0])
             .y1(([_, z]) => y(z));
-        const grad = svg
-            .append("defs")
-            .append("linearGradient")
-            .attr("id", "grad")
-            .attr("x1", "0%")
-            .attr("x2", "0%")
-            .attr("y1", "0%")
-            .attr("y2", "100%");
-        grad.append("stop")
-            .attr("class", "start")
-            .attr("offset", "0%")
-            .attr("stop-color", theme("secondary"))
-            .attr("stop-opacity", 0.2);
-        grad.append("stop")
-            .attr("class", "end")
-            .attr("offset", "100%")
-            .attr("stop-color", theme("secondary"))
-            .attr("stop-opacity", 0.2);
-        svg.append("path").attr("fill", "url(#grad)").attr("d", area(dz));
+        svg.append("path")
+            .attr("fill", theme("secondary-light"))
+            .attr("d", area(dz));
 
         const line = d3
             .line()
@@ -100,7 +84,6 @@
             .attr("fill", "none")
             .attr("stroke", theme("secondary"))
             .attr("stroke-width", 3)
-            .attr("stroke-linecap", "round")
             .attr("stroke-linejoin", "round")
             .attr("d", line(dz));
 
@@ -145,13 +128,16 @@
         const tip = svg.append("g");
         const tipRect = tip
             .append("rect")
+            .attr("transform", `translate(0, 25)`)
             .attr("fill", "black")
-            .attr("rx", 2)
-            .attr("ry", 2);
+            .attr("rx", 4)
+            .attr("ry", 4);
         const tipText = tip
             .append("text")
+            .attr("transform", `translate(0, 25)`)
             .attr("text-anchor", "middle")
             .attr("fill", "white");
+        tip.append("circle").attr("r", 5).attr("fill", "black");
         hide(tip);
 
         svg.on("pointerenter pointermove", (e) => {
@@ -164,16 +150,19 @@
                 show(tip);
                 tipText.text(Math.round(pz));
                 const bbox = tipText.node()!.getBBox();
-                const px = 2;
+                const dist = 15;
+                const [padX, padY] = [4, 2];
                 tipRect
-                    .attr("x", bbox.x - px)
-                    .attr("y", bbox.y)
-                    .attr("width", bbox.width + 2 * px)
-                    .attr("height", bbox.height);
-                tip.attr(
+                    .attr("x", bbox.x - padX)
+                    .attr("y", bbox.y - padY)
+                    .attr("width", bbox.width + 2 * padX)
+                    .attr("height", bbox.height + 2 * padY);
+                const above = y(pz) > dist + bbox.height;
+                tip.selectAll("text, rect").attr(
                     "transform",
-                    `translate(${ex}, ${y(pz) + bbox.width * 0.2})`,
+                    `translate(0, ${above ? -dist : dist + bbox.height / 2})`,
                 );
+                tip.attr("transform", `translate(${ex}, ${y(pz)})`);
             } else {
                 hide(rule);
                 hide(tip);
