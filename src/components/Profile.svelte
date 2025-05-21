@@ -2,14 +2,18 @@
     import * as d3 from "d3";
     import type { RouteSegment } from "../lib/routing";
     import { fetchProfile } from "../lib/geoadmin";
-    import { dist2, type Line3 } from "../lib/points";
+    import { along, dist2, type Line3, type Point2 } from "../lib/points";
     import { theme } from "../lib/theme";
     import Spinner from "./Spinner.svelte";
     import Icon from "./Icon.svelte";
     import { fade } from "svelte/transition";
 
-    const { route }: { route: RouteSegment[] } = $props();
+    const {
+        route,
+        onSelect: onSelect,
+    }: { route: RouteSegment[]; onSelect: (p: Point2) => void } = $props();
 
+    let chartElement: HTMLElement;
     let profile: Line3 = $state([]);
 
     let timeout: number;
@@ -28,7 +32,7 @@
         loading = true;
     });
 
-    const chart = $derived.by(() => {
+    $effect(() => {
         const width = 400;
         const height = 150;
         const margin = {
@@ -105,7 +109,38 @@
                     .attr("x2", width - margin.left - margin.right)
                     .attr("stroke-opacity", 0.1),
             );
-        return svg.node();
+        const rule = svg
+            .append("g")
+            .append("line")
+            .attr("y1", height)
+            .attr("y2", 0)
+            .attr("stroke", "black");
+        const hideRule = () => rule.attr("transform", "translate(-1, 0)");
+        hideRule();
+        svg.on("pointerenter pointermove", (e) => {
+            const ex = d3.pointer(e)[0];
+            if (ex > x.range()[0] && ex < x.range()[1]) {
+                rule.attr("transform", `translate(${ex}, 0)`);
+            } else {
+                hideRule();
+            }
+        });
+        svg.on("click", (e) => {
+            const d = x.invert(d3.pointer(e)[0]) * 1000;
+            const p = along(
+                route.flatMap((r) => r.path),
+                d,
+            );
+            onSelect(p);
+        });
+        svg.on("pointerleave", () =>
+            rule.attr("transform", "translate(-1, 0)"),
+        );
+
+        while (chartElement.firstChild) {
+            chartElement.removeChild(chartElement.firstChild);
+        }
+        chartElement.appendChild(svg.node()!);
     });
 </script>
 
@@ -116,9 +151,7 @@
         <span out:fade><Spinner inline /></span>
     {/if}
 </span>
-<div class:loading>
-    {@html chart?.outerHTML}
-</div>
+<div bind:this={chartElement} class:loading></div>
 
 <style>
     div {

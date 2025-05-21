@@ -7,7 +7,6 @@
         Map,
         MapMouseEvent,
         Marker,
-        NavigationControl,
         ScaleControl,
         type MapGeoJSONFeature,
         type SourceSpecification,
@@ -32,10 +31,8 @@
     import type { Point2 } from "../lib/points";
 
     let mapElement: HTMLElement;
-
     let map: Map;
     let markers: Marker[] = [];
-
     let floatingMarker: Marker;
     let floatingFixed: boolean = false;
     let floatingIndex: number;
@@ -442,7 +439,10 @@
         </div>
         {#if route.length > 0}
             <div transition:slide class="box">
-                <Profile {route} />
+                <Profile
+                    {route}
+                    onSelect={(p) => map.flyTo({ center: LV95toWGS(p) })}
+                />
             </div>
         {/if}
     </div>

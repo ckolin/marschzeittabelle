@@ -9,3 +9,17 @@ export function dist2(
 ): number {
     return Math.hypot(bx - ax, by - ay);
 }
+
+export function along(line: Line2, dist: number): Point2 {
+    if (dist <= 0) {
+        return line[0];
+    }
+    let d = 0;
+    for (let i = 1; i < line.length; i++) {
+        d += dist2(line[i], line[i - 1]);
+        if (d >= dist) {
+            return line[i];
+        }
+    }
+    return line[line.length - 1];
+}

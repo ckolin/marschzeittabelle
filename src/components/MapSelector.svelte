@@ -57,6 +57,6 @@
     }
 
     input:checked + img {
-        border: 4px solid var(--secondary);
+        border: 3px solid var(--secondary);
     }
 </style>
