@@ -426,9 +426,8 @@
             {/each}
         </div>
     </div>
-    <div class="overlay" style="top: 0; right: 0; align-items: end">
+    <div class="overlay" style="top: 0; right: 0; flex-direction: row">
         <div class="box">
-            <span><Icon name="search" /> Suche</span>
             <Search
                 {onHighlight}
                 {onHighlightEnd}
@@ -505,6 +504,7 @@
         position: absolute;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         gap: 0.5rem;
         margin: 0.75rem;
         z-index: 10;
@@ -515,7 +515,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        width: fit-content;
         padding: 1rem;
         border: 1px solid var(--shadow);
         border-radius: 0.5rem;
