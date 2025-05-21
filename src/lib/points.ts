@@ -10,7 +10,7 @@ export function dist2(
     return Math.hypot(bx - ax, by - ay);
 }
 
-export function along(line: Line2, dist: number): Point2 {
+export function along2<T extends Point2 | Point3>(line: T[], dist: number): T {
     if (dist <= 0) {
         return line[0];
     }

@@ -170,7 +170,7 @@
                         type: "raster",
                         source: "pixelkarte",
                         paint: {
-                            "raster-saturation": -0.1,
+                            "raster-saturation": 0,
                         },
                     },
                 ],
