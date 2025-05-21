@@ -9,8 +9,8 @@
         display: block;
         width: 2rem;
         height: 2rem;
-        border: 3px solid var(--secondary-light);
-        border-bottom-color: var(--secondary);
+        border: 3px solid var(--secondary);
+        border-bottom-color: transparent;
         border-radius: 50%;
         animation: rotation 1s linear infinite;
     }

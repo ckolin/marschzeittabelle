@@ -1,15 +1,12 @@
 type Key =
-    | "backgroundColor"
-    | "textColor"
-    | "primaryLight"
+    | "background"
+    | "text"
+    | "primary-light"
     | "primary"
-    | "primaryDark"
-    | "secondaryLight"
+    | "secondary-light"
     | "secondary"
-    | "secondaryDark"
-    | "shadowColor";
+    | "shadow";
 
 export function theme(key: Key): string {
-    const prop = "--" + key.replace(/[A-Z]/g, (m) => "-" + m.toLowerCase());
-    return window.getComputedStyle(document.body).getPropertyValue(prop);
+    return window.getComputedStyle(document.body).getPropertyValue(`--${key}`);
 }

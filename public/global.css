@@ -2,15 +2,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@0;1&display=swap");
 
 :root {
-    --background-color: #fff;
-    --text-color: #000;
-    --primary-light: #82ad6e;
-    --primary: #487033;
-    --primary-dark: #22331a;
-    --secondary-light: #ed756c;
-    --secondary: #bb081a;
-    --secondary-dark: #551110;
-    --shadow-color: rgba(0, 0, 0, 0.1);
+    --background: #fff;
+    --text: #000;
+    --primary-light: #e0efe1;
+    --primary: #00954d;
+    --secondary-light: #fbd9c9;
+    --secondary: #e2000a;
+    --shadow: #0002;
 }
 
 * {
@@ -19,7 +17,7 @@
 
 body {
     margin: 0;
-    color: var(--text-color);
-    background-color: var(--background-color);
+    color: var(--text);
+    background-color: var(--background);
     font-family: "Inter", sans-serif;
 }

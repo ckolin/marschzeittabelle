@@ -71,7 +71,7 @@
             .attr("height", height)
             .attr("viewBox", [0, 0, width, height]);
         svg.append("path")
-            .attr("fill", theme("secondaryLight"))
+            .attr("fill", theme("secondary-light"))
             .attr("d", area(dz));
         svg.append("path")
             .attr("fill", "none")

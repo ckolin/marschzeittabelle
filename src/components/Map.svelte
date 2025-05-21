@@ -464,14 +464,12 @@
             width: 20px;
             height: 20px;
             background: var(--secondary);
-            border: 3px solid var(--secondary-dark);
             border-radius: 50%;
             cursor: move;
-            box-shadow: 0 0 3px var(--shadow-color);
         }
 
         .marker:hover {
-            background: var(--secondary-light);
+            outline: 3px solid #000;
         }
 
         .marker.floating {
@@ -486,6 +484,7 @@
         gap: 0.5rem;
         margin: 0.75rem;
         z-index: 10;
+        pointer-events: none;
     }
 
     .box {
@@ -494,10 +493,23 @@
         gap: 0.25rem;
         width: fit-content;
         padding: 1rem;
-        border: 1px solid var(--shadow-color);
+        border: 1px solid var(--shadow);
         border-radius: 0.5rem;
         background: #fff8;
         backdrop-filter: blur(12px);
-        box-shadow: 0 0 1rem var(--shadow-color);
+        box-shadow: 0 0 1rem var(--shadow);
+        pointer-events: initial;
+    }
+
+    .box:has(button) {
+        gap: 0;
+        padding: 0;
+    }
+
+    .box button {
+        padding: 1rem;
+        color: inherit;
+        background: none;
+        border: none;
     }
 </style>

@@ -57,8 +57,8 @@
         padding: 0;
         margin: 0;
         cursor: pointer;
-        padding: 0.2rem 0;
-        border-bottom: 1px solid var(--shadow-color);
+        padding: 0.3rem 0;
+        border-bottom: 1px solid var(--shadow);
     }
 
     button:last-child {
