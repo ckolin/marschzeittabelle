@@ -17,7 +17,6 @@
         type RoutePoint,
         RouteMode,
         type RouteSegment,
-        type Point,
     } from "../lib/routing";
     import type { Feature, FeatureCollection, LineString } from "geojson";
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
@@ -29,6 +28,7 @@
     import { fade } from "svelte/transition";
     import Icon from "./Icon.svelte";
     import Profile from "./Profile.svelte";
+    import type { Point2 } from "../lib/points";
 
     let mapElement: HTMLElement;
 
@@ -46,7 +46,7 @@
     let loaded = $state(0);
     let total = $state(0);
     let points: RoutePoint[] = [];
-    let route: RouteSegment[];
+    let route: RouteSegment[] = $state([]);
 
     const modes = [
         {
@@ -367,7 +367,7 @@
             });
             marker.on("dragend", () => {
                 const lngLat = marker.getLngLat();
-                const pt: Point = WGStoLV95([lngLat.lng, lngLat.lat]);
+                const pt: Point2 = WGStoLV95([lngLat.lng, lngLat.lat]);
                 router.snap(pt).then((pt) => {
                     points[i] = pt;
                     recalculate();
@@ -431,8 +431,8 @@
             <MapSelector bind:baseMap onchange={updateStyle} />
         </div>
         <div class="box">
-            <span><Icon name="elevation" /> Höhenprofil</span>
-            <Profile />
+            <span><Icon name="elevation" /> Höhe (m.ü.M.)</span>
+            <Profile {route} />
         </div>
     </div>
 </div>

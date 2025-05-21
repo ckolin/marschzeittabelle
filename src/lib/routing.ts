@@ -2,25 +2,20 @@ import { unpack } from "msgpackr";
 import TinyQueue from "tinyqueue";
 import RBush, { type BBox } from "rbush";
 import knn from "rbush-knn";
+import { dist2, type Line2, type Point2 } from "./points";
 
 const TILE_SIZE = 10000;
 const LOAD_MARGIN = 2000;
 const LOAD_DENSITY = 2000;
 const SNAP_RADIUS = 50;
 
-export type Line = Point[];
-export type Point = [number, number];
 type Vertex = bigint;
 
-function distance([ax, ay]: Point, [bx, by]: Point): number {
-    return Math.hypot(bx - ax, by - ay);
-}
-
-function vertexToPoint(v: Vertex): Point {
+function vertexToPoint(v: Vertex): Point2 {
     return [Number(v >> 32n), Number(v & 0xffffffffn)];
 }
 
-function pointToVertex([x, y]: Point) {
+function pointToVertex([x, y]: Point2) {
     return (BigInt(Math.floor(x)) << 32n) | BigInt(Math.floor(y));
 }
 
@@ -32,14 +27,14 @@ class Tree {
         this.bush.load(edges);
     }
 
-    public closest([x, y]: Point): [FwdEdge, number] {
+    public closest([x, y]: Point2): [FwdEdge, number] {
         const close = knn(this.bush, x, y, 10) as FwdEdge[];
         let bestDist = Infinity;
         let bestEdge: FwdEdge;
         let bestI: number;
         for (const edge of close) {
             edge.walk((i, p) => {
-                const dist = distance([x, y], p);
+                const dist = dist2([x, y], p);
                 if (dist < bestDist) {
                     bestDist = dist;
                     bestEdge = edge;
@@ -83,7 +78,7 @@ interface Edge {
     descent: number;
     hikingTrail: boolean;
     paved: boolean;
-    walk(fn: (i: number, p: Point) => void): void;
+    walk(fn: (i: number, p: Point2) => void): void;
 }
 
 class FwdEdge implements Edge, BBox {
@@ -97,7 +92,7 @@ class FwdEdge implements Edge, BBox {
         public length: number,
         public ascent: number,
         public descent: number,
-        public line: Line,
+        public line: Line2,
         public hikingTrail: boolean,
         public paved: boolean,
     ) {}
@@ -105,7 +100,7 @@ class FwdEdge implements Edge, BBox {
     public static fromLine(
         u: Vertex,
         v: Vertex,
-        line: Line,
+        line: Line2,
         hikingTrail: boolean,
         paved: boolean,
     ): FwdEdge {
@@ -123,21 +118,21 @@ class FwdEdge implements Edge, BBox {
             hikingTrail,
             paved,
         );
-        let last: Point;
+        let last: Point2;
         edge.walk((i, [x, y]) => {
             edge.minX = Math.min(x, edge.minX);
             edge.maxX = Math.max(x, edge.maxX);
             edge.minY = Math.min(y, edge.minY);
             edge.maxY = Math.max(y, edge.maxY);
             if (i !== 0) {
-                edge.length += distance([x, y], last);
+                edge.length += dist2([x, y], last);
             }
             last = [x, y];
         });
         return edge;
     }
 
-    public walk(fn: (i: number, p: Point) => void) {
+    public walk(fn: (i: number, p: Point2) => void) {
         for (const [i, p] of this.line.entries()) {
             fn(i, p);
         }
@@ -175,7 +170,7 @@ class BwdEdge implements Edge {
         return this.fwd.paved;
     }
 
-    walk(fn: (i: number, p: Point) => void) {
+    walk(fn: (i: number, p: Point2) => void) {
         for (let i = 0; i < this.fwd.line.length; i++) {
             const p = this.fwd.line[this.fwd.line.length - i - 1];
             fn(i, p);
@@ -191,14 +186,14 @@ export enum RouteMode {
 }
 
 export interface RoutePoint {
-    point: Point;
+    point: Point2;
     onRoad: boolean;
     edge: FwdEdge;
     i: number;
 }
 
 export interface RouteSegment {
-    path: Line;
+    path: Line2;
     onRoad: boolean;
 }
 
@@ -211,14 +206,14 @@ export class Router {
         public tiles: Map<string, FwdEdge[]> = new Map(),
         public aStarMemo: Map<
             [Vertex, Vertex, RouteMode],
-            Line | undefined
+            Line2 | undefined
         > = new Map(),
     ) {}
 
-    public async snap(point: Point): Promise<RoutePoint> {
+    public async snap(point: Point2): Promise<RoutePoint> {
         await this.ensureLoaded([point]);
         const [edge, i] = this.tree.closest(point);
-        const onRoad = distance(point, edge.line[i]) < SNAP_RADIUS;
+        const onRoad = dist2(point, edge.line[i]) < SNAP_RADIUS;
         const snapped = onRoad ? edge.line[i] : point;
         return { point: snapped, onRoad, edge, i };
     }
@@ -238,7 +233,7 @@ export class Router {
         return route;
     }
 
-    private async ensureLoaded(points: Point[]): Promise<void> {
+    private async ensureLoaded(points: Point2[]): Promise<void> {
         const toLoad: Set<string> = new Set();
         const dense = Router.densify(points);
         for (const [x, y] of dense) {
@@ -281,15 +276,15 @@ export class Router {
         this.tree = new Tree(edges);
     }
 
-    private static densify([p, ...[q, ...qs]]: Point[]): Point[] {
+    private static densify([p, ...[q, ...qs]]: Point2[]): Point2[] {
         if (p == null) {
             return [];
         } else if (q == null) {
             return [p];
-        } else if (distance(p, q) > LOAD_DENSITY) {
+        } else if (dist2(p, q) > LOAD_DENSITY) {
             const [px, py] = p;
             const [qx, qy] = q;
-            const m: Point = [(px + qx) / 2, (py + qy) / 2];
+            const m: Point2 = [(px + qx) / 2, (py + qy) / 2];
             return [
                 ...Router.densify([p, m]),
                 ...Router.densify([m, q, ...qs]).slice(1),
@@ -299,16 +294,14 @@ export class Router {
         }
     }
 
-    private static getTileId([x, y]: Point): string {
+    private static getTileId([x, y]: Point2): string {
         const minX = Math.floor(x / TILE_SIZE) * TILE_SIZE;
         const minY = Math.floor(y / TILE_SIZE) * TILE_SIZE;
         return `${minX}_${minY}`;
     }
 
     private async loadTile(id: string): Promise<FwdEdge[]> {
-        const res = await fetch(
-            `${import.meta.env.VITE_TILE_URL}/${id}.txt`,
-        );
+        const res = await fetch(`${import.meta.env.VITE_TILE_URL}/${id}.txt`);
         if (!res.ok) {
             // TODO: Could be nonexistent tile, could be something else
             return [];
@@ -323,7 +316,7 @@ export class Router {
         from: RoutePoint,
         to: RoutePoint,
         mode: RouteMode,
-    ): [Line, boolean] {
+    ): [Line2, boolean] {
         if (mode === RouteMode.OffRoad || !from.onRoad || !to.onRoad) {
             return [[from.point, to.point], false];
         }
@@ -391,7 +384,7 @@ export class Router {
         start: Vertex,
         end: Vertex,
         mode: RouteMode,
-    ): Line | undefined {
+    ): Line2 | undefined {
         const key: [Vertex, Vertex, RouteMode] = [start, end, mode];
         const result = this.aStarMemo.get(key) ?? this.aStar(start, end, mode);
         this.aStarMemo.set(key, result);
@@ -402,7 +395,7 @@ export class Router {
         start: Vertex,
         end: Vertex,
         mode: RouteMode,
-    ): Line | undefined {
+    ): Line2 | undefined {
         const cost = (e: Edge) => {
             const base = e.length + 10 * e.ascent;
             const preferred =
@@ -414,7 +407,7 @@ export class Router {
         const h = (v: Vertex) => {
             const p = vertexToPoint(v);
             const e = vertexToPoint(end);
-            return distance(p, e);
+            return dist2(p, e);
         };
         const incoming: Map<Vertex, Edge> = new Map();
         const gScore: Map<Vertex, number> = new Map();
@@ -448,7 +441,7 @@ export class Router {
         incoming: Map<Vertex, Edge>,
         start: Vertex,
         end: Vertex,
-    ): Line {
+    ): Line2 {
         const edges: Edge[] = [];
         let v = end;
         while (v !== start) {
@@ -456,7 +449,7 @@ export class Router {
             edges.push(e);
             v = e.u;
         }
-        const line: Line = [];
+        const line: Line2 = [];
         for (let i = edges.length - 1; i >= 0; i--) {
             edges[i].walk((_, p) => line.push(p));
         }
