@@ -33,7 +33,7 @@
         const height = 150;
         const margin = {
             top: 10,
-            right: 10,
+            right: 20,
             bottom: 20,
             left: 40,
         };
@@ -58,13 +58,13 @@
             .range([height - margin.bottom, margin.top]);
         const area = d3
             .area()
-            .x(([d, z]) => x(d))
+            .x(([d, _]) => x(d))
             .y0(y.range()[0])
-            .y1(([d, z]) => y(z));
+            .y1(([_, z]) => y(z));
         const line = d3
             .line()
-            .x(([d, z]) => x(d))
-            .y(([d, z]) => y(z));
+            .x(([d, _]) => x(d))
+            .y(([_, z]) => y(z));
         const svg = d3
             .create("svg")
             .attr("width", width)
@@ -105,7 +105,6 @@
                     .attr("x2", width - margin.left - margin.right)
                     .attr("stroke-opacity", 0.1),
             );
-        // https://observablehq.com/@d3/area-chart/2
         return svg.node();
     });
 </script>
