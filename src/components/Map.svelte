@@ -33,9 +33,12 @@
     let mapElement: HTMLElement;
     let map: Map;
     let markers: Marker[] = [];
+
     let floatingMarker: Marker;
     let floatingFixed: boolean = false;
     let floatingIndex: number;
+
+    let highlightMarker: Marker;
 
     let router = new Router((l, t) => {
         loaded = l;
@@ -372,6 +375,26 @@
         }
     }
 
+    function onHighlight(point: Point2) {
+        if (highlightMarker == null) {
+            const el = document.createElement("div");
+            el.classList.add("marker", "highlight");
+            highlightMarker = new Marker({
+                draggable: false,
+                element: el,
+            });
+        }
+        highlightMarker.setLngLat(LV95toWGS(point)).addTo(map);
+    }
+
+    function onHighlightEnd() {
+        highlightMarker?.remove();
+    }
+
+    function onNavigate(point: Point2, zoom: number | undefined = undefined) {
+        map.flyTo({ center: LV95toWGS(point), zoom });
+    }
+
     onMount(() => {
         initializeMap();
         initializeFloatingMarker();
@@ -407,7 +430,9 @@
         <div class="box">
             <span><Icon name="search" /> Suche</span>
             <Search
-                onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })}
+                {onHighlight}
+                {onHighlightEnd}
+                onNavigate={(p) => onNavigate(p, 13)}
             />
         </div>
         <div class="box">
@@ -439,10 +464,7 @@
         </div>
         {#if route.length > 0}
             <div transition:slide class="box">
-                <Profile
-                    {route}
-                    onSelect={(p) => map.flyTo({ center: LV95toWGS(p) })}
-                />
+                <Profile {route} {onHighlight} {onHighlightEnd} {onNavigate} />
             </div>
         {/if}
     </div>
@@ -464,16 +486,18 @@
             width: 20px;
             height: 20px;
             background: var(--secondary);
+            border: 3px solid #000;
             border-radius: 50%;
             cursor: move;
         }
 
-        .marker:hover {
-            outline: 3px solid #000;
-        }
-
         .marker.floating {
             z-index: 1;
+        }
+
+        .marker.highlight {
+            border: none;
+            pointer-events: none;
         }
     }
 

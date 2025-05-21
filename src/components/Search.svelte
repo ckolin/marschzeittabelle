@@ -1,7 +1,16 @@
 <script lang="ts">
     import { search, type SearchResult } from "../lib/geoadmin";
+    import type { Point2 } from "../lib/points";
 
-    const { onSelect }: { onSelect: (r: SearchResult) => void } = $props();
+    const {
+        onHighlight,
+        onHighlightEnd,
+        onNavigate,
+    }: {
+        onHighlight: (p: Point2) => void;
+        onHighlightEnd: () => void;
+        onNavigate: (p: Point2) => void;
+    } = $props();
 
     let container: HTMLElement;
     let focus = $state(false);
@@ -18,6 +27,7 @@
     function onOutside(e: MouseEvent) {
         if (!e.composedPath().includes(container)) {
             focus = false;
+            onHighlightEnd();
         }
     }
 </script>
@@ -31,9 +41,14 @@
         bind:value={query}
     />
     {#if focus}
-        {#each results as r}
-            <button onclick={() => onSelect(r)}>
-                {@html r.label}
+        {#each results as { point, label }}
+            <button
+                onclick={() => {
+                    onNavigate(point);
+                    onHighlight(point);
+                }}
+            >
+                {@html label}
             </button>
         {/each}
     {/if}

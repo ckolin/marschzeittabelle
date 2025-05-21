@@ -10,8 +10,15 @@
 
     const {
         route,
-        onSelect: onSelect,
-    }: { route: RouteSegment[]; onSelect: (p: Point2) => void } = $props();
+        onHighlight,
+        onHighlightEnd,
+        onNavigate,
+    }: {
+        route: RouteSegment[];
+        onHighlight: (p: Point2) => void;
+        onHighlightEnd: () => void;
+        onNavigate: (p: Point2) => void;
+    } = $props();
 
     let chartElement: HTMLElement;
     let profile: Line3 = $state([]);
@@ -137,45 +144,48 @@
             .attr("transform", `translate(0, 25)`)
             .attr("text-anchor", "middle")
             .attr("fill", "#fff");
-        tip.append("circle").attr("r", 5).attr("fill", "#000");
+        tip.append("circle").attr("r", 5).attr("fill", theme("secondary"));
         hide(tip);
 
         svg.on("pointerenter pointermove", (e) => {
             const ex = d3.pointer(e)[0];
             const d = x.invert(ex);
-            const pz = along2(profile, d)[2];
-            if (ex > x.range()[0] && ex < x.range()[1]) {
-                show(rule);
-                rule.attr("transform", `translate(${ex}, 0)`);
-                show(tip);
-                tipText.text(Math.round(pz));
-                const bbox = tipText.node()!.getBBox();
-                const dist = 15;
-                const [padX, padY] = [4, 2];
-                tipRect
-                    .attr("x", bbox.x - padX)
-                    .attr("y", bbox.y - padY)
-                    .attr("width", bbox.width + 2 * padX)
-                    .attr("height", bbox.height + 2 * padY);
-                const above = y(pz) > dist + bbox.height;
-                tip.selectAll("text, rect").attr(
-                    "transform",
-                    `translate(0, ${above ? -dist : dist + bbox.height / 2})`,
-                );
-                tip.attr("transform", `translate(${ex}, ${y(pz)})`);
-            } else {
+            const [px, py, pz] = along2(profile, d);
+            if (ex < x.range()[0] || ex > x.range()[1]) {
                 hide(rule);
                 hide(tip);
+                onHighlightEnd();
+                return;
             }
+            show(rule);
+            rule.attr("transform", `translate(${ex}, 0)`);
+            show(tip);
+            tipText.text(Math.round(pz));
+            const bbox = tipText.node()!.getBBox();
+            const dist = 15;
+            const [padX, padY] = [4, 2];
+            tipRect
+                .attr("x", bbox.x - padX)
+                .attr("y", bbox.y - padY)
+                .attr("width", bbox.width + 2 * padX)
+                .attr("height", bbox.height + 2 * padY);
+            const above = y(pz) > dist + bbox.height;
+            tip.selectAll("text, rect").attr(
+                "transform",
+                `translate(0, ${above ? -dist : dist + bbox.height / 2})`,
+            );
+            tip.attr("transform", `translate(${ex}, ${y(pz)})`);
+            onHighlight([px, py]);
         });
         svg.on("click", (e) => {
             const d = x.invert(d3.pointer(e)[0]);
             const [px, py] = along2(profile, d);
-            onSelect([px, py]);
+            onNavigate([px, py]);
         });
         svg.on("pointerleave", () => {
             hide(rule);
             hide(tip);
+            onHighlightEnd();
         });
 
         while (chartElement.firstChild) {

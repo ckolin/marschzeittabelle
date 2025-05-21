@@ -1,12 +1,12 @@
 import type { LineString } from "geojson";
-import type { Line2, Line3 } from "./points";
+import type { Line2, Line3, Point2 } from "./points";
 import simplify from "simplify-js";
 
 const BASE_URL = import.meta.env.VITE_GEOADMIN_URL;
 
 export interface SearchResult {
     label: string;
-    lngLat: [number, number];
+    point: Point2;
 }
 
 export async function search(query: string): Promise<SearchResult[]> {
@@ -14,7 +14,7 @@ export async function search(query: string): Promise<SearchResult[]> {
         return [];
     }
     const res = await fetch(
-        `${BASE_URL}/api/SearchServer?searchText=${query}&type=locations&lang=de&limit=5`,
+        `${BASE_URL}/api/SearchServer?sr=2056&searchText=${query}&type=locations&lang=de&limit=5`,
     );
     const json = await res.json();
     return json.results
@@ -23,7 +23,7 @@ export async function search(query: string): Promise<SearchResult[]> {
             (a: any) =>
                 ({
                     label: a.label,
-                    lngLat: [a.lon, a.lat],
+                    point: [a.y, a.x],
                 }) as SearchResult,
         )
         .filter((r: SearchResult) => r.label.length < 255);
