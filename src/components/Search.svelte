@@ -26,7 +26,7 @@
 <div bind:this={container}>
     <input
         type="search"
-        placeholder="Ort, Gipfel, Strasse suchen..."
+        placeholder="Gipfel, Ortschaft, Haltestelle, ..."
         onfocus={() => (focus = true)}
         bind:value={query}
     />
@@ -47,7 +47,21 @@
         gap: 0.2rem;
     }
 
+    input {
+        font: inherit;
+        background: #fff;
+        border: 1px solid var(--shadow);
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.2rem;
+    }
+
+    input:focus {
+        outline: 2px solid var(--secondary);
+    }
+
     button {
+        font: inherit;
+        font-size: 0.8em;
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: inherit;
