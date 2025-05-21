@@ -147,7 +147,7 @@
         tip.append("circle").attr("r", 5).attr("fill", theme("secondary"));
         hide(tip);
 
-        svg.on("pointerenter pointermove", (e) => {
+        svg.on("mouseenter mousemove", (e) => {
             const ex = d3.pointer(e)[0];
             const d = x.invert(ex);
             const [px, py, pz] = along2(profile, d);
@@ -182,7 +182,7 @@
             const [px, py] = along2(profile, d);
             onNavigate([px, py]);
         });
-        svg.on("pointerleave", () => {
+        svg.on("mouseleave", () => {
             hide(rule);
             hide(tip);
             onHighlightEnd();
