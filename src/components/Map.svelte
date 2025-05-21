@@ -8,6 +8,7 @@
         MapMouseEvent,
         Marker,
         NavigationControl,
+        ScaleControl,
         type MapGeoJSONFeature,
         type SourceSpecification,
         type StyleSpecification,
@@ -106,14 +107,8 @@
             minZoom: 7,
             attributionControl: false,
         });
+        map.addControl(new ScaleControl({ maxWidth: 300 }), "bottom-right");
         map.addControl(new AttributionControl(), "bottom-right");
-        map.addControl(
-            new NavigationControl({
-                showZoom: true,
-                showCompass: false,
-            }),
-            "bottom-right",
-        );
         map.on("load", initializeOverlays);
         map.dragRotate.disable();
         map.keyboard.disableRotation();
@@ -388,32 +383,46 @@
 
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
-    <div class="overlay box" style="top: 0; left: 0">
-        <span>
-            <Icon name="directions" />
-            Wegfindung
-            {#if loaded < total}
-                <span out:fade><Spinner inline /></span>
-            {/if}
-        </span>
-        {#each modes as { value, icon, label }}
-            <label>
-                <input
-                    type="radio"
-                    {value}
-                    bind:group={mode}
-                    onchange={recalculate}
-                />
-                <Icon name={icon} />
-                {label}
-            </label>
-        {/each}
+    <div class="overlay" style="top: 0; left: 0">
+        <div class="box">
+            <span>
+                <Icon name="directions" />
+                Wegfindung
+                {#if loaded < total}
+                    <span out:fade><Spinner inline /></span>
+                {/if}
+            </span>
+            {#each modes as { value, icon, label }}
+                <label>
+                    <input
+                        type="radio"
+                        {value}
+                        bind:group={mode}
+                        onchange={recalculate}
+                    />
+                    <Icon name={icon} />
+                    {label}
+                </label>
+            {/each}
+        </div>
     </div>
-    <div class="overlay box" style="top: 0; right: 0">
-        <span><Icon name="search" /> Suche</span>
-        <Search onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })} />
+    <div class="overlay" style="top: 0; right: 0; align-items: end">
+        <div class="box">
+            <span><Icon name="search" /> Suche</span>
+            <Search
+                onSelect={(r) => map.flyTo({ center: r.lngLat, zoom: 12 })}
+            />
+        </div>
+        <div class="box">
+            <button onclick={() => map.zoomIn()}>
+                <Icon name="add" />
+            </button>
+            <button onclick={() => map.zoomOut()}>
+                <Icon name="remove" />
+            </button>
+        </div>
     </div>
-    <div class="overlay" style="bottom: 0; left: 0;">
+    <div class="overlay" style="bottom: 0; left: 0">
         <div class="box">
             <span><Icon name="layers" /> Ebenen</span>
             {#each overlays as { id, icon, label }}
@@ -472,16 +481,19 @@
 
     .overlay {
         position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin: 0.75rem;
         z-index: 10;
     }
 
     .box {
-        width: fit-content;
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        width: fit-content;
         padding: 1rem;
-        margin: 0.75rem;
         border: 1px solid var(--shadow-color);
         border-radius: 0.5rem;
         background: #fff8;

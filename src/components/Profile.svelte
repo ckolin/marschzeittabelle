@@ -54,6 +54,7 @@
         const y = d3
             .scaleLinear()
             .domain(d3.extent(dz, ([d, z]) => z) as [number, number])
+            .nice()
             .range([height - margin.bottom, margin.top]);
         const area = d3
             .area()
@@ -85,7 +86,7 @@
                 d3
                     .axisBottom(x)
                     .tickFormat((v) => `${v} km`)
-                    .ticks(width / 60)
+                    .ticks(width / 80)
                     .tickSizeOuter(0),
             );
         svg.append("g")
