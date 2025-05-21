@@ -121,7 +121,7 @@
             .append("line")
             .attr("y1", height)
             .attr("y2", 0)
-            .attr("stroke", "black")
+            .attr("stroke", "#000")
             .attr("stroke-width", 2);
         hide(rule);
 
@@ -129,15 +129,15 @@
         const tipRect = tip
             .append("rect")
             .attr("transform", `translate(0, 25)`)
-            .attr("fill", "black")
+            .attr("fill", "#000")
             .attr("rx", 4)
             .attr("ry", 4);
         const tipText = tip
             .append("text")
             .attr("transform", `translate(0, 25)`)
             .attr("text-anchor", "middle")
-            .attr("fill", "white");
-        tip.append("circle").attr("r", 5).attr("fill", "black");
+            .attr("fill", "#fff");
+        tip.append("circle").attr("r", 5).attr("fill", "#000");
         hide(tip);
 
         svg.on("pointerenter pointermove", (e) => {
