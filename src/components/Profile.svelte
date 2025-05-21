@@ -4,19 +4,28 @@
     import { fetchProfile } from "../lib/geoadmin";
     import { dist2, type Line3 } from "../lib/points";
     import { theme } from "../lib/theme";
+    import Spinner from "./Spinner.svelte";
+    import Icon from "./Icon.svelte";
+    import { fade } from "svelte/transition";
 
     const { route }: { route: RouteSegment[] } = $props();
 
     let profile: Line3 = $state([]);
 
     let timeout: number;
+    let loading = $state(false);
     $effect(() => {
         clearTimeout(timeout);
         const line = route.flatMap((r) => r.path);
         timeout = setTimeout(
-            () => fetchProfile(line).then((p) => (profile = p)),
+            () =>
+                fetchProfile(line).then((p) => {
+                    profile = p;
+                    loading = false;
+                }),
             200,
         );
+        loading = true;
     });
 
     const chart = $derived.by(() => {
@@ -100,7 +109,23 @@
     });
 </script>
 
-{@html chart?.outerHTML}
+<span>
+    <Icon name="elevation" />
+    Höhe (m.ü.M.)
+    {#if loading}
+        <span out:fade><Spinner inline /></span>
+    {/if}
+</span>
+<div class:loading>
+    {@html chart?.outerHTML}
+</div>
 
 <style>
+    div {
+        transition: opacity 100ms;
+    }
+
+    .loading {
+        opacity: 0.5;
+    }
 </style>

@@ -1,11 +1,12 @@
 <script lang="ts">
-    const { small = false } = $props();
+    const { inline = false } = $props();
 </script>
 
-<div class:small></div>
+<div class:inline></div>
 
 <style>
     div {
+        display: block;
         width: 2rem;
         height: 2rem;
         border: 3px solid var(--secondary-light);
@@ -14,9 +15,11 @@
         animation: rotation 1s linear infinite;
     }
 
-    div.small {
-        width: 1rem;
-        height: 1rem;
+    div.inline {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.1em;
         border-width: 2px;
     }
 

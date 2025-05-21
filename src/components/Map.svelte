@@ -25,7 +25,7 @@
     import Search from "./Search.svelte";
     import MapSelector, { type BaseMap } from "./MapSelector.svelte";
     import Spinner from "./Spinner.svelte";
-    import { fade } from "svelte/transition";
+    import { fade, slide } from "svelte/transition";
     import Icon from "./Icon.svelte";
     import Profile from "./Profile.svelte";
     import type { Point2 } from "../lib/points";
@@ -389,7 +389,13 @@
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
     <div class="overlay box" style="top: 0; left: 0">
-        <span><Icon name="directions" /> Wegfindung</span>
+        <span>
+            <Icon name="directions" />
+            Wegfindung
+            {#if loaded < total}
+                <span out:fade><Spinner inline /></span>
+            {/if}
+        </span>
         {#each modes as { value, icon, label }}
             <label>
                 <input
@@ -402,11 +408,6 @@
                 {label}
             </label>
         {/each}
-        {#if loaded < total}
-            <div out:fade>
-                <Spinner small />
-            </div>
-        {/if}
     </div>
     <div class="overlay box" style="top: 0; right: 0">
         <span><Icon name="search" /> Suche</span>
@@ -430,10 +431,11 @@
             <span><Icon name="map" /> Hintergrund</span>
             <MapSelector bind:baseMap onchange={updateStyle} />
         </div>
-        <div class="box">
-            <span><Icon name="elevation" /> Höhe (m.ü.M.)</span>
-            <Profile {route} />
-        </div>
+        {#if route.length > 0}
+            <div transition:slide class="box">
+                <Profile {route} />
+            </div>
+        {/if}
     </div>
 </div>
 
