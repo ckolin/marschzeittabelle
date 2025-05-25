@@ -438,10 +438,10 @@
         </div>
         <div class="box">
             <button onclick={() => map.zoomIn()}>
-                <Icon name="add" />
+                <Icon name="add" big />
             </button>
             <button onclick={() => map.zoomOut()}>
-                <Icon name="remove" />
+                <Icon name="remove" big />
             </button>
         </div>
     </div>
@@ -533,7 +533,6 @@
 
     .box button {
         padding: 1rem;
-        color: inherit;
         background: none;
         border: none;
     }
