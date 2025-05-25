@@ -22,7 +22,7 @@
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
     import { onDestroy, onMount } from "svelte";
     import { theme } from "../lib/theme";
-    import Search from "./Search.svelte";
+    import MapSearch from "./MapSearch.svelte";
     import MapSelector, { type BaseMap } from "./MapSelector.svelte";
     import Spinner from "./Spinner.svelte";
     import { fade, slide } from "svelte/transition";
@@ -430,7 +430,7 @@
     </div>
     <div class="overlay" style="top: 0; right: 0; flex-direction: row">
         <div class="box">
-            <Search
+            <MapSearch
                 {onHighlight}
                 {onHighlightEnd}
                 onNavigate={(p) => onNavigate(p, 13)}
