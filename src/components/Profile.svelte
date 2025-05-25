@@ -8,11 +8,15 @@
     import { fade } from "svelte/transition";
 
     const {
+        width = 400,
+        height = 140,
         route,
         onHighlight,
         onHighlightEnd,
         onNavigate,
     }: {
+        width?: number;
+        height?: number;
         route: RouteSegment[];
         onHighlight: (p: Point2) => void;
         onHighlightEnd: () => void;
@@ -39,8 +43,6 @@
     });
 
     $effect(() => {
-        const width = 400;
-        const height = 140;
         const margin = {
             top: 10,
             right: 20,
@@ -116,7 +118,7 @@
                     .selectAll(".tick line")
                     .clone()
                     .attr("x2", width - margin.left - margin.right)
-                    .attr("stroke-opacity", 0.1),
+                    .attr("stroke-opacity", 0.25),
             );
 
         const hide = (e: any) => e.attr("display", "none");
