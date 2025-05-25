@@ -2,13 +2,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@0;1&display=swap");
 
 :root {
-    --background: #fff;
-    --text: #000;
-    --primary-light: #e0efe1;
-    --primary: #00954d;
-    --secondary-light: #f8c6c7;
-    --secondary: #e2000a;
-    --shadow: #0002;
+    --background: #000;
+    --text: #fff;
+    --accent: #e2000a;
+    --shadow: #0003;
 }
 
 *,

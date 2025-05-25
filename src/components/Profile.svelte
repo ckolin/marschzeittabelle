@@ -3,7 +3,6 @@
     import type { RouteSegment } from "../lib/routing";
     import { fetchProfile } from "../lib/geoadmin";
     import { along2, dist2, type Line3, type Point2 } from "../lib/points";
-    import { theme } from "../lib/theme";
     import Spinner from "./Spinner.svelte";
     import Icon from "./Icon.svelte";
     import { fade } from "svelte/transition";
@@ -80,7 +79,7 @@
             .y0(y.range()[0])
             .y1(([_, z]) => y(z));
         svg.append("path")
-            .attr("fill", "var(--secondary-light)")
+            .attr("fill", "color-mix(in srgb, var(--accent), transparent 75%)")
             .attr("d", area(dz));
 
         const line = d3
@@ -89,7 +88,7 @@
             .y(([_, z]) => y(z));
         svg.append("path")
             .attr("fill", "none")
-            .attr("stroke", "var(--secondary)")
+            .attr("stroke", "var(--accent)")
             .attr("stroke-width", 3)
             .attr("stroke-linejoin", "round")
             .attr("d", line(dz));
@@ -144,7 +143,7 @@
             .attr("transform", `translate(0, 25)`)
             .attr("text-anchor", "middle")
             .attr("fill", "#fff");
-        tip.append("circle").attr("r", 5).attr("fill", "var(--secondary)");
+        tip.append("circle").attr("r", 5).attr("fill", "var(--accent)");
         hide(tip);
 
         svg.on("mouseenter mousemove", (e) => {

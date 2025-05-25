@@ -278,7 +278,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": theme("secondary"),
+                    "line-color": theme("accent"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                 },
@@ -293,7 +293,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": theme("secondary"),
+                    "line-color": theme("accent"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                     "line-dasharray": [2, 1],
@@ -486,7 +486,7 @@
             z-index: 2;
             width: 20px;
             height: 20px;
-            background: var(--secondary);
+            background: var(--accent);
             border: 3px solid #000;
             border-radius: 50%;
             cursor: move;

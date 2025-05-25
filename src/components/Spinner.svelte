@@ -9,7 +9,7 @@
         display: block;
         width: 2rem;
         height: 2rem;
-        border: 3px solid var(--secondary);
+        border: 3px solid var(--accent);
         border-bottom-color: transparent;
         border-radius: 50%;
         animation: rotation 1s linear infinite;

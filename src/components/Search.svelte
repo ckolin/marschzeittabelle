@@ -102,7 +102,8 @@
         text-overflow: ellipsis;
         background: none;
         border: none;
-        border-bottom: 1px solid var(--shadow);
+        border-bottom: 1px solid
+            color-mix(in srgb, var(--text), transparent 75%);
         padding: 0.4rem 0;
         cursor: pointer;
     }
