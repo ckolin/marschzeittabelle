@@ -44,8 +44,6 @@
     img {
         display: block;
         width: 4rem;
-        object-fit: cover;
-        transition: border-width 100ms;
     }
 
     label:first-child img {
@@ -57,6 +55,7 @@
     }
 
     input:checked + img {
-        border: 3px solid var(--accent);
+        outline: 3px solid var(--accent);
+        outline-offset: -3px;
     }
 </style>
