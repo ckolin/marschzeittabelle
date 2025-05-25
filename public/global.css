@@ -26,6 +26,11 @@ select {
     font: inherit;
 }
 
+::placeholder {
+    color: inherit;
+    opacity: 0.5;
+}
+
 body {
     color: var(--text);
     background: var(--background);

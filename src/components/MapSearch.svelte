@@ -80,7 +80,6 @@
 
     input {
         flex-grow: 1;
-        font: inherit;
         background: none;
         border: none;
     }
