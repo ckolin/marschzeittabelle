@@ -31,6 +31,6 @@ select {
 
 body {
     color: var(--text);
-    background-color: var(--background);
+    background: var(--background);
     font-family: "Inter", sans-serif;
 }

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { blur, fade, slide } from "svelte/transition";
     import { search, type SearchResult } from "../lib/geoadmin";
     import type { Point2 } from "../lib/points";
     import Icon from "./Icon.svelte";
@@ -58,7 +57,7 @@
         <Icon name="search" />
     </label>
     {#if focus && results.length > 0}
-        <div class="results" transition:slide>
+        <div class="results">
             {#each results as { point, label }}
                 <button onclick={() => onSelect(point)}>
                     {@html label}
@@ -70,7 +69,7 @@
 
 <style>
     .container {
-        width: 20rem;
+        width: 22rem;
     }
 
     .bar {
@@ -97,14 +96,14 @@
     }
 
     button {
-        font-size: 0.8em;
+        font-size: 0.85em;
         overflow: hidden;
         text-align: inherit;
         text-overflow: ellipsis;
         background: none;
         border: none;
         border-bottom: 1px solid var(--shadow);
-        padding: 0.3rem 0;
+        padding: 0.4rem 0;
         cursor: pointer;
     }
 
