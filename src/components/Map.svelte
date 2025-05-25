@@ -20,7 +20,7 @@
     } from "../lib/routing";
     import type { Feature, FeatureCollection, LineString } from "geojson";
     import { LV95toWGS, WGStoLV95 } from "swiss-projection";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { theme } from "../lib/theme";
     import Search from "./Search.svelte";
     import MapSelector, { type BaseMap } from "./MapSelector.svelte";
@@ -399,6 +399,8 @@
         initializeMap();
         initializeFloatingMarker();
     });
+
+    onDestroy(() => map.remove());
 </script>
 
 <div class="container">
