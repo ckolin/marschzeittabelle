@@ -202,11 +202,18 @@
         <span out:fade><Spinner inline /></span>
     {/if}
 </span>
-<div bind:this={chartElement} class:loading></div>
+<div bind:this={chartElement} class="chart" class:loading></div>
 
 <style>
-    div {
+    .chart {
         transition: opacity 100ms;
+    }
+
+    .chart :global {
+        svg * {
+            font-family: inherit;
+            font-size: 12px;
+        }
     }
 
     .loading {
