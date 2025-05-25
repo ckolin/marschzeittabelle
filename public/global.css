@@ -11,12 +11,25 @@
     --shadow: #0002;
 }
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
-body {
+* {
     margin: 0;
+}
+
+input,
+button,
+textarea,
+select {
+    color: inherit;
+    font: inherit;
+}
+
+body {
     color: var(--text);
     background-color: var(--background);
     font-family: "Inter", sans-serif;

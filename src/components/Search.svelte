@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { blur, fade, slide } from "svelte/transition";
     import { search, type SearchResult } from "../lib/geoadmin";
     import type { Point2 } from "../lib/points";
     import Icon from "./Icon.svelte";
@@ -46,7 +47,7 @@
 
 <svelte:body onmousedown={onOutside} />
 <div class="container" bind:this={container}>
-    <div>
+    <label class="bar">
         <input
             type="search"
             placeholder="Gipfel, Ortschaft, Haltestelle, ..."
@@ -55,25 +56,24 @@
             bind:value={query}
         />
         <Icon name="search" />
-    </div>
-    {#if focus}
-        {#each results as { point, label }}
-            <button onclick={() => onSelect(point)}>
-                {@html label}
-            </button>
-        {/each}
+    </label>
+    {#if focus && results.length > 0}
+        <div class="results" transition:slide>
+            {#each results as { point, label }}
+                <button onclick={() => onSelect(point)}>
+                    {@html label}
+                </button>
+            {/each}
+        </div>
     {/if}
 </div>
 
 <style>
     .container {
         width: 20rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
     }
 
-    .container div {
+    .bar {
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -84,27 +84,28 @@
         font: inherit;
         background: none;
         border: none;
-        border-radius: 0.2rem;
     }
 
     input:focus {
         outline: none;
     }
 
+    .results {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0.5rem;
+    }
+
     button {
-        font: inherit;
         font-size: 0.8em;
         overflow: hidden;
-        text-overflow: ellipsis;
         text-align: inherit;
-        color: inherit;
+        text-overflow: ellipsis;
         background: none;
         border: none;
-        padding: 0;
-        margin: 0;
-        cursor: pointer;
-        padding: 0.3rem 0;
         border-bottom: 1px solid var(--shadow);
+        padding: 0.3rem 0;
+        cursor: pointer;
     }
 
     button:last-child {
