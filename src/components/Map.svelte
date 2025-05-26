@@ -520,8 +520,8 @@
         padding: 1rem;
         border: 1px solid var(--shadow);
         border-radius: 0.5rem;
-        background: color-mix(in srgb, var(--background), transparent 50%);
-        backdrop-filter: blur(12px);
+        background: color-mix(in srgb, var(--background), transparent 40%);
+        backdrop-filter: blur(16px);
         box-shadow: 0 0 1rem var(--shadow);
         pointer-events: initial;
     }
