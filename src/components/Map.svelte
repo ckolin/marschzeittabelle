@@ -82,6 +82,10 @@
     ] as const;
     let activeOverlays: (typeof overlays)[number]["id"][] = $state([]);
 
+    let tooltip:
+        | { x: number; y: number; flipX: boolean; flipY: boolean }
+        | undefined = $state();
+
     function insertPoint(lngLat: LngLat, i = points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
         router.snap(pt).then((rp) => {
@@ -132,6 +136,17 @@
                 insertPoint(e.lngLat);
             }
         });
+        mapElement.addEventListener("mousemove", (e) => {
+            const x = e.pageX;
+            const y = e.pageY;
+            tooltip = {
+                x,
+                y,
+                flipX: x > window.innerWidth / 2,
+                flipY: y > window.innerHeight / 2,
+            };
+        });
+        mapElement.addEventListener("mouseleave", () => (tooltip = undefined));
     }
 
     function updateStyle() {
@@ -405,6 +420,18 @@
 
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
+    {#if tooltip}
+        <div
+            class="box tooltip"
+            class:flipX={tooltip.flipX}
+            class:flipY={tooltip.flipY}
+            style:left={`${tooltip.x}px`}
+            style:top={`${tooltip.y}px`}
+        >
+            <span><Icon name="mouse" />L - Punkt hinzufügen</span>
+            <span><Icon name="mouse" />R - Letzten Punkt entfernen</span>
+        </div>
+    {/if}
     <div class="overlay" style="top: 0; left: 0">
         <div class="box">
             <span>
@@ -503,13 +530,13 @@
     }
 
     .overlay {
+        z-index: 10;
         position: absolute;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
         margin: 0.75rem;
-        z-index: 10;
         pointer-events: none;
     }
 
@@ -535,5 +562,25 @@
         padding: 1rem;
         background: none;
         border: none;
+    }
+
+    .tooltip {
+        white-space: nowrap;
+        z-index: 5;
+        position: absolute;
+        pointer-events: none;
+        margin: 1rem;
+    }
+
+    .flipX {
+        transform: translateX(calc(-100% - 2rem));
+    }
+
+    .flipY {
+        transform: translateY(calc(-100% - 2rem));
+    }
+
+    .flipX.flipY {
+        transform: translate(calc(-100% - 2rem), calc(-100% - 2rem));
     }
 </style>
