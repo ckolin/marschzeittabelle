@@ -34,20 +34,25 @@
     let map: Map;
     let markers: Marker[] = [];
 
-    let floatingMarker: Marker;
-    let floatingFixed: boolean = false;
-    let floatingIndex: number;
+    let intermediateMarker: Marker;
+    let intermediateFixed = false;
+    let intermediateIndex: number;
 
     let highlightMarker: Marker;
 
-    let router = new Router((l, t) => {
-        loaded = l;
-        total = t;
-    });
-    let loaded = $state(0);
-    let total = $state(0);
-    let points: RoutePoint[] = [];
-    let route: RouteSegment[] = $state([]);
+    let tooltipElement: HTMLElement;
+    let tooltipState: "outside" | "map" | "marker" | "route" =
+        $state("outside");
+    let tooltipPosition: [number, number] = $state([0, 0]);
+
+    let baseMap: BaseMap = $state("pixelkarte");
+
+    const overlays = [
+        { id: "+wanderwege", icon: "hiking", label: "Wanderwege" },
+        { id: "+veloland", icon: "directions_bike", label: "Veloland Schweiz" },
+        { id: "+haltestellen", icon: "bus_railway", label: "ÖV-Haltestellen" },
+    ] as const;
+    let activeOverlays: (typeof overlays)[number]["id"][] = $state([]);
 
     const modes = [
         {
@@ -73,18 +78,14 @@
     ] as const;
     let mode = $state(RouteMode.PreferRoads);
 
-    let baseMap: BaseMap = $state("pixelkarte");
-
-    const overlays = [
-        { id: "+wanderwege", icon: "hiking", label: "Wanderwege" },
-        { id: "+veloland", icon: "directions_bike", label: "Veloland Schweiz" },
-        { id: "+haltestellen", icon: "bus_railway", label: "ÖV-Haltestellen" },
-    ] as const;
-    let activeOverlays: (typeof overlays)[number]["id"][] = $state([]);
-
-    let tooltip:
-        | { x: number; y: number; flipX: boolean; flipY: boolean }
-        | undefined = $state();
+    let router = new Router((l, t) => {
+        loaded = l;
+        total = t;
+    });
+    let loaded = $state(0);
+    let total = $state(0);
+    let points: RoutePoint[] = [];
+    let route: RouteSegment[] = $state([]);
 
     function insertPoint(lngLat: LngLat, i = points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
@@ -124,29 +125,41 @@
         const mouseMove = (
             e: MapMouseEvent & { features?: MapGeoJSONFeature[] },
         ) => {
-            if (!floatingFixed) {
-                floatingIndex = e.features![0].properties.i;
-                floatingMarker!.setLngLat(e.lngLat).addTo(map);
+            if (!intermediateFixed) {
+                intermediateIndex = e.features![0].properties.i;
+                intermediateMarker!.setLngLat(e.lngLat).addTo(map);
             }
+            tooltipState = "route";
         };
-        map.on("mousemove", "+routeOnRoad", mouseMove);
-        map.on("mousemove", "+routeOffRoad", mouseMove);
+        map.on("mousemove", "+route-on-road", mouseMove);
+        map.on("mousemove", "+route-off-road", mouseMove);
+        const mouseLeave = () => (tooltipState = "map");
+        map.on("mouseleave", "+route-on-road", mouseLeave);
+        map.on("mouseleave", "+route-off-road", mouseLeave);
         map.on("click", (e) => {
             if (!e.defaultPrevented) {
                 insertPoint(e.lngLat);
             }
         });
+        mapElement.addEventListener("mouseenter", () => (tooltipState = "map"));
         mapElement.addEventListener("mousemove", (e) => {
-            const x = e.pageX;
-            const y = e.pageY;
-            tooltip = {
-                x,
-                y,
-                flipX: x > window.innerWidth / 2,
-                flipY: y > window.innerHeight / 2,
-            };
+            const o = 15;
+            const w = tooltipElement.offsetWidth;
+            const h = tooltipElement.offsetHeight;
+            const x =
+                e.pageX + o + w < window.innerWidth
+                    ? e.pageX + o
+                    : e.pageX - o - w;
+            const y =
+                e.pageY + o + h < window.innerHeight
+                    ? e.pageY + o
+                    : e.pageY - o - h;
+            tooltipPosition = [x, y];
         });
-        mapElement.addEventListener("mouseleave", () => (tooltip = undefined));
+        mapElement.addEventListener(
+            "mouseleave",
+            () => (tooltipState = "outside"),
+        );
     }
 
     function updateStyle() {
@@ -284,7 +297,7 @@
         if (source == null) {
             map.addSource("+route", { type: "geojson", data: collection });
             map.addLayer({
-                id: "+routeOnRoad",
+                id: "+route-on-road",
                 type: "line",
                 source: "+route",
                 filter: ["==", "onRoad", true],
@@ -299,7 +312,7 @@
                 },
             });
             map.addLayer({
-                id: "+routeOffRoad",
+                id: "+route-off-road",
                 type: "line",
                 source: "+route",
                 filter: ["==", "onRoad", false],
@@ -319,34 +332,34 @@
         }
     }
 
-    function initializeFloatingMarker() {
+    function initializeIntermediate() {
         const el = document.createElement("div");
-        el.classList.add("marker", "floating");
-        floatingMarker = new Marker({
+        el.classList.add("marker", "intermediate");
+        intermediateMarker = new Marker({
             draggable: true,
             element: el,
         });
         el.addEventListener("mousedown", (e) => {
             if (e.button === 0) {
-                floatingFixed = true;
+                intermediateFixed = true;
             }
         });
         el.addEventListener("mouseleave", () => {
-            if (!floatingFixed) {
-                floatingMarker.remove();
+            if (!intermediateFixed) {
+                intermediateMarker.remove();
             }
         });
         const insert = () => {
-            const lnglat = floatingMarker.getLngLat();
-            insertPoint(lnglat, floatingIndex + 1);
-            floatingMarker.remove();
-            floatingFixed = false;
+            const lnglat = intermediateMarker.getLngLat();
+            insertPoint(lnglat, intermediateIndex + 1);
+            intermediateMarker.remove();
+            intermediateFixed = false;
         };
         el.addEventListener("click", (e) => {
             e.stopPropagation();
             insert();
         });
-        floatingMarker.on("dragend", insert);
+        intermediateMarker.on("dragend", insert);
     }
 
     function updateMarkers() {
@@ -360,14 +373,16 @@
             const el = document.createElement("div");
             el.classList.add("marker");
             el.addEventListener("mouseenter", () => {
-                if (!floatingFixed) {
-                    floatingMarker.remove();
+                if (!intermediateFixed) {
+                    intermediateMarker.remove();
                 }
+                tooltipState = "marker";
             });
             el.addEventListener("mousemove", (e) => e.stopPropagation());
+            el.addEventListener("mouseleave", () => (tooltipState = "map"));
             el.addEventListener("click", (e) => e.stopPropagation());
             el.addEventListener("contextmenu", () => {
-                floatingMarker.remove();
+                intermediateMarker.remove();
                 points.splice(i, 1);
                 recalculate();
             });
@@ -412,7 +427,7 @@
 
     onMount(() => {
         initializeMap();
-        initializeFloatingMarker();
+        initializeIntermediate();
     });
 
     onDestroy(() => map.remove());
@@ -420,18 +435,22 @@
 
 <div class="container">
     <div class="map" bind:this={mapElement}></div>
-    {#if tooltip}
-        <div
-            class="box tooltip"
-            class:flipX={tooltip.flipX}
-            class:flipY={tooltip.flipY}
-            style:left={`${tooltip.x}px`}
-            style:top={`${tooltip.y}px`}
-        >
+    <div
+        bind:this={tooltipElement}
+        class="box tooltip"
+        style:left={`${tooltipPosition[0]}px`}
+        style:top={`${tooltipPosition[1]}px`}
+        class:hidden={tooltipState === "outside"}
+    >
+        {#if tooltipState === "map"}
             <span><Icon name="mouse" />L - Punkt hinzufügen</span>
             <span><Icon name="mouse" />R - Letzten Punkt entfernen</span>
-        </div>
-    {/if}
+        {:else if tooltipState === "marker"}
+            <span><Icon name="mouse" />R - Punkt entfernen</span>
+        {:else if tooltipState === "route"}
+            <span><Icon name="mouse" />L - Punkt einfügen</span>
+        {/if}
+    </div>
     <div class="overlay" style="top: 0; left: 0">
         <div class="box">
             <span>
@@ -519,7 +538,7 @@
             cursor: move;
         }
 
-        .marker.floating {
+        .marker.intermediate {
             z-index: 1;
         }
 
@@ -565,22 +584,14 @@
     }
 
     .tooltip {
+        z-index: 20;
+        padding: 0.75rem;
         white-space: nowrap;
-        z-index: 5;
         position: absolute;
         pointer-events: none;
-        margin: 1rem;
     }
 
-    .flipX {
-        transform: translateX(calc(-100% - 2rem));
-    }
-
-    .flipY {
-        transform: translateY(calc(-100% - 2rem));
-    }
-
-    .flipX.flipY {
-        transform: translate(calc(-100% - 2rem), calc(-100% - 2rem));
+    .tooltip.hidden {
+        visibility: hidden;
     }
 </style>
