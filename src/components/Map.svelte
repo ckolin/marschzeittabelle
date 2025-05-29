@@ -442,7 +442,9 @@
         style:top={`${tooltipPosition[1]}px`}
         class:hidden={tooltipState === "outside"}
     >
-        {#if tooltipState === "map"}
+        {#if loaded < total}
+            <Spinner />
+        {:else if tooltipState === "map"}
             <span><Icon name="mouse" />L - Punkt hinzufügen</span>
             <span><Icon name="mouse" />R - Letzten Punkt entfernen</span>
         {:else if tooltipState === "marker"}
@@ -454,11 +456,7 @@
     <div class="overlay" style="top: 0; left: 0">
         <div class="box">
             <span>
-                <Icon name="directions" />
-                Wegfindung
-                {#if loaded < total}
-                    <span out:fade><Spinner inline /></span>
-                {/if}
+                <Icon name="directions" /> Wegfindung
             </span>
             {#each modes as { value, icon, label }}
                 <label>
