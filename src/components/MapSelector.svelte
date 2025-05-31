@@ -47,11 +47,11 @@
     }
 
     label:first-child img {
-        border-radius: 0.5rem 0 0 0.5rem;
+        border-radius: 0.2rem 0 0 0.2rem;
     }
 
     label:last-child img {
-        border-radius: 0 0.5rem 0.5rem 0;
+        border-radius: 0 0.2rem 0.2rem 0;
     }
 
     input:checked + img {

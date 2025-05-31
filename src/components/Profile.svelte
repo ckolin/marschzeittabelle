@@ -129,7 +129,7 @@
             .append("line")
             .attr("y1", height)
             .attr("y2", 0)
-            .attr("stroke", "#000")
+            .attr("stroke", "#fff")
             .attr("stroke-width", 2);
         hide(rule);
 
@@ -137,14 +137,14 @@
         const tipRect = tip
             .append("rect")
             .attr("transform", `translate(0, 25)`)
-            .attr("fill", "#000")
+            .attr("fill", "#fff")
             .attr("rx", 4)
             .attr("ry", 4);
         const tipText = tip
             .append("text")
             .attr("transform", `translate(0, 25)`)
             .attr("text-anchor", "middle")
-            .attr("fill", "#fff");
+            .attr("fill", "#000");
         tip.append("circle").attr("r", 5).attr("fill", "var(--accent)");
         hide(tip);
 

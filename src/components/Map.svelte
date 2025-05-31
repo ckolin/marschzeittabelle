@@ -516,7 +516,7 @@
 <style>
     .container {
         position: relative;
-        background: #bbb;
+        background: #222;
     }
 
     .map {
@@ -551,7 +551,7 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
-        margin: 0.75rem;
+        margin: 0.5rem;
         pointer-events: none;
     }
 
@@ -560,9 +560,8 @@
         flex-direction: column;
         gap: 0.25rem;
         padding: 1rem;
-        border: 1px solid var(--shadow);
-        border-radius: 0.5rem;
-        background: color-mix(in srgb, var(--background), transparent 40%);
+        border: 1px solid #fff4;
+        background: color-mix(in srgb, var(--background), transparent 30%);
         backdrop-filter: blur(16px);
         box-shadow: 0 0 1rem var(--shadow);
         pointer-events: initial;
