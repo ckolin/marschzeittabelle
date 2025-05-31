@@ -78,13 +78,9 @@
     ] as const;
     let mode = $state(RouteMode.PreferRoads);
 
-    let router = new Router((l, t) => {
-        loaded = l;
-        total = t;
-    });
-    let loaded = $state(0);
-    let total = $state(0);
-    let points: RoutePoint[] = [];
+    let router = new Router((l, t) => (routerLoading = l < t));
+    let routerLoading = $state(false);
+    let points: RoutePoint[] = $state([]);
     let route: RouteSegment[] = $state([]);
 
     function insertPoint(lngLat: LngLat, i = points.length) {
@@ -442,8 +438,10 @@
         style:top={`${tooltipPosition[1]}px`}
         class:hidden={tooltipState === "outside"}
     >
-        {#if loaded < total}
+        {#if routerLoading}
             <Spinner />
+        {:else if tooltipState === "map" && points.length === 0}
+            <span><Icon name="mouse" />L - Startpunkt setzen</span>
         {:else if tooltipState === "map"}
             <span><Icon name="mouse" />L - Punkt hinzufügen</span>
             <span><Icon name="mouse" />R - Letzten Punkt entfernen</span>
