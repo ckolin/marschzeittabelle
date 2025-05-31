@@ -1,4 +1,8 @@
 <script lang="ts">
+    import { onDestroy, onMount } from "svelte";
+    import { slide } from "svelte/transition";
+    import type { Feature, FeatureCollection, LineString } from "geojson";
+    import { LV95toWGS, WGStoLV95 } from "swiss-projection";
     import "maplibre-gl/dist/maplibre-gl.css";
     import {
         AttributionControl,
@@ -18,17 +22,13 @@
         RouteMode,
         type RouteSegment,
     } from "../lib/routing";
-    import type { Feature, FeatureCollection, LineString } from "geojson";
-    import { LV95toWGS, WGStoLV95 } from "swiss-projection";
-    import { onDestroy, onMount } from "svelte";
+    import type { Point2 } from "../lib/points";
     import { theme } from "../lib/theme";
     import MapSearch from "./MapSearch.svelte";
     import MapSelector, { type BaseMap } from "./MapSelector.svelte";
-    import Spinner from "./Spinner.svelte";
-    import { fade, slide } from "svelte/transition";
-    import Icon from "./Icon.svelte";
     import Profile from "./Profile.svelte";
-    import type { Point2 } from "../lib/points";
+    import Icon from "./Icon.svelte";
+    import Spinner from "./Spinner.svelte";
 
     let mapElement: HTMLElement;
     let map: Map;
