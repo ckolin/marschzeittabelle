@@ -28,7 +28,7 @@ class Tree {
     }
 
     public closest([x, y]: Point2): [FwdEdge, number] {
-        const close = knn(this.bush, x, y, 10) as FwdEdge[];
+        const close = knn(this.bush, x, y, 10);
         let bestDist = Infinity;
         let bestEdge: FwdEdge;
         let bestI: number;
