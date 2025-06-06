@@ -48,9 +48,26 @@
     let baseMap: BaseMap = $state("pixelkarte");
 
     const overlays = [
-        { id: "+wanderwege", icon: "hiking", label: "Wanderwege" },
-        { id: "+veloland", icon: "directions_bike", label: "Veloland Schweiz" },
-        { id: "+haltestellen", icon: "bus_railway", label: "ÖV-Haltestellen" },
+        {
+            id: "+wanderwege",
+            icon: "hiking",
+            label: "Wanderwege",
+        },
+        {
+            id: "+sperrungen",
+            icon: "dangerous",
+            label: "Sperrungen/Umleitungen",
+        },
+        {
+            id: "+veloland",
+            icon: "directions_bike",
+            label: "Veloland Schweiz",
+        },
+        {
+            id: "+haltestellen",
+            icon: "bus_railway",
+            label: "ÖV-Haltestellen",
+        },
     ] as const;
     let activeOverlays: (typeof overlays)[number]["id"][] = $state([]);
 
@@ -219,6 +236,17 @@
             paint: {
                 "raster-opacity": 0.7,
             },
+        });
+        map.addSource(
+            "+sperrungen",
+            makeRasterSource(
+                "https://wms.geo.admin.ch/?REQUEST=GetMap&SERVICE=WMS&VERSION=1.3.0&FORMAT=image/png&LAYERS=ch.astra.wanderland-sperrungen_umleitungen&CRS=EPSG:3857&WIDTH=256&HEIGHT=256&BBOX={bbox-epsg-3857}",
+            ),
+        );
+        map.addLayer({
+            id: "+sperrungen",
+            type: "raster",
+            source: "+sperrungen",
         });
         map.addSource(
             "+veloland",
