@@ -1,13 +1,14 @@
 import * as vec from "./vec.js";
+import simplify from "simplify-js";
 
 const baseUrl = "https://api3.geo.admin.ch/rest/services";
 const epsilon = 2;
-const maxPoints = 100;
 
 export function fetchProfile(line, ensureInputPoints, resolution) {
+    const coordinates = simplifyTo(line.map(({x, y}) => [x, y]), 2000);
     const geometry = {
         type: "LineString",
-        coordinates: line.map(p => [Math.round(p.x), Math.round(p.y)])
+        coordinates,
     };
     return fetch(`${baseUrl}/profile.json`, {
         method: "POST",
@@ -40,17 +41,7 @@ export function fetchProfile(line, ensureInputPoints, resolution) {
 }
 
 export function fetchMaps(line, mapScale) {
-    let path = [];
-    const rounded = line.map(p => [Math.round(p.x), Math.round(p.y)]);
-    // Make sure that query is not too long
-    if (rounded.length > maxPoints) {
-        for (let i = 0; i < maxPoints; i++) {
-            const p = rounded[Math.floor(i / maxPoints * rounded.length)];
-            path.push(p);
-        }
-    } else {
-        path = rounded;
-    }
+    const path = simplifyTo(line.map(({x, y}) => [x, y]), 100);
     const geometry = {
         paths: [path]
     };
@@ -65,6 +56,18 @@ export function fetchMaps(line, mapScale) {
                 .map(([id, label]) => ({ id, label }));
             resolve(unique);
         }));
+}
+
+function simplifyTo(line, max, tol = 1) {
+    const simplified = simplify(
+        line.map(([x, y]) => ({ x, y })),
+        tol,
+    ).map(({ x, y }) => [x, y]);
+    if (simplified.length > max) {
+        return simplifyTo(simplified, max, tol * 2);
+    } else {
+        return simplified;
+    }
 }
 
 function handleConnectionError() {
