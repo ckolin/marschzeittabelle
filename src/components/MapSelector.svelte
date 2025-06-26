@@ -55,7 +55,7 @@
     }
 
     input:checked + img {
-        outline: 3px solid var(--accent);
+        outline: 3px solid var(--acc);
         outline-offset: -3px;
     }
 </style>

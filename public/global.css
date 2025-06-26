@@ -2,9 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@0;1&display=swap");
 
 :root {
-    --background: #000;
-    --text: #fff;
-    --accent: #e2000a;
+    --bg: #fff;
+    --fg: #000;
+    --acc: #000;
     --shadow: #0003;
 }
 
@@ -32,7 +32,7 @@ select {
 }
 
 body {
-    color: var(--text);
-    background: var(--background);
+    color: var(--fg);
+    background: var(--bg);
     font-family: "Inter", sans-serif;
 }

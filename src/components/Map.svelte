@@ -330,7 +330,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": theme("accent"),
+                    "line-color": theme(mapElement, "acc"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                 },
@@ -345,7 +345,7 @@
                     "line-join": "bevel",
                 },
                 paint: {
-                    "line-color": theme("accent"),
+                    "line-color": theme(mapElement, "acc"),
                     "line-opacity": 0.8,
                     "line-width": 8,
                     "line-dasharray": [2, 1],
@@ -556,7 +556,7 @@
             z-index: 2;
             width: 20px;
             height: 20px;
-            background: var(--accent);
+            background: var(--acc);
             border: 3px solid #000;
             border-radius: 50%;
             cursor: move;
@@ -589,7 +589,8 @@
         gap: 0.25rem;
         padding: 1rem;
         border: 1px solid #fff4;
-        background: color-mix(in srgb, var(--background), transparent 30%);
+        color: var(--fg);
+        background: color-mix(in srgb, var(--bg), transparent 30%);
         backdrop-filter: blur(16px);
         box-shadow: 0 0 1rem var(--shadow);
         pointer-events: initial;

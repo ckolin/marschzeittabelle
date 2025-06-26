@@ -9,8 +9,8 @@
         display: block;
         width: 2rem;
         height: 2rem;
-        border: 3px solid color-mix(in srgb, var(--accent), transparent 75%);
-        border-bottom-color: var(--accent);
+        border: 3px solid color-mix(in srgb, var(--acc), transparent 75%);
+        border-bottom-color: var(--acc);
         border-radius: 50%;
         animation: rotation 1s linear infinite;
     }

@@ -81,7 +81,7 @@
             .y0(y.range()[0])
             .y1(([_, z]) => y(z));
         svg.append("path")
-            .attr("fill", "color-mix(in srgb, var(--accent), transparent 75%)")
+            .attr("fill", "color-mix(in srgb, var(--acc), transparent 75%)")
             .attr("d", area(dz));
 
         const line = d3
@@ -90,7 +90,7 @@
             .y(([_, z]) => y(z));
         svg.append("path")
             .attr("fill", "none")
-            .attr("stroke", "var(--accent)")
+            .attr("stroke", "var(--acc)")
             .attr("stroke-width", 3)
             .attr("stroke-linejoin", "round")
             .attr("d", line(dz));
@@ -145,7 +145,7 @@
             .attr("transform", `translate(0, 25)`)
             .attr("text-anchor", "middle")
             .attr("fill", "#000");
-        tip.append("circle").attr("r", 5).attr("fill", "var(--accent)");
+        tip.append("circle").attr("r", 5).attr("fill", "var(--acc)");
         hide(tip);
 
         svg.on("mouseenter mousemove", (e) => {
