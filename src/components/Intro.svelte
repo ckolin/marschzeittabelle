@@ -90,7 +90,6 @@
     .outer {
         text-align: initial;
         flex-direction: row;
-        align-items: start;
     }
 
     .inner {
@@ -111,6 +110,7 @@
     }
 
     .or {
+        flex-grow: 1;
         align-self: stretch;
         display: flex;
         align-items: center;
