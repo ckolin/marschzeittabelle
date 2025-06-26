@@ -36,3 +36,7 @@ body {
     background: var(--bg);
     font-family: "Inter", sans-serif;
 }
+
+a {
+    color: var(--acc);
+}

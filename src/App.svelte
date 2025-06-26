@@ -1,9 +1,11 @@
 <script lang="ts">
+    import Intro from "./components/Intro.svelte";
     import Map from "./components/Map.svelte";
     import { BLACK, RED, WHITE } from "./lib/theme";
 </script>
 
-<Map --acc={RED} --fg={WHITE} --bg={BLACK} />
+<Intro --fg={BLACK} --bg={WHITE} />
+<!--<Map --acc={RED} --fg={WHITE} --bg={BLACK} />-->
 
 <style>
 </style>

@@ -6,11 +6,12 @@
 
 <style>
     span {
-        font-size: 18px;
+        font-size: var(--size, 18px);
         vertical-align: -0.15em;
+        user-select: none;
     }
 
     .big {
-        font-size: 24px;
+        font-size: var(--size, 24px);
     }
 </style>
