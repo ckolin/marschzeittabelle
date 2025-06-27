@@ -76,7 +76,10 @@
         <Button><Icon name="file_open" /> Öffnen</Button>
     </ColorBox>
     <p>
-        Marschzeittabelle.ch | <a href="">Hilfe</a> | <a href="">Quellcode</a>
+        Marschzeittabelle.ch | <a href="">Hilfe</a> |
+        <a href="https://github.com/ckolin/marschzeittabelle" target="_blank">
+            Quellcode
+        </a>
     </p>
 </main>
 
@@ -170,5 +173,15 @@
         border: 1px solid var(--acc);
         opacity: 0.3;
         margin: 0.5rem 0;
+    }
+
+    @media (max-width: 45rem) {
+        main {
+            margin: 1rem;
+        }
+
+        .outer {
+            flex-direction: column;
+        }
     }
 </style>
