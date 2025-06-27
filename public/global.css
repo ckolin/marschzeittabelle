@@ -1,13 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital@0;1&display=swap");
 
-:root {
-    --bg: #fff;
-    --fg: #000;
-    --acc: #000;
-    --shadow: #0003;
-}
-
 *,
 *::before,
 *::after {
@@ -29,6 +22,21 @@ select {
 ::placeholder {
     color: inherit;
     opacity: 0.5;
+}
+
+:root {
+    --bg: #fff;
+    --fg: #000;
+    --acc: #000;
+    --shadow: #0003;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #000;
+        --fg: #fff;
+        --acc: #fff;
+    }
 }
 
 body {

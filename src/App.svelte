@@ -6,7 +6,7 @@
 
 <Landing />
 
-<!--<Map --acc={RED} --fg={WHITE} --bg={BLACK} />-->
+<!--<Map --acc={RED} />-->
 
 <style>
 </style>

@@ -23,6 +23,7 @@
         outline: 2px solid var(--acc);
         border: 12px solid color-mix(in srgb, var(--acc), transparent 70%);
         padding: 0.8rem;
+        box-shadow: 0 0 0.5rem var(--shadow);
     }
 
     .icon {

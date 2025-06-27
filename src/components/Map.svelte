@@ -544,7 +544,6 @@
 <style>
     .container {
         position: relative;
-        background: #222;
     }
 
     .map {

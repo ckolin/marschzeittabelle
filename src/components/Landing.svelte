@@ -25,8 +25,8 @@
     <div class="title">
         <h1>Marschzeittabelle leicht gemacht</h1>
         <p>
-            Schluss mit Schnur und Kopfrechnen! Übertrage deine Route
-            automatisch in eine Marschzeittabelle.
+            Schluss mit Schnur und Kopfrechnen! Plane deine Route und übertrage
+            sie automatisch in eine Marschzeittabelle.
         </p>
     </div>
     <div class="outer">
@@ -107,7 +107,7 @@
     }
 
     .background {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
@@ -116,7 +116,7 @@
         background-position: center;
         background-repeat: no-repeat;
         pointer-events: none;
-        opacity: 0.3;
+        opacity: 0.5;
         z-index: -1;
     }
 
@@ -126,6 +126,10 @@
         flex-direction: column;
         gap: 3rem;
         margin: 5rem calc(50% - 20rem);
+    }
+
+    .title {
+        text-shadow: 0 0 2px var(--bg);
     }
 
     .title p {
