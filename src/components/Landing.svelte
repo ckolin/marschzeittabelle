@@ -20,7 +20,7 @@
     <Icon name="upload_file" huge />
     <p>Datei hier ablegen (GPX oder KML)</p>
 </div>
-<img alt="Höhenlinien" src={isolines} />
+<div class="background" style:background-image="url({isolines})"></div>
 <main ondragleave={(e) => e.stopPropagation()}>
     <div class="title">
         <h1>Marschzeittabelle leicht gemacht</h1>
@@ -106,13 +106,17 @@
         font-size: 1.5em;
     }
 
-    img {
+    .background {
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 100vw;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         pointer-events: none;
-        opacity: 0.5;
+        opacity: 0.3;
         z-index: -1;
     }
 
