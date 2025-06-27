@@ -21,6 +21,7 @@
         color: var(--fg);
         outline: 2px solid var(--acc);
         border: 12px solid color-mix(in srgb, var(--acc), transparent 70%);
+        backdrop-filter: blur(8px);
         padding: 0.8rem;
     }
 

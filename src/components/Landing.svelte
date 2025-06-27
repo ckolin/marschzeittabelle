@@ -3,21 +3,24 @@
     import ColorBox from "./ColorBox.svelte";
     import Icon from "./Icon.svelte";
     import { BLUE, GREEN, PINK, YELLOW } from "../lib/theme";
+    import isolines from "../assets/isolines.svg";
 
     let dragging = $state(false);
 </script>
 
-<svelte:window ondragenter={() => (dragging = true)} />
+<svelte:window
+    ondragenter={(e) => (dragging = e.dataTransfer?.items[0].kind === "file")}
+/>
 <div
     class="drop"
     style:visibility={dragging ? "visible" : "hidden"}
     role="region"
-    ondragover={(e) => e.preventDefault()}
     ondragleave={() => (dragging = false)}
 >
     <Icon name="upload_file" huge />
     <p>Datei hier ablegen (GPX oder KML)</p>
 </div>
+<img alt="Höhenlinien" src={isolines} />
 <main ondragleave={(e) => e.stopPropagation()}>
     <div class="title">
         <h1>Marschzeittabelle leicht gemacht</h1>
@@ -101,6 +104,16 @@
 
     .drop p {
         font-size: 1.5em;
+    }
+
+    img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+        opacity: 0.5;
+        z-index: -1;
     }
 
     main {

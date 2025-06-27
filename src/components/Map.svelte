@@ -588,7 +588,6 @@
         flex-direction: column;
         gap: 0.25rem;
         padding: 1rem;
-        border: 1px solid #fff4;
         color: var(--fg);
         background: color-mix(in srgb, var(--bg), transparent 30%);
         backdrop-filter: blur(16px);
