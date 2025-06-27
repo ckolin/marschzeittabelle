@@ -10,3 +10,4 @@ export const RED = "#e2000a";
 export const GREEN = "#00954d";
 export const BLUE = "#008ad1";
 export const PINK = "#e5007c";
+export const YELLOW = "#f7a71f";

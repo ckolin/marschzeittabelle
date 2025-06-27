@@ -2,10 +2,23 @@
     import Button from "./Button.svelte";
     import ColorBox from "./ColorBox.svelte";
     import Icon from "./Icon.svelte";
-    import { BLUE, GREEN, PINK } from "../lib/theme";
+    import { BLUE, GREEN, PINK, YELLOW } from "../lib/theme";
+
+    let dragging = $state(false);
 </script>
 
-<main>
+<svelte:window ondragenter={() => (dragging = true)} />
+<div
+    class="drop"
+    style:visibility={dragging ? "visible" : "hidden"}
+    role="region"
+    ondragover={(e) => e.preventDefault()}
+    ondragleave={() => (dragging = false)}
+>
+    <Icon name="upload_file" huge />
+    <p>Datei hier ablegen (GPX oder KML)</p>
+</div>
+<main ondragleave={(e) => e.stopPropagation()}>
     <div class="title">
         <h1>Marschzeittabelle leicht gemacht</h1>
         <p>
@@ -14,8 +27,7 @@
         </p>
     </div>
     <div class="outer">
-        <ColorBox --acc={PINK}>
-            <div class="icon"><Icon name="gesture" --size="96px" /></div>
+        <ColorBox icon="gesture" --acc={PINK}>
             <span>Schritt 1</span>
             <h3>Route zeichnen</h3>
             <p>
@@ -36,10 +48,7 @@
             <Button><Icon name="upload" /> Datei hochladen</Button>
         </ColorBox>
         <div class="inner">
-            <ColorBox --acc={GREEN}>
-                <div class="icon">
-                    <Icon name="add_location_alt" --size="96px" />
-                </div>
+            <ColorBox icon="add_location_alt" --acc={GREEN}>
                 <span>Schritt 2</span>
                 <h3>Wegpunkte setzen</h3>
                 <p>
@@ -47,10 +56,7 @@
                     kennzeichnen.
                 </p>
             </ColorBox>
-            <ColorBox --acc={BLUE}>
-                <div class="icon">
-                    <Icon name="description" --size="96px" />
-                </div>
+            <ColorBox icon="description" --acc={BLUE}>
                 <span>Schritt 3</span>
                 <h3>Marschzeittabelle bearbeiten</h3>
                 <p>
@@ -60,15 +66,44 @@
             </ColorBox>
         </div>
     </div>
+    <ColorBox icon="history" --acc={YELLOW}>
+        <span>Zuletzt bearbeitet</span>
+        <h3>Aasdlfkj</h3>
+        <p><Icon name="schedule" /> vor 3 Stunden</p>
+        <Button><Icon name="file_open" /> Öffnen</Button>
+    </ColorBox>
     <p>
         Marschzeittabelle.ch | <a href="">Hilfe</a> | <a href="">Quellcode</a>
     </p>
 </main>
 
 <style>
-    main {
+    .drop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
         color: var(--fg);
-        background: var(--bg);
+        background: color-mix(in srgb, var(--bg), transparent 70%);
+        backdrop-filter: blur(16px);
+        z-index: 10;
+    }
+
+    .drop :global(*) {
+        pointer-events: none;
+    }
+
+    .drop p {
+        font-size: 1.5em;
+    }
+
+    main {
         text-align: center;
         display: flex;
         flex-direction: column;
@@ -94,14 +129,6 @@
 
     .inner {
         flex-direction: column;
-    }
-
-    .icon {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.3rem;
-        color: var(--acc);
-        opacity: 0.3;
     }
 
     span {
