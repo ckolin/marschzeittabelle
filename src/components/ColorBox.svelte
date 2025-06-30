@@ -1,10 +1,10 @@
 <script lang="ts">
     import Icon from "./Icon.svelte";
 
-    const { children, icon = undefined } = $props();
+    const { children, icon = undefined, noborder = false } = $props();
 </script>
 
-<div class="box">
+<div class="box" class:noborder>
     {#if icon}
         <div class="icon"><Icon name={icon} huge /></div>
     {/if}
@@ -24,6 +24,10 @@
         border: 12px solid color-mix(in srgb, var(--acc), transparent 70%);
         padding: 0.8rem;
         box-shadow: 0 0 0.5rem var(--shadow);
+    }
+
+    .box.noborder {
+        border: none;
     }
 
     .icon {

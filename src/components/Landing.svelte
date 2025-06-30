@@ -2,7 +2,7 @@
     import Button from "./Button.svelte";
     import ColorBox from "./ColorBox.svelte";
     import Icon from "./Icon.svelte";
-    import { BLUE, GREEN, PINK, YELLOW } from "../lib/theme";
+    import { BLACK, BLUE, BROWN, GREEN, PINK, YELLOW } from "../lib/theme";
     import isolines from "../assets/isolines.svg";
 
     let dragging = $state(false);
@@ -25,8 +25,8 @@
     <div class="title">
         <h1>Marschzeittabelle leicht gemacht</h1>
         <p>
-            Schluss mit Schnur und Kopfrechnen! Plane deine Route und übertrage
-            sie automatisch in eine Marschzeittabelle.
+            Schluss mit Schnur und Kopfrechnen! Plane deine Route hier und
+            übertrage sie automatisch in eine Marschzeittabelle.
         </p>
     </div>
     <div class="outer">
@@ -69,7 +69,7 @@
             </ColorBox>
         </div>
     </div>
-    <ColorBox icon="history" --acc={YELLOW}>
+    <ColorBox icon="history" noborder --acc={BROWN}>
         <span>Zuletzt bearbeitet</span>
         <h3>Aasdlfkj</h3>
         <p><Icon name="schedule" /> vor 3 Stunden</p>
