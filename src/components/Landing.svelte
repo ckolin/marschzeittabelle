@@ -2,9 +2,10 @@
     import Button from "./Button.svelte";
     import ColorBox from "./ColorBox.svelte";
     import Icon from "./Icon.svelte";
-    import { BLACK, BLUE, BROWN, GREEN, PINK, YELLOW } from "../lib/theme";
+    import { BLUE, BROWN, GREEN, PINK } from "../lib/theme";
     import isolines from "../assets/isolines.svg";
 
+    const { onMapOpen } = $props();
     let dragging = $state(false);
 </script>
 
@@ -37,7 +38,9 @@
                 Mit automatischer Wegführung entlang von Wanderwegen und
                 Strassen.
             </p>
-            <Button><Icon name="map" /> Karte öffnen</Button>
+            <Button onclick={onMapOpen}>
+                <Icon name="map" /> Karte öffnen
+            </Button>
             <div class="or">
                 <hr />
                 <span>oder</span>
