@@ -544,10 +544,11 @@
 <style>
     .container {
         position: relative;
+        height: 100%;
     }
 
     .map {
-        height: 100vh;
+        height: 100%;
     }
 
     .map :global {

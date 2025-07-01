@@ -1,6 +1,7 @@
 <script lang="ts">
     import Landing from "./components/Landing.svelte";
-    import { BLACK, RED, WHITE } from "./lib/theme";
+    import MenuBar from "./components/MenuBar.svelte";
+    import { RED, YELLOW } from "./lib/theme";
 
     const map = import("./components/Map.svelte");
     let view: "landing" | "map" | "table" = "landing";
@@ -9,10 +10,26 @@
 {#if view === "landing"}
     <Landing onMapOpen={() => (view = "map")} />
 {:else if view === "map"}
-    {#await map then Map}
-        <Map.default --acc={RED} />
-    {/await}
+    <div class="layout">
+        <nav>
+            <MenuBar --acc={YELLOW} />
+        </nav>
+        <main>
+            {#await map then Map}
+                <Map.default --acc={RED} />
+            {/await}
+        </main>
+    </div>
 {/if}
 
 <style>
+    .layout {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    main {
+        flex-grow: 1;
+    }
 </style>
