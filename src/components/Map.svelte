@@ -159,13 +159,13 @@
             const w = tooltipElement.offsetWidth;
             const h = tooltipElement.offsetHeight;
             const x =
-                e.pageX + o + w < window.innerWidth
-                    ? e.pageX + o
-                    : e.pageX - o - w;
+                e.offsetX + o + w < window.innerWidth
+                    ? e.offsetX + o
+                    : e.offsetX - o - w;
             const y =
-                e.pageY + o + h < window.innerHeight
-                    ? e.pageY + o
-                    : e.pageY - o - h;
+                e.offsetY + o + h < window.innerHeight
+                    ? e.offsetY + o
+                    : e.offsetY - o - h;
             tooltipState = "map";
             tooltipPosition = [x, y];
         });
