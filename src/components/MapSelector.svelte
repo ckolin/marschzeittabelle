@@ -42,16 +42,17 @@
     }
 
     img {
+        --radius: 0;
         display: block;
         width: 4rem;
     }
 
     label:first-child img {
-        border-radius: 0.2rem 0 0 0.2rem;
+        border-radius: var(--radius) 0 0 var(--radius);
     }
 
     label:last-child img {
-        border-radius: 0 0.2rem 0.2rem 0;
+        border-radius: 0 var(--radius) var(--radius) 0;
     }
 
     input:checked + img {

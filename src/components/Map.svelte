@@ -613,8 +613,8 @@
         gap: 0.25rem;
         padding: 1rem;
         color: var(--fg);
-        background: color-mix(in srgb, var(--bg), transparent 30%);
-        backdrop-filter: blur(16px);
+        background: color-mix(in srgb, var(--bg), transparent 40%);
+        backdrop-filter: blur(20px);
         box-shadow: 0 0 1rem var(--shadow);
         pointer-events: initial;
     }
