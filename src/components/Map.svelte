@@ -16,12 +16,7 @@
         type SourceSpecification,
         type StyleSpecification,
     } from "maplibre-gl";
-    import {
-        Router,
-        type RoutePoint,
-        RouteMode,
-        type RouteSegment,
-    } from "../lib/routing";
+    import { Router, RouteMode, type RouteSegment } from "../lib/routing";
     import type { Point2 } from "../lib/points";
     import { theme } from "../lib/theme";
     import MapSearch from "./MapSearch.svelte";
@@ -29,7 +24,7 @@
     import Profile from "./Profile.svelte";
     import Icon from "./Icon.svelte";
     import Spinner from "./Spinner.svelte";
-    import { RoutingState } from "../lib/state";
+    import { model } from "../model.svelte";
 
     let mapElement: HTMLElement;
     let map: Map;
@@ -95,7 +90,7 @@
         },
     ] as const;
 
-    let routing = $state(new RoutingState());
+    let routing = model.routing!;
 
     let router = new Router((l, t) => (routerLoading = l < t));
     let routerLoading = $state(false);
@@ -453,6 +448,7 @@
     onMount(() => {
         initializeMap();
         initializeIntermediate();
+        recalculate();
     });
 
     onDestroy(() => map.remove());
@@ -480,7 +476,7 @@
             <span><Icon name="mouse" />L - Punkt einfügen</span>
         {/if}
     </div>
-    <div class="overlay" style="top: 0; left: 0">
+    <div class="overlay" style:top="0" style:left="0">
         <div class="box">
             <span>
                 <Icon name="directions" /> Wegfindung
@@ -498,26 +494,35 @@
                 </label>
             {/each}
         </div>
-        <div class="box">
+        <div class="box" style:flex-direction="row">
             <button
+                title="Rückgängig"
                 onclick={() => {
                     routing.undo();
                     recalculate();
                 }}
+                disabled={routing.history.length === 0}
             >
                 <Icon name="undo" big />
             </button>
             <button
+                title="Wiederherstellen"
                 onclick={() => {
                     routing.redo();
                     recalculate();
                 }}
+                disabled={routing.future.length === 0}
             >
                 <Icon name="redo" big />
             </button>
         </div>
     </div>
-    <div class="overlay" style="top: 0; right: 0; flex-direction: row">
+    <div
+        class="overlay"
+        style:top="0"
+        style:right="0"
+        style:flex-direction="row"
+    >
         <div class="box">
             <MapSearch
                 {onHighlight}
@@ -526,15 +531,15 @@
             />
         </div>
         <div class="box">
-            <button onclick={() => map.zoomIn()}>
+            <button title="Grösser" onclick={() => map.zoomIn()}>
                 <Icon name="add" big />
             </button>
-            <button onclick={() => map.zoomOut()}>
+            <button title="Kleiner" onclick={() => map.zoomOut()}>
                 <Icon name="remove" big />
             </button>
         </div>
     </div>
-    <div class="overlay" style="bottom: 0; left: 0">
+    <div class="overlay" style:bottom="0" style:left="0">
         <div class="box">
             <span><Icon name="layers" /> Ebenen</span>
             {#each overlays as { id, icon, label }}
@@ -623,6 +628,10 @@
         padding: 1rem;
         background: none;
         border: none;
+    }
+
+    .box button:disabled {
+        opacity: 0.5;
     }
 
     .tooltip {

@@ -1,23 +1,19 @@
-import type { Line2 } from "./points";
-import { RouteMode, type RoutePoint } from "./routing";
+import type { Line2 } from "./lib/points";
+import { RouteMode, type RoutePoint } from "./lib/routing";
 
-export class State {
-    constructor(
-        public routing: RoutingState | undefined,
-        public line: Line2 | undefined = undefined,
-        public title: string = "",
-        public author: string = "",
-        public start: number = 0,
-        public speed: number = 4,
-        public mapScale: 25 | 50 | 100 = 25,
-    ) {}
+export class Model {
+    routing: RoutingModel | undefined = $state(new RoutingModel());
+    line: Line2 | undefined = $state(undefined);
+    title: string = $state("");
+    author: string = $state("");
+    start: number = $state(0);
+    speed: number = $state(4);
+    mapScale: 25 | 50 | 100 = $state(25);
+    // TODO: Waypoints
 
-    static new(): State {
-        return new State(new RoutingState());
-    }
-
-    static import(line: Line2): State {
-        return new State(undefined, line);
+    public import(line: Line2) {
+        this.routing = undefined;
+        this.line = line;
     }
 }
 
@@ -42,16 +38,14 @@ interface Replace {
 
 type Command = Insert | Remove | Replace;
 
-export class RoutingState {
-    constructor(
-        public mode: RouteMode = RouteMode.PreferRoads,
-        public points: RoutePoint[] = [],
-        private history: Command[] = [],
-        private future: Command[] = [],
-    ) {}
+export class RoutingModel {
+    mode: RouteMode = $state(RouteMode.PreferRoads);
+    points: RoutePoint[] = $state([]);
+    history: Command[] = $state([]);
+    future: Command[] = $state([]);
 
     public insert(point: RoutePoint, index: number = this.points.length) {
-        this.execute({ kind: "insert", index, point }, true);
+        this.execute({ kind: "insert", index, point });
     }
 
     public remove(index: number = this.points.length - 1) {
@@ -69,21 +63,21 @@ export class RoutingState {
 
     public undo() {
         if (this.history.length > 0) {
-            const cmd = RoutingState.reverse(this.history.pop()!);
-            this.execute(cmd);
+            const cmd = RoutingModel.reverse(this.history.pop()!);
+            this.execute(cmd, false);
             this.future.push(cmd);
         }
     }
 
     public redo() {
         if (this.future.length > 0) {
-            const cmd = RoutingState.reverse(this.future.pop()!);
-            this.execute(cmd);
+            const cmd = RoutingModel.reverse(this.future.pop()!);
+            this.execute(cmd, false);
             this.history.push(cmd);
         }
     }
 
-    private execute(cmd: Command, track: boolean = false) {
+    private execute(cmd: Command, track: boolean = true) {
         if (cmd.kind === "insert") {
             this.points.splice(cmd.index, 0, cmd.point);
         } else if (cmd.kind === "remove") {
@@ -114,3 +108,5 @@ export class RoutingState {
         }
     }
 }
+
+export const model = new Model();
