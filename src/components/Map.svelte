@@ -29,6 +29,7 @@
     import Profile from "./Profile.svelte";
     import Icon from "./Icon.svelte";
     import Spinner from "./Spinner.svelte";
+    import { RoutingState } from "../lib/state";
 
     let mapElement: HTMLElement;
     let map: Map;
@@ -93,24 +94,24 @@
             label: "Wanderwege",
         },
     ] as const;
-    let mode = $state(RouteMode.PreferRoads);
+
+    let routing = $state(new RoutingState());
 
     let router = new Router((l, t) => (routerLoading = l < t));
     let routerLoading = $state(false);
-    let points: RoutePoint[] = $state([]);
     let route: RouteSegment[] = $state([]);
 
-    function insertPoint(lngLat: LngLat, i = points.length) {
+    function insertPoint(lngLat: LngLat, i = routing.points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
         router.snap(pt).then((rp) => {
-            points.splice(i, 0, rp);
+            routing.insert(rp, i);
             recalculate();
         });
     }
 
     function recalculate() {
         updateMarkers();
-        router.route(points, mode).then((r) => {
+        router.route(routing.points, routing.mode).then((r) => {
             route = r;
             updateFeatures();
         });
@@ -132,7 +133,7 @@
         map.keyboard.disableRotation();
         map.touchZoomRotate.disableRotation();
         map.on("contextmenu", () => {
-            points.pop();
+            routing.remove();
             recalculate();
         });
         const mouseMove = (
@@ -388,12 +389,12 @@
 
     function updateMarkers() {
         // Remove surplus markers
-        for (let i = markers.length - 1; i >= points.length; i--) {
+        for (let i = markers.length - 1; i >= routing.points.length; i--) {
             const marker = markers.pop()!;
             marker.remove();
         }
         // Add markers as needed
-        for (let i = markers.length; i < points.length; i++) {
+        for (let i = markers.length; i < routing.points.length; i++) {
             const el = document.createElement("div");
             el.classList.add("marker");
             el.addEventListener("mouseenter", () => {
@@ -407,7 +408,7 @@
             el.addEventListener("click", (e) => e.stopPropagation());
             el.addEventListener("contextmenu", () => {
                 intermediateMarker.remove();
-                points.splice(i, 1);
+                routing.remove(i);
                 recalculate();
             });
             const marker = new Marker({
@@ -417,15 +418,15 @@
             marker.on("dragend", () => {
                 const lngLat = marker.getLngLat();
                 const pt: Point2 = WGStoLV95([lngLat.lng, lngLat.lat]);
-                router.snap(pt).then((pt) => {
-                    points[i] = pt;
+                router.snap(pt).then((rp) => {
+                    routing.replace(i, rp);
                     recalculate();
                 });
             });
             markers.push(marker);
         }
-        for (let i = 0; i < points.length; i++) {
-            markers[i].setLngLat(LV95toWGS(points[i].point)).addTo(map);
+        for (let i = 0; i < routing.points.length; i++) {
+            markers[i].setLngLat(LV95toWGS(routing.points[i].point)).addTo(map);
         }
     }
 
@@ -468,7 +469,7 @@
     >
         {#if routerLoading}
             <Spinner />
-        {:else if tooltipState === "map" && points.length === 0}
+        {:else if tooltipState === "map" && routing.points.length === 0}
             <span><Icon name="mouse" />L - Startpunkt setzen</span>
         {:else if tooltipState === "map"}
             <span><Icon name="mouse" />L - Punkt hinzufügen</span>
@@ -489,13 +490,31 @@
                     <input
                         type="radio"
                         {value}
-                        bind:group={mode}
+                        bind:group={routing.mode}
                         onchange={recalculate}
                     />
                     <Icon name={icon} />
                     {label}
                 </label>
             {/each}
+        </div>
+        <div class="box">
+            <button
+                onclick={() => {
+                    routing.undo();
+                    recalculate();
+                }}
+            >
+                <Icon name="undo" big />
+            </button>
+            <button
+                onclick={() => {
+                    routing.redo();
+                    recalculate();
+                }}
+            >
+                <Icon name="redo" big />
+            </button>
         </div>
     </div>
     <div class="overlay" style="top: 0; right: 0; flex-direction: row">

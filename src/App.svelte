@@ -1,10 +1,13 @@
 <script lang="ts">
     import Landing from "./components/Landing.svelte";
     import MenuBar from "./components/MenuBar.svelte";
-    import { RED, YELLOW } from "./lib/theme";
+    import { State } from "./lib/state";
+    import { RED } from "./lib/theme";
 
     const map = import("./components/Map.svelte");
-    let view: "landing" | "map" | "table" = "landing";
+    let view: "landing" | "map" | "table" = $state("landing");
+
+    let appState = $state(State.new());
 </script>
 
 {#if view === "landing"}
@@ -12,7 +15,7 @@
 {:else if view === "map"}
     <div class="layout">
         <nav>
-            <MenuBar --acc={YELLOW} />
+            <MenuBar />
         </nav>
         <main>
             {#await map then Map}
