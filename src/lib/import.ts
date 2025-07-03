@@ -36,10 +36,6 @@ function extractSingleLineString(geojson: FeatureCollection): LineString {
     }
     while (lines.length > 1) {
         const conn = findConnectedLines(lines);
-        if (conn == undefined) {
-            // TODO: Error handling
-            throw null;
-        }
         if (conn.revFst) {
             lines[conn.fst].coordinates.reverse();
         }
@@ -54,14 +50,12 @@ function extractSingleLineString(geojson: FeatureCollection): LineString {
     return cleanCoords(lines[0]);
 }
 
-function findConnectedLines(lines: LineString[]):
-    | {
-          fst: number;
-          snd: number;
-          revFst: boolean;
-          revSnd: boolean;
-      }
-    | undefined {
+function findConnectedLines(lines: LineString[]): {
+    fst: number;
+    snd: number;
+    revFst: boolean;
+    revSnd: boolean;
+} {
     const equal = (a: Position, b: Position) =>
         distance(a, b, { units: "meters" }) < EPSILON;
     const first = (l: LineString) => l.coordinates[0];
@@ -83,7 +77,8 @@ function findConnectedLines(lines: LineString[]):
             }
         }
     }
-    return undefined;
+    // TODO: Error handling
+    throw 0;
 }
 
 function extractWaypoints(
