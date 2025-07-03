@@ -150,6 +150,7 @@
                 insertPoint(e.lngLat);
             }
         });
+        mapElement.addEventListener("mouseenter", () => (tooltipState = "map"));
         mapElement.addEventListener("mousemove", (e) => {
             const o = 15;
             const w = tooltipElement.offsetWidth;
@@ -162,7 +163,6 @@
                 e.pageY + o + h < window.innerHeight
                     ? e.pageY + o
                     : e.pageY - o - h;
-            tooltipState = "map";
             tooltipPosition = [x, y];
         });
         mapElement.addEventListener(
