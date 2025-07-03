@@ -9,20 +9,22 @@ import { WGStoLV95 } from "swiss-projection";
 
 const EPSILON = 10;
 
-export async function importFile(file: File): Promise<Line2> {
+export async function importFile(file: File): Promise<[Line2, Waypoint[]]> {
     const text = await file.text();
     const xml = new DOMParser().parseFromString(text, "text/xml");
     let geojson = file.name.endsWith(".kml")
         ? (kml(xml, { skipNullGeometry: true }) as FeatureCollection)
         : gpx(xml);
     console.log(geojson);
-    const lineString = extractSingleLine(geojson);
+    const lineString = extractSingleLineString(geojson);
     const waypoints = extractWaypoints(geojson, lineString);
-    console.log(waypoints);
-    return [];
+    const line: Line2 = lineString.coordinates.map(([x, y]) =>
+        WGStoLV95([x, y]),
+    );
+    return [line, waypoints];
 }
 
-function extractSingleLine(geojson: FeatureCollection): LineString {
+function extractSingleLineString(geojson: FeatureCollection): LineString {
     const lines: LineString[] = [];
     for (const feature of geojson.features) {
         if (feature.geometry.type === "LineString") {
