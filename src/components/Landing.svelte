@@ -1,11 +1,11 @@
 <script lang="ts">
+    import isolines from "../assets/isolines.svg";
+    import { importFile } from "../lib/import";
+    import { BLUE, BROWN, GREEN, PINK } from "../lib/theme";
     import Button from "./Button.svelte";
     import ColorBox from "./ColorBox.svelte";
-    import Icon from "./Icon.svelte";
-    import { BLUE, BROWN, GREEN, PINK } from "../lib/theme";
-    import isolines from "../assets/isolines.svg";
     import DropZone from "./DropZone.svelte";
-    import { importFile } from "../lib/import";
+    import Icon from "./Icon.svelte";
 
     const { onMapOpen } = $props();
     let files: FileList | undefined = $state();

@@ -1,11 +1,11 @@
-import { gpx, kml } from "@tmcw/togeojson";
 import type { Line2, Point2 } from "./points";
-import { WGStoLV95 } from "swiss-projection";
-import type { GeoJsonProperties, LineString, Polygon, Position } from "geojson";
-import nearestPointOnLine from "@turf/nearest-point-on-line";
-import distance from "@turf/distance";
+import { gpx, kml } from "@tmcw/togeojson";
 import cleanCoords from "@turf/clean-coords";
+import distance from "@turf/distance";
+import nearestPointOnLine from "@turf/nearest-point-on-line";
 import polygonToLine from "@turf/polygon-to-line";
+import type { LineString, Polygon, Position } from "geojson";
+import { WGStoLV95 } from "swiss-projection";
 
 const EPSILON = 10;
 

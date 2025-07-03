@@ -9,9 +9,9 @@
 </script>
 
 <script lang="ts">
-    import pixelkarteIcon from "../assets/pixelkarte.jpg";
     import baseIcon from "../assets/base.jpg";
     import imageryBaseIcon from "../assets/imagerybase.jpg";
+    import pixelkarteIcon from "../assets/pixelkarte.jpg";
 
     let {
         baseMap = $bindable(),

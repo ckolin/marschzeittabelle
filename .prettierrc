@@ -1,7 +1,10 @@
 {
     "tabWidth": 4,
     "useTabs": false,
-    "plugins": ["prettier-plugin-svelte"],
+    "plugins": [
+        "prettier-plugin-svelte",
+        "@trivago/prettier-plugin-sort-imports"
+    ],
     "overrides": [
         {
             "files": "*.svelte",

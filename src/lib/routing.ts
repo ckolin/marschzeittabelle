@@ -1,8 +1,8 @@
+import { dist2, type Line2, type Point2 } from "./points";
 import { unpack } from "msgpackr";
-import TinyQueue from "tinyqueue";
 import RBush, { type BBox } from "rbush";
 import knn from "rbush-knn";
-import { dist2, type Line2, type Point2 } from "./points";
+import TinyQueue from "tinyqueue";
 
 const TILE_SIZE = 10000;
 const LOAD_MARGIN = 2000;

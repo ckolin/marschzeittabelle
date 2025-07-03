@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { GREEN, PINK } from "../lib/theme";
     import Button from "./Button.svelte";
     import Icon from "./Icon.svelte";
-    import { GREEN, PINK } from "../lib/theme";
 </script>
 
 <nav>

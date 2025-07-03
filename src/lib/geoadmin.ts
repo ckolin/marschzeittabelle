@@ -1,5 +1,5 @@
-import type { LineString } from "geojson";
 import type { Line2, Line3, Point2 } from "./points";
+import type { LineString } from "geojson";
 import simplify from "simplify-js";
 
 const BASE_URL = import.meta.env.VITE_GEOADMIN_URL;

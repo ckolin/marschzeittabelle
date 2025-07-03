@@ -1,10 +1,10 @@
 <script lang="ts">
     import * as d3 from "../lib/d3";
-    import type { RouteSegment } from "../lib/routing";
     import { fetchProfile } from "../lib/geoadmin";
     import { along2, dist2, type Line3, type Point2 } from "../lib/points";
-    import Spinner from "./Spinner.svelte";
+    import type { RouteSegment } from "../lib/routing";
     import Icon from "./Icon.svelte";
+    import Spinner from "./Spinner.svelte";
     import { fade } from "svelte/transition";
 
     const {
