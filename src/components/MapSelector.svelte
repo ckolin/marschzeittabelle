@@ -45,6 +45,7 @@
         --radius: 0;
         display: block;
         width: 4rem;
+        cursor: pointer;
     }
 
     label:first-child img {

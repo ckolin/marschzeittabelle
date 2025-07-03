@@ -16,6 +16,10 @@ select {
     font: inherit;
 }
 
+button {
+    cursor: pointer;
+}
+
 ::placeholder {
     color: inherit;
     opacity: 0.5;
