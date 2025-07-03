@@ -193,9 +193,9 @@
 
     function getStyle(): string | StyleSpecification {
         if (baseMap === "base") {
-            return "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap_world.vt/style.json?key=elL5I2rTshJ5j6y7kifu";
+            return `https://vectortiles.geo.admin.ch/styles/ch.swisstopo.basemap_world.vt/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`;
         } else if (baseMap === "imagerybase") {
-            return "https://vectortiles.geo.admin.ch/styles/ch.swisstopo.imagerybasemap_world.vt/style.json?key=elL5I2rTshJ5j6y7kifu";
+            return `https://vectortiles.geo.admin.ch/styles/ch.swisstopo.imagerybasemap_world.vt/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`;
         } else {
             return {
                 version: 8,
