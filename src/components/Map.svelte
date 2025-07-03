@@ -314,7 +314,7 @@
             features,
         };
         const source: GeoJSONSource | undefined = map.getSource("+route");
-        if (source == null) {
+        if (source == undefined) {
             map.addSource("+route", { type: "geojson", data: collection });
             map.addLayer({
                 id: "+route-on-road",
@@ -426,7 +426,7 @@
     }
 
     function onHighlight(point: Point2) {
-        if (highlightMarker == null) {
+        if (highlightMarker == undefined) {
             const el = document.createElement("div");
             el.classList.add("marker", "highlight");
             highlightMarker = new Marker({

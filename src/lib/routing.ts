@@ -277,9 +277,9 @@ export class Router {
     }
 
     private static densify([p, ...[q, ...qs]]: Point2[]): Point2[] {
-        if (p == null) {
+        if (p == undefined) {
             return [];
-        } else if (q == null) {
+        } else if (q == undefined) {
             return [p];
         } else if (dist2(p, q) > LOAD_DENSITY) {
             const [px, py] = p;
@@ -339,7 +339,7 @@ export class Router {
         if (endAdded) {
             this.removeVertex(end);
         }
-        if (path == null) {
+        if (path == undefined) {
             return [[vertexToPoint(start), vertexToPoint(end)], false];
         } else {
             return [path, true];

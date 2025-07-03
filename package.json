@@ -34,6 +34,10 @@
     "type": "module",
     "dependencies": {
         "@tmcw/togeojson": "^7.1.2",
+        "@turf/clean-coords": "^7.2.0",
+        "@turf/distance": "^7.2.0",
+        "@turf/nearest-point-on-line": "^7.2.0",
+        "@turf/polygon-to-line": "^7.2.0",
         "d3-array": "^3.2.4",
         "d3-axis": "^3.0.0",
         "d3-scale": "^4.0.2",

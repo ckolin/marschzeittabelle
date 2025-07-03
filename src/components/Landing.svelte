@@ -4,25 +4,23 @@
     import Icon from "./Icon.svelte";
     import { BLUE, BROWN, GREEN, PINK } from "../lib/theme";
     import isolines from "../assets/isolines.svg";
+    import DropZone from "./DropZone.svelte";
+    import { importFile } from "../lib/import";
 
     const { onMapOpen } = $props();
-    let dragging = $state(false);
+    let files: FileList | undefined = $state();
+    let uploadInput: HTMLInputElement;
+
+    $effect(() => {
+        if (files != undefined && files[0] != undefined) {
+            importFile(files[0]);
+        }
+    });
 </script>
 
-<svelte:window
-    ondragenter={(e) => (dragging = e.dataTransfer?.items[0].kind === "file")}
-/>
-<div
-    class="drop"
-    style:visibility={dragging ? "visible" : "hidden"}
-    role="region"
-    ondragleave={() => (dragging = false)}
->
-    <Icon name="upload_file" huge />
-    <p>Datei hier ablegen (GPX oder KML)</p>
-</div>
+<DropZone bind:files />
 <div class="background" style:background-image="url({isolines})"></div>
-<main ondragleave={(e) => e.stopPropagation()}>
+<main>
     <div class="title">
         <h1>Marschzeittabelle leicht gemacht</h1>
         <p>
@@ -51,7 +49,16 @@
                 Untersützt sind GPX- und KML-Dateien, z.B. aus der swisstopo-App
                 oder von Outdooractive.com.
             </p>
-            <Button><Icon name="upload" /> Datei hochladen</Button>
+            <input
+                bind:this={uploadInput}
+                id="upload"
+                type="file"
+                accept=".kml,.gpx"
+                bind:files
+            />
+            <Button onclick={() => uploadInput.click()}>
+                <Icon name="upload" /> Datei hochladen
+            </Button>
         </ColorBox>
         <div class="inner">
             <ColorBox icon="add_location_alt" --acc={GREEN}>
@@ -87,31 +94,6 @@
 </main>
 
 <style>
-    .drop {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-        color: var(--fg);
-        background: color-mix(in srgb, var(--bg), transparent 70%);
-        backdrop-filter: blur(16px);
-        z-index: 10;
-    }
-
-    .drop :global(*) {
-        pointer-events: none;
-    }
-
-    .drop p {
-        font-size: 1.5em;
-    }
-
     .background {
         position: fixed;
         top: 0;
@@ -176,6 +158,10 @@
         border: 1px solid var(--acc);
         opacity: 0.3;
         margin: 0.5rem 0;
+    }
+
+    input#upload {
+        display: none;
     }
 
     @media (max-width: 45rem) {

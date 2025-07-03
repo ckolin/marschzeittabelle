@@ -122,7 +122,7 @@
             );
 
         const hide = (e: any) => e.attr("display", "none");
-        const show = (e: any) => e.attr("display", null);
+        const show = (e: any) => e.attr("display", undefined);
 
         const rule = svg
             .append("g")
