@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { fade } from "svelte/transition";
     import Icon from "./Icon.svelte";
 
     let { files = $bindable() } = $props();
@@ -8,20 +9,21 @@
 <svelte:window
     ondragenter={(e) => (dragging = e.dataTransfer?.items[0].kind === "file")}
 />
-<div
-    style:visibility={dragging ? "visible" : "hidden"}
-    role="region"
-    ondrop={(e) => {
-        files = e.dataTransfer?.files;
-        dragging = false;
-        e.preventDefault();
-    }}
-    ondragover={(e) => e.preventDefault()}
-    ondragleave={() => (dragging = false)}
->
-    <Icon name="upload_file" huge />
-    <p>Datei hier ablegen (GPX oder KML)</p>
-</div>
+{#if dragging}
+    <div out:fade
+        role="region"
+        ondrop={(e) => {
+            files = e.dataTransfer?.files;
+            dragging = false;
+            e.preventDefault();
+        }}
+        ondragover={(e) => e.preventDefault()}
+        ondragleave={() => (dragging = false)}
+    >
+        <Icon name="upload_file" huge />
+        <p>Datei hier ablegen (GPX oder KML)</p>
+    </div>
+{/if}
 
 <style>
     div {

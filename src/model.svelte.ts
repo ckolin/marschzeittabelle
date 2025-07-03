@@ -1,20 +1,21 @@
-import type { Line2 } from "./lib/points";
+import type { Line2, Point2 } from "./lib/points";
 import { RouteMode, type RoutePoint } from "./lib/routing";
 
-export class Model {
-    routing: RoutingModel | undefined = $state(new RoutingModel());
-    line: Line2 | undefined = $state(undefined);
-    title: string = $state("");
-    author: string = $state("");
-    start: number = $state(0);
-    speed: number = $state(4);
-    mapScale: 25 | 50 | 100 = $state(25);
-    // TODO: Waypoints
+export interface Waypoint {
+    name: string;
+    comment: string;
+    point: Point2;
+}
 
-    public import(line: Line2) {
-        this.routing = undefined;
-        this.line = line;
-    }
+export interface Model {
+    routing: RoutingModel | undefined;
+    line: Line2 | undefined;
+    title: string;
+    author: string;
+    start: number;
+    speed: number;
+    mapScale: 25 | 50 | 100;
+    waypoints: Waypoint[];
 }
 
 interface Insert {
@@ -109,4 +110,13 @@ export class RoutingModel {
     }
 }
 
-export const model = new Model();
+export const model = $state({
+    routing: new RoutingModel(),
+    line: undefined,
+    title: "",
+    author: "",
+    start: 0,
+    speed: 4,
+    mapScale: 25,
+    waypoints: [],
+});

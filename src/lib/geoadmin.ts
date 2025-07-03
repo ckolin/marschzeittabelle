@@ -16,6 +16,7 @@ export async function search(query: string): Promise<SearchResult[]> {
     const res = await fetch(
         `${BASE_URL}/api/SearchServer?sr=2056&searchText=${query}&type=locations&lang=de&limit=5`,
     );
+    // TODO: Error handling
     const json = await res.json();
     return json.results
         .map((r: any) => r.attrs)
@@ -46,6 +47,7 @@ export async function fetchProfile(
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `sr=2056&nb_points=${resolution}&geom=${JSON.stringify(geom)}`,
     });
+    // TODO: Error handling
     const json = await res.json();
     const profile = json.map((p: any) => [p.easting, p.northing, p.alts.COMB]);
     return profile;

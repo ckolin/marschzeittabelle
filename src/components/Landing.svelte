@@ -13,7 +13,7 @@
 
     $effect(() => {
         if (files != undefined && files[0] != undefined) {
-            importFile(files[0]);
+            importFile(files[0]).then(([l, ws]) => console.log([l, ws]));
         }
     });
 </script>
@@ -86,7 +86,7 @@
         <Button><Icon name="file_open" /> Öffnen</Button>
     </ColorBox>
     <p>
-        Marschzeittabelle.ch | <a href="">Hilfe</a> |
+        Marschzeittabelle.ch | <a href="help" target="blank">Hilfe</a> |
         <a href="https://github.com/ckolin/marschzeittabelle" target="_blank">
             Quellcode
         </a>
@@ -113,7 +113,7 @@
         display: flex;
         flex-direction: column;
         gap: 3rem;
-        margin: 5rem calc(50% - 20rem);
+        margin: 3rem calc(50% - 20rem);
     }
 
     .title {

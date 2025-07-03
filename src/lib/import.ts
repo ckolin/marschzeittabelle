@@ -1,4 +1,5 @@
-import type { Line2, Point2 } from "./points";
+import type { Waypoint } from "../model.svelte";
+import type { Line2 } from "./points";
 import { gpx, kml } from "@tmcw/togeojson";
 import cleanCoords from "@turf/clean-coords";
 import distance from "@turf/distance";
@@ -15,7 +16,6 @@ export async function importFile(file: File): Promise<[Line2, Waypoint[]]> {
     let geojson = file.name.endsWith(".kml")
         ? (kml(xml, { skipNullGeometry: true }) as FeatureCollection)
         : gpx(xml);
-    console.log(geojson);
     const lineString = extractSingleLineString(geojson);
     const waypoints = extractWaypoints(geojson, lineString);
     const line: Line2 = lineString.coordinates.map(([x, y]) =>
@@ -37,7 +37,7 @@ function extractSingleLineString(geojson: FeatureCollection): LineString {
     while (lines.length > 1) {
         const conn = findConnectedLines(lines);
         if (conn == undefined) {
-            // TODO: Throw exception
+            // TODO: Error handling
             throw null;
         }
         if (conn.revFst) {
@@ -84,12 +84,6 @@ function findConnectedLines(lines: LineString[]):
         }
     }
     return undefined;
-}
-
-interface Waypoint {
-    name: string;
-    comment: string;
-    point: Point2;
 }
 
 function extractWaypoints(

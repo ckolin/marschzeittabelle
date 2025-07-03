@@ -303,7 +303,8 @@ export class Router {
     private async loadTile(id: string): Promise<FwdEdge[]> {
         const res = await fetch(`${import.meta.env.VITE_TILE_URL}/${id}.txt`);
         if (!res.ok) {
-            // TODO: Could be nonexistent tile, could be something else
+            // TODO: Error handling
+            // Could be nonexistent tile, could be something else
             return [];
         }
         const buf = await res.arrayBuffer();
