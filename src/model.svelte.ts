@@ -45,15 +45,15 @@ export class RoutingModel {
     history: Command[] = $state([]);
     future: Command[] = $state([]);
 
-    public insert(point: RoutePoint, index: number = this.points.length) {
+    public insertPoint(point: RoutePoint, index: number = this.points.length) {
         this.execute({ kind: "insert", index, point });
     }
 
-    public remove(index: number = this.points.length - 1) {
+    public removePoint(index: number = this.points.length - 1) {
         this.execute({ kind: "remove", index, point: this.points[index] });
     }
 
-    public replace(index: number, point: RoutePoint) {
+    public replacePoint(index: number, point: RoutePoint) {
         this.execute({
             kind: "replace",
             index,
@@ -110,7 +110,7 @@ export class RoutingModel {
     }
 }
 
-export const model = $state({
+export const model: Model = $state({
     routing: new RoutingModel(),
     line: undefined,
     title: "",

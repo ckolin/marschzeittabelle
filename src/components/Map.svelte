@@ -99,7 +99,7 @@
     function insertPoint(lngLat: LngLat, i = routing.points.length) {
         const pt = WGStoLV95([lngLat.lng, lngLat.lat]);
         router.snap(pt).then((rp) => {
-            routing.insert(rp, i);
+            routing.insertPoint(rp, i);
             recalculate();
         });
     }
@@ -128,7 +128,7 @@
         map.keyboard.disableRotation();
         map.touchZoomRotate.disableRotation();
         map.on("contextmenu", () => {
-            routing.remove();
+            routing.removePoint();
             recalculate();
         });
         const mouseMove = (
@@ -403,7 +403,7 @@
             el.addEventListener("click", (e) => e.stopPropagation());
             el.addEventListener("contextmenu", () => {
                 intermediateMarker.remove();
-                routing.remove(i);
+                routing.removePoint(i);
                 recalculate();
             });
             const marker = new Marker({
@@ -414,7 +414,7 @@
                 const lngLat = marker.getLngLat();
                 const pt: Point2 = WGStoLV95([lngLat.lng, lngLat.lat]);
                 router.snap(pt).then((rp) => {
-                    routing.replace(i, rp);
+                    routing.replacePoint(i, rp);
                     recalculate();
                 });
             });
