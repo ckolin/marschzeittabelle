@@ -155,13 +155,13 @@
             const w = tooltipElement.offsetWidth;
             const h = tooltipElement.offsetHeight;
             const x =
-                e.offsetX + o + w < window.innerWidth
-                    ? e.offsetX + o
-                    : e.offsetX - o - w;
+                e.pageX + o + w < window.innerWidth
+                    ? e.pageX + o
+                    : e.pageX - o - w;
             const y =
-                e.offsetY + o + h < window.innerHeight
-                    ? e.offsetY + o
-                    : e.offsetY - o - h;
+                e.pageY + o + h < window.innerHeight
+                    ? e.pageY + o
+                    : e.pageY - o - h;
             tooltipState = "map";
             tooltipPosition = [x, y];
         });
@@ -448,7 +448,6 @@
     onMount(() => {
         initializeMap();
         initializeIntermediate();
-        recalculate();
     });
 
     onDestroy(() => map.remove());
@@ -636,9 +635,9 @@
 
     .tooltip {
         z-index: 20;
+        position: fixed;
         padding: 0.75rem;
         white-space: nowrap;
-        position: absolute;
         pointer-events: none;
     }
 

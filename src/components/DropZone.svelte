@@ -25,6 +25,7 @@
 
 <style>
     div {
+        z-index: 1000;
         position: fixed;
         top: 0;
         left: 0;
@@ -38,7 +39,6 @@
         color: var(--fg);
         background: color-mix(in srgb, var(--bg), transparent 70%);
         backdrop-filter: blur(16px);
-        z-index: 10;
     }
 
     div :global(*) {

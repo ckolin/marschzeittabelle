@@ -12,12 +12,12 @@
 
 <style>
     nav {
+        z-index: 100;
         display: flex;
         align-items: center;
         gap: 0.5rem;
         padding: 1rem;
         box-shadow: 0 0 0.5rem var(--shadow);
-        z-index: 10;
     }
 
     span {
