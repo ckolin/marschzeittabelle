@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { downloadGpx } from "../lib/export";
     import type { Point2 } from "../lib/points";
     import { Router, RouteMode, type RouteSegment } from "../lib/routing";
     import { theme } from "../lib/theme";
@@ -513,6 +514,19 @@
                 disabled={routing.future.length === 0}
             >
                 <Icon name="redo" big />
+            </button>
+        </div>
+        <div class="box">
+            <button
+                onclick={() =>
+                    downloadGpx(
+                        "TODO",
+                        "TODO",
+                        route.flatMap((r) => r.path),
+                    )}
+                disabled={route.length === 0}
+            >
+                GPX exportieren
             </button>
         </div>
     </div>
