@@ -1,5 +1,4 @@
 <script>
-    import { slide } from "svelte/transition";
     import { saveRoute } from "../modules/storage.js";
     import Icon from "./Icon.svelte";
     import Options from "./Options.svelte";
@@ -17,7 +16,10 @@
         <input id="title" type="text" bind:value={route.title} />
     </h1>
     <div class="noprint">
-        <button class="pill" on:click={() => document.getElementById("title").select()}>
+        <button
+            class="pill"
+            on:click={() => document.getElementById("title").select()}
+        >
             <Icon name="edit" /> Titel bearbeiten
         </button>
         <br />
@@ -39,14 +41,13 @@
         {/if}
     </button>
     {#if showProfile}
-        <div transition:slide={{ duration: 100 }}>
-            <Profile {route} />
-        </div>
+        <Profile {route} />
     {/if}
 </div>
 
 <style>
-    h1, h2 {
+    h1,
+    h2 {
         margin-bottom: 0.5rem;
     }
 
