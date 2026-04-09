@@ -65,7 +65,7 @@
             .range([margin.left, width - margin.right]);
         const y = d3
             .scaleLinear()
-            .domain(d3.extent(dz, ([_, z]) => z) as [number, number])
+            .domain(d3.extent(dz, ([, z]) => z) as [number, number])
             .nice()
             .range([height - margin.bottom, margin.top]);
 
@@ -77,17 +77,17 @@
 
         const area = d3
             .area()
-            .x(([d, _]) => x(d))
+            .x(([d]) => x(d))
             .y0(y.range()[0])
-            .y1(([_, z]) => y(z));
+            .y1(([, z]) => y(z));
         svg.append("path")
             .attr("fill", "color-mix(in srgb, var(--acc), transparent 75%)")
             .attr("d", area(dz));
 
         const line = d3
             .line()
-            .x(([d, _]) => x(d))
-            .y(([_, z]) => y(z));
+            .x(([d]) => x(d))
+            .y(([, z]) => y(z));
         svg.append("path")
             .attr("fill", "none")
             .attr("stroke", "var(--acc)")
@@ -99,8 +99,8 @@
             .attr("transform", `translate(0, ${height - margin.bottom})`)
             .call(
                 d3
-                    .axisBottom(x)
-                    .tickFormat((v: any) => `${v / 1000} km`)
+                    .axisBottom<number>(x)
+                    .tickFormat((v) => `${v / 1000} km`)
                     .ticks(width / 80)
                     .tickSizeOuter(0),
             );
