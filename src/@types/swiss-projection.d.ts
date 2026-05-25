@@ -5,8 +5,6 @@ type Geometry = import("geojson").Geometry;
 type Input =
     | [number, number]
     | [number, number][]
-    | [number, number, number]
-    | [number, number, number][]
     | Feature
     | FeatureCollection
     | Geometry;
