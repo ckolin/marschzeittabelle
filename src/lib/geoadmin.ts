@@ -54,13 +54,12 @@ export async function fetchProfile(
 }
 
 function simplifyTo(line: Line2, max: number, tol = 1): Line2 {
+    if (line.length <= max) {
+        return line;
+    }
     const simplified: Line2 = simplify(
         line.map(([x, y]) => ({ x, y })),
         tol,
     ).map(({ x, y }) => [x, y]);
-    if (simplified.length > max) {
-        return simplifyTo(simplified, max, tol * 2);
-    } else {
-        return simplified;
-    }
+    return simplifyTo(simplified, max, tol * 2);
 }
