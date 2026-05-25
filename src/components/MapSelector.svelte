@@ -23,7 +23,7 @@
 </script>
 
 <div>
-    {#each baseMaps as { id, icon, label }}
+    {#each baseMaps as { id, icon, label } (id)}
         <label>
             <input type="radio" value={id} bind:group={baseMap} {onchange} />
             <img src={icon} alt={label} />

@@ -13,7 +13,7 @@ const EPSILON = 10;
 export async function importFile(file: File): Promise<[Line2, Waypoint[]]> {
     const text = await file.text();
     const xml = new DOMParser().parseFromString(text, "text/xml");
-    let geojson = file.name.endsWith(".kml")
+    const geojson = file.name.endsWith(".kml")
         ? (kml(xml, { skipNullGeometry: true }) as FeatureCollection)
         : gpx(xml);
     const lineString = extractSingleLineString(geojson);

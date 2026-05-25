@@ -58,7 +58,7 @@
     </label>
     {#if focus && results.length > 0}
         <div class="results">
-            {#each results as { point, label }}
+            {#each results as { point, label } (point)}
                 <button onclick={() => onSelect(point)}>
                     {@html label}
                 </button>

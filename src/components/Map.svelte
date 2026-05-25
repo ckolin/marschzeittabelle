@@ -1,7 +1,7 @@
 <script lang="ts">
     import { downloadGpx } from "../lib/export";
     import type { Point2 } from "../lib/points";
-    import { Router, RouteMode, type RouteSegment } from "../lib/routing";
+    import { RouteMode, Router, type RouteSegment } from "../lib/routing";
     import { theme } from "../lib/theme";
     import { model } from "../model.svelte";
     import Icon from "./Icon.svelte";
@@ -481,7 +481,7 @@
             <span>
                 <Icon name="directions" /> Wegfindung
             </span>
-            {#each modes as { value, icon, label }}
+            {#each modes as { value, icon, label } (value)}
                 <label>
                     <input
                         type="radio"
@@ -555,7 +555,7 @@
     <div class="overlay" style:bottom="0" style:left="0">
         <div class="box">
             <span><Icon name="layers" /> Ebenen</span>
-            {#each overlays as { id, icon, label }}
+            {#each overlays as { id, icon, label } (id)}
                 <label>
                     <input
                         type="checkbox"
