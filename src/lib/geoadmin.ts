@@ -32,12 +32,13 @@ export async function search(query: string): Promise<SearchResult[]> {
 
 export async function fetchProfile(
     line: Line2,
-    resolution: number = 200,
+    inputResolution: number = 1000,
+    outputResolution: number = 200,
 ): Promise<Line3> {
     if (line.length === 0) {
         return [];
     }
-    const simplified = simplifyTo(line, 1000);
+    const simplified = simplifyTo(line, inputResolution);
     const geom: LineString = {
         type: "LineString",
         coordinates: simplified,
@@ -45,7 +46,7 @@ export async function fetchProfile(
     const res = await fetch(`${BASE_URL}/profile.json`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `sr=2056&nb_points=${resolution}&geom=${JSON.stringify(geom)}`,
+        body: `sr=2056&nb_points=${outputResolution}&geom=${JSON.stringify(geom)}`,
     });
     // TODO: Error handling
     const json = await res.json();
