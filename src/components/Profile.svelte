@@ -70,7 +70,8 @@
             .range([height - margin.bottom, margin.top]);
 
         const svg = d3
-            .create("svg")
+            .select(chartElement)
+            .append("svg")
             .attr("width", width)
             .attr("height", height)
             .attr("viewBox", [0, 0, width, height]);
@@ -121,17 +122,14 @@
                     .attr("stroke-opacity", 0.25),
             );
 
-        const hide = (e: any) => e.attr("display", "none");
-        const show = (e: any) => e.attr("display", undefined);
-
         const rule = svg
             .append("g")
             .append("line")
             .attr("y1", height)
             .attr("y2", 0)
             .attr("stroke", "var(--fg")
-            .attr("stroke-width", 2);
-        hide(rule);
+            .attr("stroke-width", 2)
+            .attr("display", "none");
 
         const tip = svg.append("g");
         const tipRect = tip
@@ -145,22 +143,23 @@
             .attr("transform", `translate(0, 25)`)
             .attr("text-anchor", "middle")
             .attr("fill", "var(--bg)");
-        tip.append("circle").attr("r", 5).attr("fill", "var(--acc)");
-        hide(tip);
+        tip.append("circle")
+            .attr("r", 5)
+            .attr("fill", "var(--acc)")
+            .attr("display", "none");
 
         svg.on("mouseenter mousemove", (e) => {
             const ex = d3.pointer(e)[0];
             const d = x.invert(ex);
             const [px, py, pz] = along2(profile, d);
             if (ex < x.range()[0] || ex > x.range()[1]) {
-                hide(rule);
-                hide(tip);
+                rule.attr("display", "none");
+                tip.attr("display", "none");
                 onHighlightEnd();
                 return;
             }
-            show(rule);
-            rule.attr("transform", `translate(${ex}, 0)`);
-            show(tip);
+            rule.attr("transform", `translate(${ex}, 0)`).attr("display", null);
+            tip.attr("display", null);
             tipText.text(Math.round(pz));
             const bbox = tipText.node()!.getBBox();
             const dist = 15;
@@ -184,15 +183,13 @@
             onNavigate([px, py]);
         });
         svg.on("mouseleave", () => {
-            hide(rule);
-            hide(tip);
+            rule.attr("display", "none");
+            tip.attr("display", "none");
             onHighlightEnd();
         });
 
-        while (chartElement.firstChild) {
-            chartElement.removeChild(chartElement.firstChild);
-        }
-        chartElement.appendChild(svg.node()!);
+        // Clean up old SVG
+        return () => svg.remove();
     });
 </script>
 
