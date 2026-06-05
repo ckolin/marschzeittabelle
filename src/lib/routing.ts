@@ -223,7 +223,7 @@ export class Router {
         mode: RouteMode,
     ): Promise<RouteSegment[]> {
         await this.ensureLoaded(points.map((rp) => rp.point));
-        let route: RouteSegment[] = [];
+        const route: RouteSegment[] = [];
         for (let i = 0; i < points.length - 1; i++) {
             const from = points[i];
             const to = points[i + 1];
@@ -248,7 +248,7 @@ export class Router {
         if (toLoad.size === 0) {
             return;
         }
-        const loads: Promise<any>[] = [];
+        const loads: Promise<unknown>[] = [];
         for (const id of toLoad) {
             if (!this.loading.has(id)) {
                 this.loading.set(
@@ -277,9 +277,9 @@ export class Router {
     }
 
     private static densify([p, ...[q, ...qs]]: Point2[]): Point2[] {
-        if (p == undefined) {
+        if (p === undefined) {
             return [];
-        } else if (q == undefined) {
+        } else if (q === undefined) {
             return [p];
         } else if (dist2(p, q) > LOAD_DENSITY) {
             const [px, py] = p;
@@ -308,9 +308,8 @@ export class Router {
             return [];
         }
         const buf = await res.arrayBuffer();
-        const arrs = unpack(buf);
-        // @ts-ignore
-        return arrs.map((a) => new FwdEdge(...a));
+        const arrs: ConstructorParameters<typeof FwdEdge>[] = unpack(buf);
+        return arrs.map((args) => new FwdEdge(...args));
     }
 
     private shortestPath(
@@ -340,7 +339,7 @@ export class Router {
         if (endAdded) {
             this.removeVertex(end);
         }
-        if (path == undefined) {
+        if (path === undefined) {
             return [[vertexToPoint(start), vertexToPoint(end)], false];
         } else {
             return [path, true];

@@ -12,8 +12,10 @@
     let uploadInput: HTMLInputElement;
 
     $effect(() => {
-        if (files != undefined && files[0] != undefined) {
-            importFile(files[0]).then(([l, ws]) => console.log([l, ws]));
+        if (files !== undefined && files[0] !== undefined) {
+            importFile(files[0]).then(([line, waypoints]) =>
+                console.log({ line, waypoints }),
+            );
         }
     });
 </script>

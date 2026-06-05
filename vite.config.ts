@@ -8,10 +8,10 @@ export default defineConfig({
         {
             name: "help",
             configureServer(server) {
-                server.middlewares.use((req, res, next) => {
-                    // @ts-ignore
+                server.middlewares.use((req, _res, next) => {
+                    // @ts-expect-error
                     if (req.url === "/help") {
-                        // @ts-ignore
+                        // @ts-expect-error
                         req.url = "/help.html";
                     }
                     next();

@@ -35,7 +35,7 @@
     let intermediateFixed = false;
     let intermediateIndex: number;
 
-    let highlightMarker: Marker;
+    let highlightMarker: Marker | undefined;
 
     let tooltipElement: HTMLElement;
     let tooltipState: "outside" | "map" | "marker" | "route" =
@@ -315,7 +315,7 @@
             features,
         };
         const source: GeoJSONSource | undefined = map.getSource("+route");
-        if (source == undefined) {
+        if (source === undefined) {
             map.addSource("+route", { type: "geojson", data: collection });
             map.addLayer({
                 id: "+route-on-road",
@@ -427,7 +427,7 @@
     }
 
     function onHighlight(point: Point2) {
-        if (highlightMarker == undefined) {
+        if (highlightMarker === undefined) {
             const el = document.createElement("div");
             el.classList.add("marker", "highlight");
             highlightMarker = new Marker({

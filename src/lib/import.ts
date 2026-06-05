@@ -89,7 +89,7 @@ function extractWaypoints(
     for (const feature of geojson.features) {
         if (
             feature.geometry.type !== "Point" ||
-            feature.properties?.name == undefined
+            feature.properties?.name === undefined
         ) {
             continue;
         }
@@ -97,7 +97,7 @@ function extractWaypoints(
             units: "meters",
         });
         const [x, y] = nearest.geometry.coordinates;
-        if (nearest.properties.dist < EPSILON) {
+        if (nearest.properties.pointDistance < EPSILON) {
             waypoints.push({
                 name: feature.properties.name,
                 comment: feature.properties.description ?? "",
