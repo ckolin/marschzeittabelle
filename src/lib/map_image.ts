@@ -1,8 +1,8 @@
-// Resolution in m/px for each zoom level
-// See https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
-import type { Line2, Point2 } from "./points";
+import type { Bounds, Line2, Point2 } from "./points";
 
-// Highest resolution removed because it is slow to render
+// Resolution in m/px for each zoom level.
+// Highest resolution removed because it is slow to render.
+// See https://wmts.geo.admin.ch/EPSG/2056/1.0.0/WMTSCapabilities.xml
 const RESOLUTIONS = [
     4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250,
     1000, 750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5,
@@ -12,53 +12,50 @@ const ORIGIN_X = 2420000;
 const ORIGIN_Y = 1350000;
 const A4_RATIO = 297 / 210;
 
-export async function getMapImage(
+export async function getMapImage(line: Line2): Promise<OffscreenCanvas> {
+    const bounds = calculateBounds(line);
+    const canvas = await drawMap(bounds);
+    drawLine(line, bounds, canvas);
+    return canvas;
+}
+
+function calculateBounds(
     line: Line2,
     margin: number = 0.05,
-): Promise<OffscreenCanvas> {
+    fitToA4: boolean = true,
+): Bounds {
     // Find bounding box
     const xs = line.map(([x]) => x);
     const ys = line.map(([, y]) => y);
-    let west = Math.min(...xs);
-    let south = Math.min(...ys);
-    let east = Math.max(...xs);
-    let north = Math.max(...ys);
+    const west = Math.min(...xs);
+    const south = Math.min(...ys);
+    const east = Math.max(...xs);
+    const north = Math.max(...ys);
     // Apply relative margins
     const centerX = (east + west) / 2;
     const centerY = (north + south) / 2;
     let width = (east - west) * (1 + 2 * margin);
     let height = (north - south) * (1 + 2 * margin);
     // Fit to A4 paper
-    const ratio = height / width;
-    const targetRatio = ratio < 1 ? 1 / A4_RATIO : A4_RATIO;
-    if (ratio < targetRatio) {
-        height = width * targetRatio;
-    } else {
-        width = height / targetRatio;
+    if (fitToA4) {
+        const ratio = height / width;
+        const targetRatio = ratio < 1 ? 1 / A4_RATIO : A4_RATIO;
+        if (ratio < targetRatio) {
+            height = width * targetRatio;
+        } else {
+            width = height / targetRatio;
+        }
     }
-    west = centerX - width / 2;
-    south = centerY - height / 2;
-    east = centerX + width / 2;
-    north = centerY + height / 2;
-    const canvas = await drawMap([west, south, east, north]);
-    const ctx = canvas.getContext("2d")!;
-    const proj = ([x, y]: Point2): Point2 => [
-        ((x - west) / (east - west)) * canvas.width,
-        ((north - y) / (north - south)) * canvas.height,
+    return [
+        centerX - width / 2,
+        centerY - height / 2,
+        centerX + width / 2,
+        centerY + height / 2,
     ];
-    ctx.moveTo(...proj(line[0]));
-    for (let i = 1; i < line.length; i++) {
-        ctx.lineTo(...proj(line[i]));
-    }
-    ctx.lineCap = ctx.lineJoin = "round";
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = "#f008";
-    ctx.stroke();
-    return canvas;
 }
 
 async function drawMap(
-    bounds: readonly [number, number, number, number],
+    bounds: Bounds,
     style: "color" | "grayscale" = "color",
     maxImageSize: number = 2000,
 ): Promise<OffscreenCanvas> {
@@ -111,4 +108,21 @@ async function drawMap(
     }
     await Promise.all(promises);
     return canvas;
+}
+
+function drawLine(line: Line2, bounds: Bounds, canvas: OffscreenCanvas): void {
+    const ctx = canvas.getContext("2d")!;
+    const [west, south, east, north] = bounds;
+    const proj = ([x, y]: Point2): Point2 => [
+        ((x - west) / (east - west)) * canvas.width,
+        ((north - y) / (north - south)) * canvas.height,
+    ];
+    ctx.moveTo(...proj(line[0]));
+    for (let i = 1; i < line.length; i++) {
+        ctx.lineTo(...proj(line[i]));
+    }
+    ctx.lineCap = ctx.lineJoin = "round";
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = "#f008";
+    ctx.stroke();
 }

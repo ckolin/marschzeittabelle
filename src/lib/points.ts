@@ -3,6 +3,9 @@ export type Point3 = [number, number, number];
 export type Line2 = Point2[];
 export type Line3 = Point3[];
 
+/** west, south, east, north */
+export type Bounds = [number, number, number, number];
+
 export function dist2(
     [ax, ay]: Point2 | Point3,
     [bx, by]: Point2 | Point3,
