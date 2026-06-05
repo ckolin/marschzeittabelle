@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { downloadGpx } from "../lib/export";
+    import { downloadGpx, downloadMapImage } from "../lib/export";
     import type { Point2 } from "../lib/points";
     import { RouteMode, Router, type RouteSegment } from "../lib/routing";
     import { theme } from "../lib/theme";
@@ -527,6 +527,16 @@
                 disabled={route.length === 0}
             >
                 GPX exportieren
+            </button>
+            <button
+                onclick={() =>
+                    downloadMapImage(
+                        "TODO",
+                        route.flatMap((r) => r.path),
+                    )}
+                disabled={route.length === 0}
+            >
+                Karte exportieren
             </button>
         </div>
     </div>

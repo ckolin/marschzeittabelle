@@ -1,4 +1,5 @@
 import { fetchProfile } from "./geoadmin";
+import { getMapImage } from "./map_image";
 import type { Line2 } from "./points";
 import { LV95toWGS } from "swiss-projection";
 
@@ -23,8 +24,22 @@ export async function downloadGpx(name: string, author: string, line: Line2) {
         </trkseg>
     </trk>
 </gpx>`;
+    download(
+        `${name}.gpx`,
+        URL.createObjectURL(new Blob([xml], { type: "text/xml" })),
+    );
+}
+
+export async function downloadMapImage(name: string, line: Line2) {
+    const mapImage = await getMapImage(line);
+    const blob = await mapImage.convertToBlob();
+    const url = URL.createObjectURL(blob);
+    download(name, url);
+}
+
+function download(name: string, url: string): void {
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([xml], { type: "text/xml" }));
-    a.download = `${name}.gpx`;
+    a.download = name;
+    a.href = url;
     a.click();
 }
