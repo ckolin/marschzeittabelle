@@ -3,6 +3,7 @@
     import Editor from "./Editor.svelte";
     import Introduction from "./Introduction.svelte";
     import Import from "./Import.svelte";
+    import Ad from "./Ad.svelte";
 
     let route;
 </script>
@@ -14,6 +15,7 @@
     <main>
         <Introduction />
         <Import bind:route />
+        <Ad />
     </main>
 {:else}
     <header class="noprint">
