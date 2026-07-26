@@ -9,7 +9,9 @@
     import MapSelector, { type BaseMap } from "./MapSelector.svelte";
     import Profile from "./Profile.svelte";
     import Spinner from "./Spinner.svelte";
+    import { deserialize } from "flatgeobuf/lib/mjs/geojson";
     import type { Feature, FeatureCollection, LineString } from "geojson";
+    import throttle from "just-throttle";
     import {
         AttributionControl,
         GeoJSONSource,
@@ -260,17 +262,39 @@
                 "raster-opacity": 0.7,
             },
         });
-        map.addSource(
-            "+haltestellen",
-            makeRasterSource(
-                "https://wmts.geo.admin.ch/1.0.0/ch.bav.haltestellen-oev/default/current/3857/{z}/{x}/{y}.png",
-            ),
-        );
+        map.addSource("+haltestellen", {
+            type: "geojson",
+            data: { type: "FeatureCollection", features: [] },
+        });
         map.addLayer({
             id: "+haltestellen",
-            type: "raster",
+            type: "circle",
             source: "+haltestellen",
+            minzoom: 12,
         });
+        const update = async () => {
+            if (
+                map.getLayoutProperty("+haltestellen", "visibility") ===
+                    "none" ||
+                map.getZoom() < 12
+            ) {
+                return;
+            }
+            const [minX, minY, maxX, maxY] = map.getBounds().toArray().flat();
+            const bounds = { minX, minY, maxX, maxY };
+            const iter = deserialize(import.meta.env.VITE_STATIONS_URL, bounds);
+            const fc: FeatureCollection = {
+                type: "FeatureCollection",
+                features: [],
+            };
+            let i = 0;
+            for await (const feature of iter) {
+                fc.features.push({ ...feature, id: i++ });
+            }
+            const source = map.getSource("+haltestellen") as GeoJSONSource;
+            source.setData(fc);
+        };
+        map.on("move", throttle(update, 1000));
         updateOverlays();
     }
 
