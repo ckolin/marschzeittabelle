@@ -49,7 +49,7 @@
             <h3>Route importieren</h3>
             <p>
                 Untersützt sind GPX- und KML-Dateien, z.B. aus der swisstopo-App
-                oder von Outdooractive.com.
+                oder von Outdooractive.
             </p>
             <input
                 bind:this={uploadInput}
