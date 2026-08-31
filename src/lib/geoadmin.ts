@@ -43,6 +43,7 @@ export async function fetchProfile(
         type: "LineString",
         coordinates: simplified,
     };
+    outputResolution = Math.min(outputResolution, 5000);
     const res = await fetch(`${BASE_URL}/profile.json`, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
